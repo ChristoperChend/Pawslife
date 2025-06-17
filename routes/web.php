@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Route::get('/', function() {
-    return view('welcome');
+    return redirect('beranda.adopterBeranda');
 });
 
+Route::fallback(function () {
+    return redirect()->route('beranda.adopterBeranda');
+});
 
 Route::get('auth/login', [loginController::class, 'showLoginForm'])->name('login');
 Route::post('auth/login', [loginController::class, 'login']);
