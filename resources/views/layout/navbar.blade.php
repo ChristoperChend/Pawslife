@@ -20,7 +20,7 @@
     }
 </style>
 
-<header class="primary-color mb-5">
+<header class="primary-color position-sticky">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             {{-- Adopter --}}
@@ -71,8 +71,8 @@
                     <li class="px-1"><a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a></li>
                     <li class="px-1"><a class="nav-link" href="">Shelter</a></li>
                     <li class="px-1"><a class="nav-link" href="">Riwayat</a></li>
-                    <li class="px-1"><a class="nav-link" href="" onclick="lepasAdopsi()">Lepas Adopsi</a></li>
-                    <li class="px-1"><a class="nav-link" href="" >Tentang Kami</a></li>
+                    <li class="px-1"><a class="nav-link" href="">Lepas Adopsi</a></li>
+                    <li class="px-1"><a class="nav-link" href="">Tentang Kami</a></li>
                 </ul>
 
                 <div class="text-end text-white auth">
@@ -82,32 +82,18 @@
             @endif
 
             @auth
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="">Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="dropdown-item">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
+                <button class="btn">
+                    <i class="fa-solid fa-heart fa-xl" style="color: #ff0000;"></i>
+                </button>
+                {{-- {{ dump(Auth::user()) }} --}}
+                <button class="btn">
+                    @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
+                        <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="35" height="35"  class="rounded-circle" alt="Foto Adopter">
+                    @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
+                        <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="50" alt="Foto Shelter">
+                    @endif
+                </button>
             @endauth
         </div>
     </div>
 </header>
-
-<script>
-function lepasAdopsi() {
-    event.preventDefault();
-    Swal.fire({
-        title: 'Silahkan Lakukan Login Terlebih Dahulu',
-        icon: 'error',
-        confirmButtonText: 'OK',
-    })
-}
-</script>

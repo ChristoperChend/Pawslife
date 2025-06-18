@@ -16,12 +16,11 @@ class loginController
     public function login(Request $request) {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required',
         ], [
             'email.required' => 'Email harus diisi.',
             'email.email' => 'Format email tidak valid.',
             'password.required' => 'Kata sandi harus diisi.',
-            'password.min' => 'Kata sandi minimal 6 karakter.',
         ]);
 
         if(Auth::attempt($credentials)) {
