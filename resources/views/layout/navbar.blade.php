@@ -5,95 +5,104 @@
 
     .nav-link {
         color: white;
+        font-weight: bold;
     }
 
     .nav-link:hover {
         color: #ffd700;
     }
 
-    .auth a {
+    .auth-text {
         color: white;
+        text-decoration: none;
+        font-weight: bold;
     }
 
-    .auth a:hover {
+    .auth-text:hover {
         color: #ffd700;
+    }
+
+    .profile-image-navbar {
+        object-fit: cover;
+    }
+
+    @media (max-width: 991.98px) {
+        .navbar-nav .nav-item {
+            text-align: center;
+        }
+        .auth-section {
+            display: flex;
+            justify-content: center;
+            padding-top: 1rem;
+            padding-bottom: 0.5rem;
+        }
+        .auth-section .btn {
+            margin: 0 0.5rem;
+        }
     }
 </style>
 
-<header class="primary-color position-sticky">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            {{-- Adopter --}}
-            @if (Auth::check() && Auth::user()->tipe_pengguna == 'adopter')
-                <a href="{{ route('beranda.adopterBeranda') }}" class="d-flex align-items-center text-white text-decoration-none">
-                    <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
-                </a>
+<header>
+    <nav class="navbar navbar-expand-lg primary-color">
+        <div class="container">
+            <a class="navbar-brand" href="{{ Auth::check() ? route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') : route('beranda.adopterBeranda') }}">
+                <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
+            </a>
 
-                <ul class="nav cursor col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
-                    <li class="px-1"><a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Shelter</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Riwayat</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Lepas Adopsi</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Tentang Kami</a></li>
-                </ul>
-            {{-- Shelter --}}
-            @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
-                <a href="{{ route('beranda.adopterBeranda') }}" class="d-flex align-items-center text-white text-decoration-none">
-                    <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
-                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="toggle navigation">
+                <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
+            </button>
 
-                <ul class="nav cursor col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
-                    <li class="px-1"><a class="nav-link" href="{{ route('beranda.shelterBeranda') }}">Beranda</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Shelter</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Data Hewan</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Daftar Pengajuan</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Riwayat</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Tentang Kami</a></li>
-                </ul>
-            {{-- Admin --}}
-            @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
-                <a href="{{ route('beranda.adopterBeranda') }}" class="d-flex align-items-center text-white text-decoration-none">
-                    <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
-                </a>
+            <div class="collapse navbar-collapse justify-content-lg-end" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        @if (Auth::check())
+                            <a class="nav-link" href="{{ route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') }}">Beranda</a>
+                        @else
+                            <a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a>
+                        @endif
+                    </li>
 
-                <ul class="nav cursor col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
-                    <li class="px-1"><a class="nav-link" href="{{ route('beranda.adminBeranda') }}">Beranda</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Shelter</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Riwayat</a></li>
-                </ul>
-            {{-- Quest --}}
-            @else
-                <a href="{{ route('beranda.adopterBeranda') }}" class="d-flex align-items-center text-white text-decoration-none">
-                    <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
-                </a>
-
-                <ul class="nav cursor col-12 col-lg-auto me-lg-auto justify-content-center mb-md-0">
-                    <li class="px-1"><a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Shelter</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Riwayat</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Lepas Adopsi</a></li>
-                    <li class="px-1"><a class="nav-link" href="">Tentang Kami</a></li>
-                </ul>
-
-                <div class="text-end text-white auth">
-                    <a href="{{ route('login') }}" class="text-decoration-none cursor">Log In</a>
-                    <a href="{{ route('register') }}" class="ms-4 text-decoration-none cursor">Daftar Sekarang</a>
-                </div>
-            @endif
-
-            @auth
-                <button class="btn">
-                    <i class="fa-solid fa-heart fa-xl" style="color: #ff0000;"></i>
-                </button>
-                {{-- {{ dump(Auth::user()) }} --}}
-                <button class="btn">
-                    @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
-                        <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="35" height="35"  class="rounded-circle" alt="Foto Adopter">
-                    @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
-                        <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="50" alt="Foto Shelter">
+                    @if (Auth::check() && Auth::user()->tipe_pengguna == 'adopter')
+                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
+                    @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
+                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Data Hewan</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Daftar Pengajuan</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
+                    @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
+                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                    @else
+                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
                     @endif
-                </button>
-            @endauth
+                </ul>
+
+                <div class="auth-section d-flex align-items-center">
+                    @auth
+                        <button class="btn p-0 me-2">
+                            <i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i>
+                        </button>
+                        <button class="btn ps-3"> 
+                            @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
+                                <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
+                            @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
+                                <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
+                            @endif
+                        </button>
+                        @else
+                            <a href="{{ route('login') }}" class="auth-text me-3 cursor">Log In</a>
+                            <a href="{{ route('register') }}" class="auth-text cursor">Daftar Sekarang</a>
+                    @endauth
+                </div>
+            </div>
         </div>
-    </div>
+    </nav>
 </header>
