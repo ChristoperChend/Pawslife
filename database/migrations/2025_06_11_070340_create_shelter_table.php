@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->string('nama_shelter');
             $table->string('alamat_shelter');
-            $table->integer('deskripsi_shelter');
+            $table->string('deskripsi_shelter');
             $table->string('no_telepon_shelter');
             $table->string('dokumen_legal');
             $table->string('foto_shelter');

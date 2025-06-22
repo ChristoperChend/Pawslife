@@ -253,7 +253,7 @@ class registerController
             ]);
 
             $fotoPath = $request->file('foto_shelter')->store('foto_shelter', 'public');
-            $fotoDokumenPath = $request->file('dokumen_legal')->store('foto_shelter', 'public');
+            $fotoDokumenPath = $request->file('dokumen_legal')->store('foto_dokumen_shelter', 'public');
 
             shelter::create([
                 'pengguna_id' => $pengguna->id,

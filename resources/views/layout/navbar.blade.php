@@ -6,6 +6,7 @@
     .nav-link {
         color: white;
         font-weight: bold;
+        padding-right: 20px !important;
     }
 
     .nav-link:hover {
@@ -88,7 +89,9 @@
                 <div class="auth-section d-flex align-items-center">
                     @auth
                         <button class="btn p-0 me-2">
-                            <i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i>
+                            @if (Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
+                                <i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i>
+                            @endif
                         </button>
                         <button class="btn ps-3"> 
                             @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
