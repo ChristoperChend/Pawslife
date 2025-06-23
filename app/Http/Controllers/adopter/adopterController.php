@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\adopter;
 
 use App\Models\hewan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class adopterController
+class adopterController extends Controller
 {
     public function daftarHewan(Request $request) {
         $query = hewan::with('shelter');
