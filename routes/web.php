@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\adopterController;
 use App\Http\Controllers\berandaController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\registerController;
@@ -31,6 +32,8 @@ Route::post('/logout', [loginController::class, 'logout'])->name('logout');
 
 Route::prefix('adopter')->group(function () {
     Route::get('beranda', [berandaController::class, 'adopterBeranda'])->name('beranda.adopterBeranda');
+    Route::get('daftar_hewan', [adopterController::class, 'daftarHewan'])->name('adopter.daftarHewan');
+    Route::get('detail_hewan', [adopterController::class, 'detailHewan'])->name('adopter.detailHewan');
 });
 
 Route::prefix('shelter')->group(function () {
