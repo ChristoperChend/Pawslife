@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\adopterController;
+use App\Http\Controllers\adopter\adopterController;
 use App\Http\Controllers\berandaController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\registerController;
