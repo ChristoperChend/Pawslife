@@ -22,7 +22,7 @@
     }
 </style>
 
-<footer class="primary-color bottom-0 w-100 mt-5">
+<footer class="primary-color bottom-0 w-100">
     <div class="container py-4 text-white">
         <div class="row d-flex justify-content-center justify-content-start footer-content">
             <div class="col-12 col-md-3">
