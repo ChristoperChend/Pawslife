@@ -3,7 +3,9 @@
 use App\Http\Controllers\adopter\adopterController;
 use App\Http\Controllers\berandaController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\mailController;
 use App\Http\Controllers\registerController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -19,6 +21,12 @@ Route::prefix('auth')->group(function () {
     Route::get('login', [loginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [loginController::class, 'login']);
 
+    Route::get('lupa_kata_sandi', [loginController::class, 'lupaKataSandi'])->name('lupaKataSandi');
+    Route::post('lupa_kata_sandi/validasi_email', [loginController::class, 'validasiEmail'])->name('lupaKataSandi.validasiEmail');
+    Route::get('lupa_kata_sandi/send-email/{email}/{otp}', [mailController::class, 'sendEmail']);
+    Route::post('lupa_kata_sandi/verifikasi_otp', [loginController::class, 'validasiOTP'])->name('lupaKataSandi.validasiOTP');
+    Route::post('lupa_kata_sandi/ganti_kata_sandi', [loginController::class, 'gantiKataSandi'])->name('lupaKataSandi.gantiKataSandi');
+    
     Route::get('register', [registerController::class, 'showRegisterForm'])->name('register');
     Route::post('register/validasiAdopterTahap1', [registerController::class, 'validasiAdopterTahap1'])->name('register.validasiAdopterTahap1');
     Route::post('register/validasiAdopterTahap2', [registerController::class, 'validasiAdopterTahap2'])->name('register.validasiAdopterTahap2');

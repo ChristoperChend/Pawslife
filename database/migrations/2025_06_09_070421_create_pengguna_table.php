@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('kata_sandi');
             $table->string('tipe_pengguna');
+            $table->string('otp')->nullable();
+            $table->dateTime('otp_expired_at')->nullable();
             $table->timestamps();
         });
     }

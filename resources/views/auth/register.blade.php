@@ -252,7 +252,7 @@
                 <!-- Login -->
                 <div class="text-center">
                     <label>Sudah punya akun?</label>
-                    <a href="/auth/login" class="text-decoration-none pointer">Sign in</a>
+                    <a href="{{ route('login') }}" class="text-decoration-none pointer">Sign in</a>
                 </div>
             </div>
         </div>
@@ -488,8 +488,6 @@
                     }
                 })
         }
-
-        public
 
         function validasiShelterTahap2() {
             // Tampilkan loading fullscreen

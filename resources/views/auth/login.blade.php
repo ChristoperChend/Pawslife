@@ -70,7 +70,7 @@
                     <div class="mb-4">
                         <div class="d-flex justify-content-between">
                             <label for="password" class="form-label mb-0">Kata Sandi</label>
-                            <a class="text-decoration-none pointer fs-7">Lupa Kata Sandi</a>
+                            <a href="{{ route('lupaKataSandi') }}" class="text-decoration-none pointer fs-7">Lupa Kata Sandi</a>
                         </div>
                         <input type="password" name="password" class="form-control" id="password"
                             placeholder="Masukkan kata sandi anda">
@@ -95,7 +95,7 @@
                 <!-- Register -->
                 <div class="text-center">
                     <label>Belum punya akun?</label>
-                    <a href="/auth/register" class="text-decoration-none pointer">Sign up</a>
+                    <a href="{{ route('register') }}" class="text-decoration-none pointer">Sign up</a>
                 </div>
             </div>
         </div>
