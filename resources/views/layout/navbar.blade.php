@@ -65,24 +65,24 @@
                     </li>
 
                     @if (Auth::check() && Auth::user()->tipe_pengguna == 'adopter')
-                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
                         <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Data Hewan</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Daftar Pengajuan</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
                         <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Tentang Kami</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @endif
                 </ul>
 

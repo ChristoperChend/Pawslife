@@ -37,6 +37,7 @@
 
     .hewan-image {
         width: 300px;
+        height: 250px;
         border-radius: 20px;
     }
 
@@ -47,8 +48,8 @@
 
     .overlay-text {
         position: absolute;
-        top: 60%;
-        left: 36%;
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
         color: white;
         font-size: 24px;
@@ -56,7 +57,7 @@
         text-align: center;
         visibility: hidden;
         width: 300px;
-        height: 300px;
+        height: 250px;
         border-radius: 20px;
         background-color: rgba(0, 0, 0, 0.6);
         display: flex;
@@ -86,29 +87,38 @@
 
         <div class="container button-container">
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-6 col-md-4 image-container cursor mb-3">
-                    <img src="{{ asset('image/kucing.jpeg') }}" class="hewan-image img-fluid" alt="Kucing">
-                    <div class="overlay-text">Kucing</div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-4 image-container cursor mb-3">
-                    <img src="{{ asset('image/anjing.jpeg') }}" class="hewan-image img-fluid" alt="Anjing">
-                    <div class="overlay-text">Anjing</div>
-                </div>
+                <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'kucing']) }}" class="col-12 col-sm-6 d-flex justify-content-center mb-3">
+                    <div class="image-container cursor">
+                        <img src="{{ asset('image/kucing.jpeg') }}" class="hewan-image" alt="Kucing">
+                        <div class="overlay-text">Kucing</div>
+                    </div>
+                </a>
+                <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'anjing']) }}" class="col-12 col-sm-6 d-flex justify-content-center mb-3">
+                    <div class="image-container cursor">
+                        <img src="{{ asset('image/anjing.jpeg') }}" class="hewan-image" alt="Anjing">
+                        <div class="overlay-text">Anjing</div>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <h5 class="text-center">Lihat semua <i class="fa-solid fa-chevron-right fa-2xs" style="color: #000000;"></i></h5>
+        <div class="text-center mb-1">
+            <a href="{{ route('adopter.daftarHewan') }}" class="text-decoration-none cursor fw-bold text-black" style="font-size: 25px;">
+                Lihat semua 
+                <i class="fa-solid fa-chevron-right fa-2xs" style="color: #000000;"></i>
+            </a>
+        </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @foreach ($listHewan as $hewan)
                 <div class="col d-flex justify-content-center">
-                    <div class="hewan-container cursor secondary-color">
+                    <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="hewan-container cursor secondary-color text-decoration-none">
                         <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan">
                         <h5 class="pt-2">{{ $hewan->nama_hewan ?? '-' }}</h5>
                         <h6 class="fw-bold mb-3">{{ $hewan->ras ?? '-' }}</h6>
                         <h6>{{ $hewan->status_steril ?? '-' }} | {{ $hewan->status_vaksin ?? '-' }}</h6>
                         <h6 class="pb-2">{{ $hewan->shelter->nama_shelter ?? '-' }}</h6>
-                    </div>
+                    </a>
                 </div>
             @endforeach
         </div>
