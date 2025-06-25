@@ -22,4 +22,8 @@ class berandaController
     public function adminBeranda() {
         return view('admin.beranda');
     }
+
+    public function tentangKami() {
+        return view('layout.tentangKami');
+    }
 }

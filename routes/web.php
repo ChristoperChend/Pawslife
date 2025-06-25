@@ -29,11 +29,13 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::post('/logout', [loginController::class, 'logout'])->name('logout');
+Route::get('/tentang_kami', [berandaController::class, 'tentangKami'])->name('tentangKami');
 
 Route::prefix('adopter')->group(function () {
     Route::get('beranda', [berandaController::class, 'adopterBeranda'])->name('beranda.adopterBeranda');
     Route::get('daftar_hewan', [adopterController::class, 'daftarHewan'])->name('adopter.daftarHewan');
     Route::get('detail_hewan', [adopterController::class, 'detailHewan'])->name('adopter.detailHewan');
+    Route::get('daftar_shelter', [adopterController::class, 'daftarShelter'])->name('adopter.daftarShelter');
 });
 
 Route::prefix('shelter')->group(function () {
