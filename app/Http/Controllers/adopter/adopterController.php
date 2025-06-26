@@ -13,8 +13,11 @@ class adopterController extends Controller
 {
     public function daftarHewan(Request $request) {
         $query = hewan::with('shelter');
-        if ($request->has('jenis_hewan')) {
+        if ($request->filled('jenis_hewan')) {
             $query->where('jenis_hewan', $request->jenis_hewan);
+        }
+        if ($request->filled('jenis_kelamin')) {
+            $query->where('jenis_kelamin', $request->jenis_kelamin);
         }
         $listHewan = $query->paginate(12);
         $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
@@ -58,8 +61,25 @@ class adopterController extends Controller
         }
     }
 
-    public function daftarFavorit() {
-        $listFavorit = favorit::paginate(12);
+    public function daftarFavorit(Request $request) {
+        $adopter_id = Auth::id();
+
+        $query = favorit::with(['hewan.shelter'])
+            ->where('adopter_id', $adopter_id);
+
+        // Filter berdasarkan dropdown jika ada
+        if ($request->filled('jenis_hewan')) {
+            $query->whereHas('hewan', function($q) use ($request) {
+                $q->where('jenis_hewan', $request->jenis_hewan);
+            });
+        }
+        if ($request->filled('jenis_kelamin')) {
+            $query->whereHas('hewan', function($q) use ($request) {
+                $q->where('jenis_kelamin', $request->jenis_kelamin);
+            });
+        }
+
+        $listFavorit = $query->paginate(12);
         $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
         return view('adopter.daftarFavorit', compact('listFavorit', 'favoritHewanIds'));   
     }

@@ -35,12 +35,53 @@
     .heart-icon.liked {
         color: #e74c3c;
     }
+
+    #jenis-hewan:focus,
+    #jenis-kelamin-hewan:focus {
+        border-color: white !important;
+    }
+
+    #jenis-hewan {
+        min-width: 150px;
+    }
+
+    #jenis-kelamin-hewan {
+        min-width: 230px;
+    }
+    #jenis-hewan-text, #jenis-kelamin-hewan-text {
+        display: inline-block;
+        min-width: 90px;
+        text-align: left;
+    }
 </style>
 
 @extends('layout.master')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center mb-4">
+            <div class=" border border-2 rounded">
+                <div class="btn-group align-items-center">
+                    <button class="btn" type="button" id="jenis-hewan" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="jenis-hewan-text">Jenis hewan</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-start" id="jenis-hewan-dropdown">
+                        <a class="dropdown-item" data-value="kucing">Kucing</a>
+                        <a class="dropdown-item" data-value="anjing">Anjing</a>
+                    </div>
+                    |
+                    <button class="btn" type="button" id="jenis-kelamin-hewan" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="jenis-kelamin-hewan-text">Jenis kelamin hewan</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-start" id="jenis-kelamin-hewan-dropdown">
+                        <a class="dropdown-item" data-value="jantan">Jantan</a>
+                        <a class="dropdown-item" data-value="betina">Betina</a>
+                    </div>
+                    
+                    <i class="fa-solid fa-magnifying-glass me-3 cursor" onclick="searchHewan()"></i>
+                </div>
+            </div>
+        </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listHewan->isEmpty())
             @foreach ($listHewan as $hewan)
@@ -66,7 +107,28 @@
         <div class="d-flex justify-content-center mt-4"> {{ $listHewan->links() }}
     </div>
 
+    @include('layout.loading')
+
     <script>
+        let selectedJenisHewan = '';
+        let selectedJenisKelamin = '';
+
+        document.querySelectorAll('#jenis-hewan-dropdown .dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('jenis-hewan-text').textContent = this.textContent;
+                selectedJenisHewan = this.getAttribute('data-value');
+            });
+        });
+
+        document.querySelectorAll('#jenis-kelamin-hewan-dropdown .dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('jenis-kelamin-hewan-text').textContent = this.textContent;
+                selectedJenisKelamin = this.getAttribute('data-value');
+            });
+        });
+
         function toggleHeart(el, hewanId) {
             fetch("{{ route('adopter.tambahFavorit') }}", {
                 method: "POST",
@@ -89,6 +151,16 @@
                     el.classList.remove('liked');
                 }
             });
+        }
+
+        function searchHewan() {
+            document.getElementById('fullscreen-loading').classList.remove('d-none')
+            var params = [];
+            if (selectedJenisHewan) params.push('jenis_hewan=' + encodeURIComponent(selectedJenisHewan));
+            if (selectedJenisKelamin) params.push('jenis_kelamin=' + encodeURIComponent(selectedJenisKelamin));
+            var url = '{{ route('adopter.daftarHewan') }}';
+            if (params.length > 0) url += '?' + params.join('&');
+            window.location.href = url;
         }
     </script>
 @endsection
