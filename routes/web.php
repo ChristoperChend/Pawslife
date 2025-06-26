@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\adopter\adopterController;
 use App\Http\Controllers\berandaController;
+use App\Http\Controllers\favoritController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\mailController;
 use App\Http\Controllers\registerController;
@@ -44,6 +45,8 @@ Route::prefix('adopter')->group(function () {
     Route::get('daftar_hewan', [adopterController::class, 'daftarHewan'])->name('adopter.daftarHewan');
     Route::get('detail_hewan', [adopterController::class, 'detailHewan'])->name('adopter.detailHewan');
     Route::get('daftar_shelter', [adopterController::class, 'daftarShelter'])->name('adopter.daftarShelter');
+    Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
+    Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
 });
 
 Route::prefix('shelter')->group(function () {

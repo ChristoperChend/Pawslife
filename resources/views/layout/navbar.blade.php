@@ -90,7 +90,7 @@
                     @auth
                         <button class="btn p-0 me-2">
                             @if (Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
-                                <i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i>
+                                <a href="{{ route('adopter.daftarFavorit') }}"><i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i></a>
                             @endif
                         </button>
                         <button class="btn ps-3"> 

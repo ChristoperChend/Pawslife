@@ -26,6 +26,7 @@
     .hewan-container {
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+        position: relative;
     }
 
     .hewan-container h5,
@@ -73,6 +74,21 @@
         width: 250px;
         height: 200px;
     }
+
+    .heart-icon {
+        position: absolute;
+        top: 25px;
+        right: 7px;
+        color: #fff;
+        font-size: 28px;
+        z-index: 2;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .heart-icon.liked {
+        color: #e74c3c;
+    }
 </style>
 
 @extends('layout.master')
@@ -108,19 +124,54 @@
                 <i class="fa-solid fa-chevron-right fa-2xs" style="color: #000000;"></i>
             </a>
         </div>
-
+        
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
+            @if (!$listHewan->isEmpty())
             @foreach ($listHewan as $hewan)
                 <div class="col d-flex justify-content-center">
-                    <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="hewan-container cursor secondary-color text-decoration-none">
+                    <div class="hewan-container secondary-color">
+                        <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
+                            <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
+                        </span>
                         <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan">
-                        <h5 class="pt-2">{{ $hewan->nama_hewan ?? '-' }}</h5>
-                        <h6 class="fw-bold mb-3">{{ $hewan->ras ?? '-' }}</h6>
-                        <h6>{{ $hewan->status_steril ?? '-' }} | {{ $hewan->status_vaksin ?? '-' }}</h6>
-                        <h6 class="pb-2">{{ $hewan->shelter->nama_shelter ?? '-' }}</h6>
-                    </a>
+                        <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                            <h5 class="pt-2">{{ $hewan->nama_hewan ?? '-' }}</h5>
+                            <h6 class="fw-bold mb-3">{{ $hewan->ras ?? '-' }}</h6>
+                            <h6>{{ $hewan->status_steril ?? '-' }} | {{ $hewan->status_vaksin ?? '-' }}</h6>
+                            <h6 class="pb-2">{{ $hewan->shelter->nama_shelter ?? '-' }}</h6>
+                        </a>
+                    </div>
                 </div>
             @endforeach
+            @else
+                <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar hewan</h4>
+            @endif
         </div>
     </div>
+    
+    <script>
+        function toggleHeart(el, hewanId) {
+            fetch("{{ route('adopter.tambahFavorit') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ hewan_id: hewanId })
+            })
+            .then(res => res.json())
+            .then(res => {
+                const icon = el.querySelector('i');
+                if (res.status === 'added') {
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid');
+                    el.classList.add('liked');
+                } else {
+                    icon.classList.remove('fa-solid');
+                    icon.classList.add('fa-regular');
+                    el.classList.remove('liked');
+                }
+            });
+        }
+    </script>
 @endsection
