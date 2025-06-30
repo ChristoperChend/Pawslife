@@ -95,9 +95,13 @@
                         </button>
                         <button class="btn ps-3"> 
                             @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
-                                <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
+                                <a href="{{ route('adopter.profile') }}">
+                                    <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
+                                </a>
                             @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
-                                <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
+                                <a>
+                                    <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
+                                </a>
                             @endif
                         </button>
                         @else

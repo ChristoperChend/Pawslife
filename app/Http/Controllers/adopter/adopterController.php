@@ -83,4 +83,12 @@ class adopterController extends Controller
         $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
         return view('adopter.daftarFavorit', compact('listFavorit', 'favoritHewanIds'));   
     }
+
+    public function profile() {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+    $adopter = Auth::user();
+    return view('adopter.profile', compact('adopter'));
+    }
 }

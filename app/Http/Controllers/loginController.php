@@ -60,7 +60,7 @@ class loginController extends Controller
     public function logout(Request $request) {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        Cookie::queue(Cookie::forget('remember_me'));
+        Cookie::queue(Cookie::forget('remember_token'));
         Auth::logout();
         return redirect()->route('login');
     }

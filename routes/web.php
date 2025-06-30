@@ -47,6 +47,7 @@ Route::prefix('adopter')->group(function () {
     Route::get('daftar_shelter', [adopterController::class, 'daftarShelter'])->name('adopter.daftarShelter');
     Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
     Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
+    Route::get('profile', [adopterController::class, 'profile'])->name('adopter.profile');
 });
 
 Route::prefix('shelter')->group(function () {
