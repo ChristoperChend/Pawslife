@@ -91,4 +91,17 @@ class adopterController extends Controller
     $adopter = Auth::user();
     return view('adopter.profile', compact('adopter'));
     }
+
+    public function updateProfile(Request $request) {
+        $user = Auth::user();
+        $adopter = $user->adopter;
+        $field = $request->field;
+        $value = $request->value;
+        if (in_array($field, ['nama_lengkap', 'alamat', 'usia', 'no_handphone', 'no_whatsapp', 'pekerjaan'])) {
+            $adopter->$field = $value;
+            $adopter->save();
+            return response()->json(['success' => true, 'message' => 'Berhasil mengubah data']);
+        }
+        return response()->json(['error' => true, 'message' => 'Gagal mengubah data']);
+    }
 }
