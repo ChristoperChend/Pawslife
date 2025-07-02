@@ -8,7 +8,7 @@
     .hewan-container h5,
     .hewan-container h6 {
         margin: 2px;
-        color: white;
+        color: black;
         padding-left: 10px;
     }
 
@@ -25,7 +25,7 @@
         position: absolute;
         top: 25px;
         right: 7px;
-        color: #fff;
+        color: black;
         font-size: 28px;
         z-index: 2;
         cursor: pointer;
@@ -86,7 +86,7 @@
             @if (!$listHewan->isEmpty())
             @foreach ($listHewan as $hewan)
                 <div class="col d-flex justify-content-center">
-                    <div class="hewan-container secondary-color">
+                    <div class="card hewan-container shadow-sm">
                         <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
                             <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                         </span>
@@ -130,6 +130,7 @@
         });
 
         function toggleHeart(el, hewanId) {
+            document.getElementById('fullscreen-loading').classList.remove('d-none')
             fetch("{{ route('adopter.tambahFavorit') }}", {
                 method: "POST",
                 headers: {
@@ -140,16 +141,38 @@
             })
             .then(res => res.json())
             .then(res => {
+                document.getElementById('fullscreen-loading').classList.add('d-none')
                 const icon = el.querySelector('i');
                 if (res.status === 'added') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.title,
+                        text: res.message
+                    })
+                    .then(() => {
+                        location.reload();
+                    })
                     icon.classList.remove('fa-regular');
                     icon.classList.add('fa-solid');
                     el.classList.add('liked');
-                } else {
+                } else if (res.status === 'removed') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.title,
+                        text: res.message
+                    })
+                    .then(() => {
+                        location.reload();
+                    })
                     icon.classList.remove('fa-solid');
                     icon.classList.add('fa-regular');
                     el.classList.remove('liked');
                 }
+                Swal.fire({
+                    icon: 'error',
+                    title: res.title,
+                    text: res.message
+                });
             });
         }
 

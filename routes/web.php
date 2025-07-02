@@ -49,6 +49,7 @@ Route::prefix('adopter')->group(function () {
     Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
     Route::get('profile', [adopterController::class, 'profile'])->name('adopter.profile');
     Route::post('update_profile', [adopterController::class, 'updateProfile'])->name('adopter.updateProfile');
+    Route::post('ajukan_adopsi', [adopterController::class, 'ajukanAdopsi'])->name('adopter.ajukanAdopsi');
 });
 
 Route::prefix('shelter')->group(function () {

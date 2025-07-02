@@ -139,50 +139,47 @@
             }
             document.querySelectorAll('.error-validasi1').forEach(e => e.remove())
             fetch('{{ route('lupaKataSandi.validasiEmail') }}', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "Application/json",
-                        "X-CSRF-TOKEN": data.csrf_token
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    if (res.errors) {
-                        for (const key in res.errors) {
-                            const input = document.getElementById(key)
-                            if (input) {
-                                const div = document.createElement('div')
-                                div.className = 'text-danger mt-1 fs-7 error-validasi1'
-                                div.innerText = res.errors[key][0]
-                                input.parentNode.appendChild(div)
-                            }
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "Application/json",
+                    "X-CSRF-TOKEN": data.csrf_token
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('fullscreen-loading').classList.add('d-none')
+                if (res.errors) {
+                    for (const key in res.errors) {
+                        const input = document.getElementById(key)
+                        if (input) {
+                            const div = document.createElement('div')
+                            div.className = 'text-danger mt-1 fs-7 error-validasi1'
+                            div.innerText = res.errors[key][0]
+                            input.parentNode.appendChild(div)
                         }
-                    } else {
-                        // jika sukses, lanjut ke tahap 1
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil Dikirim',
-                            text: res.message,
-                        });
-
-                        document.getElementById('form-email').classList.add('d-none')
-                        document.getElementById('form-otp').classList.remove('d-none')
-
-                        document.getElementById('masukkan-email').classList.add('d-none')
-                        document.getElementById('masukkan-otp').classList.remove('d-none')
                     }
-                }).catch(error => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    console.error('Error during validasi email:', error);
+                } else if (res.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.title,
+                        text: res.message,
+                    });
+
+                    document.getElementById('form-email').classList.add('d-none')
+                    document.getElementById('form-otp').classList.remove('d-none')
+
+                    document.getElementById('masukkan-email').classList.add('d-none')
+                    document.getElementById('masukkan-otp').classList.remove('d-none')
+                } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Kesalahan Jaringan',
-                        text: 'Terjadi masalah saat memvalidasi data Anda. Silakan coba lagi.'
+                        title: res.title,
+                        text: res.message,
                     });
-                });
+                }
+            })
         }
 
         function validasiOTP() {
@@ -194,51 +191,49 @@
             }
             document.querySelectorAll('.error-validasi1').forEach(e => e.remove())
             fetch('{{ route('lupaKataSandi.validasiOTP') }}', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "Application/json",
-                        "X-CSRF-TOKEN": data.csrf_token
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    if (res.errors) {
-                        for (const key in res.errors) {
-                            const input = document.getElementById(key)
-                            if (input) {
-                                const div = document.createElement('div')
-                                div.className = 'text-danger mt-1 fs-7 error-validasi1'
-                                div.innerText = res.errors[key][0]
-                                input.parentNode.appendChild(div)
-                            }
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "Application/json",
+                    "X-CSRF-TOKEN": data.csrf_token
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('fullscreen-loading').classList.add('d-none')
+                if (res.errors) {
+                    for (const key in res.errors) {
+                        const input = document.getElementById(key)
+                        if (input) {
+                            const div = document.createElement('div')
+                            div.className = 'text-danger mt-1 fs-7 error-validasi1'
+                            div.innerText = res.errors[key][0]
+                            input.parentNode.appendChild(div)
                         }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kode OTP Salah',
-                            text: res.errors.otp,
-                        });
-                    } else {
-                        document.getElementById('title-masukkan-kata-sandi').classList.remove('d-none')
-                        document.getElementById('masukkan-kata-sandi').classList.remove('d-none')
-
-                        document.getElementById('title-masukkan-email').classList.add('d-none')
-                        document.getElementById('masukkan-otp').classList.add('d-none')
-
-                        document.getElementById('form-otp').classList.add('d-none')
-                        document.getElementById('form-kata-sandi').classList.remove('d-none')
                     }
-                }).catch(error => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    console.error('Error during validasi OTP:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Kesalahan Jaringan',
-                        text: 'Terjadi masalah saat memvalidasi data Anda. Silakan coba lagi.'
+                        title: res.errors.title,
+                        text: res.errors.message,
                     });
-                });
+                } else if (res.success) {
+                    document.getElementById('title-masukkan-kata-sandi').classList.remove('d-none')
+                    document.getElementById('masukkan-kata-sandi').classList.remove('d-none')
+
+                    document.getElementById('title-masukkan-email').classList.add('d-none')
+                    document.getElementById('masukkan-otp').classList.add('d-none')
+
+                    document.getElementById('form-otp').classList.add('d-none')
+                    document.getElementById('form-kata-sandi').classList.remove('d-none')
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: res.title,
+                        text: res.message,
+                    });
+                }
+            })
         }
 
         function gantiKataSandi() {
@@ -252,45 +247,48 @@
             }
             document.querySelectorAll('.error-validasi1').forEach(e => e.remove())
             fetch('{{ route('lupaKataSandi.gantiKataSandi') }}', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "Application/json",
-                        "X-CSRF-TOKEN": data.csrf_token
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(res => res.json())
-                .then(res => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    if (res.errors) {
-                        for (const key in res.errors) {
-                            const input = document.getElementById(key)
-                            if (input) {
-                                const div = document.createElement('div')
-                                div.className = 'text-danger mt-1 fs-7 error-validasi1'
-                                div.innerText = res.errors[key][0]
-                                input.parentNode.appendChild(div)
-                            }
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "Application/json",
+                    "X-CSRF-TOKEN": data.csrf_token
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('fullscreen-loading').classList.add('d-none')
+                if (res.errors) {
+                    for (const key in res.errors) {
+                        const input = document.getElementById(key)
+                        if (input) {
+                            const div = document.createElement('div')
+                            div.className = 'text-danger mt-1 fs-7 error-validasi1'
+                            div.innerText = res.errors[key][0]
+                            input.parentNode.appendChild(div)
                         }
-                    } else {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Kata Sandi Berhasil Diubah',
-                            text: res.message,
-                        }).then(() => {
-                            window.location.href = res.redirect
-                        })
                     }
-                }).catch(error => {
-                    document.getElementById('fullscreen-loading').classList.add('d-none')
-                    console.error('Error during ganti kata sandi:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Kesalahan Jaringan',
-                        text: 'Terjadi masalah saat memvalidasi data Anda. Silakan coba lagi.'
+                        title: res.errors.title,
+                        text: res.errors.message,
                     });
-                });
+                } else if (res.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.title,
+                        text: res.message,
+                    }).then(() => {
+                        window.location.href = res.redirect
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: res.title,
+                        text: res.message,
+                    });
+                }
+            })
         }
     </script>
 </body>

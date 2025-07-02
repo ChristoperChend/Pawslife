@@ -3,10 +3,14 @@
         width: 600px;
         height: 450px !important;
         border-radius: 10px;
+        margin-bottom: 1.5rem;
     }
 
     div h5 {
         margin-bottom: 0px;
+        font-weight: normal !important;
+        font-size: 18px;
+        margin-bottom: 5px;
     }
 
     .detail-row {
@@ -14,6 +18,7 @@
     }
     .detail-row label {
         margin-bottom: 0;
+        color: black !important;
     }
 
     .detail-row label input {
@@ -44,11 +49,11 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>Nama lengkap</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_nama_lengkap">{{ $adopter->adopter->nama_lengkap ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_nama_lengkap" value="{{ $adopter->adopter->nama_lengkap }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_nama_lengkap" onclick="editField('nama_lengkap')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_nama_lengkap" onclick="saveField('nama_lengkap'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_nama_lengkap" onclick="editField('nama_lengkap')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_nama_lengkap" onclick="saveField('nama_lengkap'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -56,18 +61,18 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>Email</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3">{{ $adopter->email ?? 'data tidak ada' }}</label>
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $adopter->email ?? 'data tidak ada' }}</label>
                     </div>
                 </div>
 
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>Alamat</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_alamat">{{ $adopter->adopter->alamat ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_alamat" value="{{ $adopter->adopter->alamat }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_alamat" onclick="editField('alamat')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_alamat" onclick="saveField('alamat'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_alamat" onclick="editField('alamat')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_alamat" onclick="saveField('alamat'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -75,11 +80,11 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>Usia</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_usia">{{ $adopter->adopter->usia ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_usia" value="{{ $adopter->adopter->usia }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_usia" onclick="editField('usia')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_usia" onclick="saveField('usia'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_usia" onclick="editField('usia')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_usia" onclick="saveField('usia'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -87,11 +92,11 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>No Handphone</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_no_handphone">{{ $adopter->adopter->no_handphone ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_no_handphone" value="{{ $adopter->adopter->no_handphone }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_no_handphone" onclick="editField('no_handphone')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_no_handphone" onclick="saveField('no_handphone'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_no_handphone" onclick="editField('no_handphone')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_no_handphone" onclick="saveField('no_handphone'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -99,11 +104,11 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>No Whatsapp</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_no_whatsapp">{{ $adopter->adopter->no_whatsapp ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_no_whatsapp" value="{{ $adopter->adopter->no_whatsapp }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_no_whatsapp" onclick="editField('no_whatsapp')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_no_whatsapp" onclick="saveField('no_whatsapp'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_no_whatsapp" onclick="editField('no_whatsapp')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_no_whatsapp" onclick="saveField('no_whatsapp'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -111,11 +116,11 @@
                 <div class="row detail-row">
                     <div class="col-12">
                         <h5>Pekerjaan</h5>
-                        <label class="secondary-color w-100 p-2 text-white rounded-2 mb-3 position-relative">
+                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 position-relative">
                             <span id="text_pekerjaan">{{ $adopter->adopter->pekerjaan ?? 'data tidak ada' }}</span>
                             <input type="text" id="input_pekerjaan" value="{{ $adopter->adopter->pekerjaan }}" class="form-control d-none">
-                            <a href="#" class="float-end text-decoration-none text-white" id="edit_pekerjaan" onclick="editField('pekerjaan')">edit</a>
-                            <button class="btn float-end d-none text-white" id="save_pekerjaan" onclick="saveField('pekerjaan'); return false;">Simpan</button>
+                            <a href="#" class="float-end text-decoration-none text-black" id="edit_pekerjaan" onclick="editField('pekerjaan')">edit</a>
+                            <button class="btn btn-outline-primary float-end d-none" id="save_pekerjaan" onclick="saveField('pekerjaan'); return false;">Simpan</button>
                         </label>
                     </div>
                 </div>
@@ -160,7 +165,7 @@
                 if (res.success) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Berhasil',
+                        title: res.title,
                         text: res.message,
                     })
                     .then(() => {
@@ -169,7 +174,7 @@
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal',
+                        title: res.title,
                         text: res.message,
                     })
                     .then(() => {
