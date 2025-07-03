@@ -53,7 +53,7 @@ Route::prefix('adopter')->group(function () {
 });
 
 Route::prefix('shelter')->group(function () {
-    Route::get('beranda', [berandaController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
+    Route::get('/beranda', [berandaController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
 });
 
 Route::prefix('admin')->group(function () {

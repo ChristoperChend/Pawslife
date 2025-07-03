@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        //     'shelter' => [
+        //     'driver'   => 'session',
+        //     'provider' => 'shelters',
+        // ],
     ],
 
     /*
@@ -64,6 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Pengguna::class),
         ],
+    // 'shelters' => [
+    //         'driver' => 'eloquent',
+    //         'model'  => App\Models\shelter::class,
+    //     ],
 
         // 'users' => [
         //     'driver' => 'database',

@@ -167,12 +167,13 @@
                     icon.classList.remove('fa-solid');
                     icon.classList.add('fa-regular');
                     el.classList.remove('liked');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: res.title,
+                        text: res.message
+                    })
                 }
-                Swal.fire({
-                    icon: 'error',
-                    title: res.title,
-                    text: res.message
-                });
             });
         }
 

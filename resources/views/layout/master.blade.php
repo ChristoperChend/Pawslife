@@ -13,14 +13,17 @@
 </head>
 
 <body>
-    <div class="position-relative min-vh-100">
+    {{-- <div class="position-relative min-vh-100"> --}}
+    <div class="d-flex flex-column min-vh-100">
         @include('layout.navbar')
 
         <div class="position-relative">
             @yield('content')
         </div>
-
-        @include('layout.footer')
+        <div class="mt-auto">
+            @include('layout.footer')
+        </div>
+        
     </div>
 </body>
 

@@ -49,6 +49,14 @@ class adopterController extends Controller
 
     public function tambahFavorit(Request $request) {
         try {
+            if (!Auth::check()) {
+                return response()->json([
+                    'error' => true,
+                    'title' => '',
+                    'message' => 'Lakukan login sebagai adopter untuk menambahkan hewan ke favorit'
+                ]);
+            }
+
             $request->validate([
                 'hewan_id' => 'required|exists:hewan,id',
             ]);
