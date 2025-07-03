@@ -6,7 +6,7 @@ use App\Http\Controllers\favoritController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\mailController;
 use App\Http\Controllers\registerController;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\shelter\shelterController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -53,7 +53,9 @@ Route::prefix('adopter')->group(function () {
 });
 
 Route::prefix('shelter')->group(function () {
-    Route::get('/beranda', [berandaController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
+    Route::get('/beranda', [shelterController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
+    Route::get('/tambahHewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
+    Route::post('/tambahHewanPost', [shelterController::class, 'halamanTambahHewanPost'])->name('shelter.tambahHewanPost');
 });
 
 Route::prefix('admin')->group(function () {
