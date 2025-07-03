@@ -258,7 +258,7 @@
         </div>
         <!-- Image -->
         <div class="col-5 img-container p-0 position-fixed">
-            <img src="{{ asset('image/register.jpg') }}" alt="Login Image">
+            <img src="{{ asset('image/register2.jpg') }}" alt="Login Image">
         </div>
     </div>
 

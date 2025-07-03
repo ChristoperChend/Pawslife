@@ -3,24 +3,29 @@
         width: 55px;
     }
 
+    .navbar{
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
     .nav-link {
-        color: white;
+        color: black;
         font-weight: bold;
         padding-right: 20px !important;
     }
 
     .nav-link:hover {
-        color: #ffd700;
+        /* color: #007bff; */
+        transform: translateY(-2px);
     }
 
     .auth-text {
-        color: white;
+        color: black;
         text-decoration: none;
         font-weight: bold;
     }
 
     .auth-text:hover {
-        color: #ffd700;
+        transform: translateY(-2px);
     }
 
     .profile-image-navbar {
@@ -44,10 +49,10 @@
 </style>
 
 <header>
-    <nav class="navbar navbar-expand-lg primary-color">
+    <nav class="navbar navbar-expand-lg nav-color">
         <div class="container">
             <a class="navbar-brand" href="{{ Auth::check() ? route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') : route('beranda.adopterBeranda') }}">
-                <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image">
+                <img src="{{ asset('image/AppLogo.png') }}" alt="Logo Image" class="logo-image">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="toggle navigation">
