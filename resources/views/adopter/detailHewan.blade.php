@@ -12,12 +12,17 @@
         margin-bottom: 5px;
     }
 
+    .nama-hewan {
+        background: white !important;
+    }
+
     .detail-row {
         margin-bottom: 15px;
     }
     .detail-row label {
         margin-bottom: 0;
         color: black !important;
+        background: white !important;
     }
 
     .mr {
@@ -33,11 +38,11 @@
 
 @section('content')
 
-    <div class="container mt-5">
+    <div class="container py-5">
         <div class="row">
             <div class="col-12 col-md-6 text-center">
                 <img src="{{ asset('storage/' . $detailHewan->foto_hewan) }}" class="hewan-image img-fluid" alt="Hewan Image">
-                <label class="w-75 p-2 text-white mb-3 mt-3 rounded-2">{{ $detailHewan->nama_hewan ?? 'data tidak ada' }}</label>
+                <label class="border shadow-sm w-75 p-2 mb-3 mt-3 rounded-2 nama-hewan text-black">{{ $detailHewan->nama_hewan ?? 'data tidak ada' }}</label>
             </div>
 
             <div class="col-12 col-md-6">
@@ -105,6 +110,8 @@
         </div>
     </div>
 
+    @include('layout.loading')
+
     <script>
         function ajukanAdopsi() {
             Swal.fire({
@@ -121,6 +128,7 @@
             })
             .then((result) => {
                 if (result.isConfirmed) {
+                    document.getElementById('fullscreen-loading').classList.remove('d-none')
                     const data = {
                         adopter_id: '{{ $adopter_id }}',
                         hewan_id: '{{ $detailHewan->id }}',
@@ -136,6 +144,7 @@
                     })
                     .then(res => res.json())
                     .then(res => {
+                        document.getElementById('fullscreen-loading').classList.add('d-none')
                         if (res.success) {
                             Swal.fire({
                                 icon: "success",

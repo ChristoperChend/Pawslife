@@ -10,9 +10,9 @@
     }
 
     .my-active-page-style .page-link {
-        background-color: #ffd700;
-        border-color: #ffd700;
-        color: #333;
+        background-color: #1158dd;
+        border-color: #1158dd;
+        color: #fff;
     }
 
     .my-inactive-page-style .page-link:hover {

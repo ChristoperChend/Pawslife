@@ -24,7 +24,7 @@
 @extends('layout.master')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container py-5">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listShelter->isEmpty())
                 @foreach ($listShelter as $shelter)

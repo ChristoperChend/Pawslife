@@ -4,12 +4,18 @@
         text-align: justify;
         margin-bottom: 2.5rem !important;
     }
+
+    @media (max-width: 768px) {
+        p {
+            font-size: 18px;
+        }
+    }
 </style>
 
 @extends('layout.master')
 
 @section('content')
-    <div class="container mt-5 align justify-content-center">
+    <div class="container py-5 align justify-content-center">
         <h1 class="fw-bold text-center">Tentang Kami</h1>
         <hr>
 

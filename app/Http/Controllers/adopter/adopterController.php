@@ -4,6 +4,7 @@ namespace App\Http\Controllers\adopter;
 
 use App\Models\favorit;
 use App\Models\formPengajuanAdopsi;
+use App\Models\formPenyerahanHewan;
 use App\Models\hewan;
 use App\Models\shelter;
 use Exception;
@@ -154,13 +155,26 @@ class adopterController extends Controller
                 ]);
             }
 
+            $sudahAda = formPengajuanAdopsi::where('adopter_id', $request->adopter_id)
+                ->where('hewan_id', $request->hewan_id)
+                ->whereIn('status_pengajuan', ['Menunggu konfirmasi'])
+                ->exists();
+            
+            if ($sudahAda) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Pengajuan Ganda',
+                    'message' => 'Kamu sudah melakukan pengajuan adopsi terhadap hewan ini.'
+                ]);
+            }
+
             DB::beginTransaction();
 
             formPengajuanAdopsi::create([
                 'adopter_id' => $request->adopter_id,
                 'hewan_id' => $request->hewan_id,
                 'shelter_id' => $request->shelter_id,
-                'status_pengajuan' => 'Masa Percobaan',
+                'status_pengajuan' => 'Menunggu konfirmasi',
                 'alasan' => ''
             ]);
 
@@ -180,5 +194,108 @@ class adopterController extends Controller
                 'message' => 'Terjadi kesalahan saat pengajuan adopsi, silahkan coba lagi.'
             ]);
         }
+    }
+
+    public function showRiwayatPengajuanAdopsi() {
+        $adopter_id = Auth::user()->id;
+
+        $riwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)->latest()->paginate(4);
+        return view('adopter.riwayatPengajuanAdopsi', compact('riwayat'));
+    }
+
+    public function showLepasAdopsi() {
+        return view('adopter.lepasAdopsi');
+    }
+
+    public function lepasAdopsi(Request $request) {
+        try {
+            $request->validate([
+                'namaHewan'=> 'required',
+                'jenisHewan' =>'required|in:anjing,kucing',
+                'jenisKelaminHewan' =>'required|in:jantan,betina',
+                'statusVaksinHewan' =>'required|in:sudahVaksin,belumVaksin',
+                'statusSterilHewan' =>'required|in:sudahSteril,belumSteril',
+                'beratHewan' =>'required|numeric',
+                'rasHewan' =>'required',
+                'fotoHewan' =>'required|image|mimes:jpeg,png,jpg|max:2048',
+            ],[
+                'namaHewan.required' => '*Nama Hewan Harus di Isi',
+                'jenisHewan.required' => '*Jenis Hewan Harus di Pilih',
+                'jenisKelaminHewan.required' => '*Jenis Kelamin Hewan Harus di Isi',
+                'statusVaksinHewan.required' => '*Status Vaksin Hewan Harus di Isi',
+                'statusSterilHewan.required' => '*Status Steril Hewan Harus di Isi',
+                'beratHewan.required' => '*Berat Hewan Harus di Isi',
+                'beratHewan.numeric' => '*Berat Hewan Hanya Boleh Berupa Angka',
+                'rasHewan.required' => '*Ras Hewan Harus di Isi',
+                'fotoHewan.required' => '*Foto harus diisi.',
+                'fotoHewan.image' => '*Foto harus berformat JPG, JPEG, atau PNG.',
+                'fotoHewan.mimes' => '*Foto harus berformat JPG, JPEG, atau PNG.',
+                'fotoHewan.max' => '*Ukuran foto maksimal 2MB.'
+            ]);
+
+            $fotoPath = $request->file('fotoHewan')->store('foto_hewan_adopter', 'public');
+
+            if(!Auth::check()) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Error',
+                    'message' => 'Lakukan login terlebih dahulu sebelum melakukan penyerahan hewan peliharaan',
+                ]);
+            } else {
+                $adopter_id = Auth::user()->id;
+            }
+
+            DB::beginTransaction();
+
+            $statusVaksin = $request->statusVaksinHewan === 'sudahVaksin' ? 'Sudah Vaksin' : 'Belum Vaksin';
+            $statusSteril = $request->statusSterilHewan === 'sudahSteril' ? 'Sudah Steril' : 'Belum Steril';
+
+            $formPenyerahanHewan = formPenyerahanHewan::create([
+                'shelter_id' => null,
+                'adopter_id' => $adopter_id,
+                'nama_hewan' => $request->namaHewan,
+                'ras' => $request->rasHewan,
+                'berat' => $request->beratHewan,
+                'status_steril' => $statusSteril,
+                'status_vaksin' => $statusVaksin,
+                'catatan_medis' => $request->catatanMedisHewan ?: '-',
+                'foto_hewan' => $fotoPath,
+                'jenis_hewan' => $request->jenisHewan,
+                'alasan_penyerahan' => $request->alasanPenyerahanHewan ?: '-',
+                'jenis_kelamin' => $request->jenisKelaminHewan,
+                'status_penyerahan' => 'Mencari shelter',
+            ]);
+
+            DB::commit();
+
+            if (!$formPenyerahanHewan) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Error',
+                    'message' => 'Terjadi kesalahan ketika menyimpan data hewan!'
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Berhasil',
+                'message' => 'Berhasil menyimpan data hewan!'
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error LepasAdopsi: '. $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'title' => 'Error',
+                'message' => 'Terjadi kesalahan saat penyerahan hewan peliharaan, silahkan coba lagi.'
+            ]);
+        }
+    }
+
+    public function showRiwayatPenyerahanHewan() {
+        $adopter_id = Auth::user()->id;
+
+        $riwayat = formPenyerahanHewan::where('adopter_id', $adopter_id)->latest()->paginate(4);
+        return view('adopter.riwayatPenyerahanHewan', compact('riwayat'));
     }
 }

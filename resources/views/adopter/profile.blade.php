@@ -19,6 +19,7 @@
     .detail-row label {
         margin-bottom: 0;
         color: black !important;
+        background: white !important;
     }
 
     .detail-row label input {
@@ -39,7 +40,7 @@
 
 @section('content')
 
-    <div class="container mt-5">
+    <div class="container py-5">
         <div class="row">
             <div class="col-12 col-md-6 text-center">
                 <img src="{{ asset('storage/' . $adopter->adopter->foto_adopter) }}" class="adopter-image img-fluid" alt="Adopter Image">
@@ -129,7 +130,7 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-warning w-30 fw-bold ms-4 mr">Logout</a>
+                    <a href="#" onclick="confirmLogout(event)" class="btn btn-warning w-30 fw-bold ms-4 mr">Logout</a>
                 </div>
             </div>
         </div>
@@ -146,42 +147,74 @@
         }
 
         function saveField(field) {
-            document.getElementById('fullscreen-loading').classList.remove('d-none')
-            const data = {
-                value: document.getElementById('input_' + field).value,
-                field: field
-            }
-            fetch("{{ route('adopter.updateProfile') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify(data)
+            Swal.fire({
+                icon: "question",
+                title: "Perubahan Data",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yakin",
+                cancelButtonText: "Kembali",
+                reverseButtons: true,
+                text: 'Apakah anda yakin mengubah data?'
             })
-            .then(res => res.json())
-            .then(res => {
-                document.getElementById('fullscreen-loading').classList.add('d-none')
-                if (res.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: res.title,
-                        text: res.message,
-                    })
-                    .then(() => {
-                        location.reload();
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: res.title,
-                        text: res.message,
-                    })
-                    .then(() => {
-                        location.reload();
-                    })
+            .then((result) => {
+                document.getElementById('fullscreen-loading').classList.remove('d-none')
+                const data = {
+                    value: document.getElementById('input_' + field).value,
+                    field: field
                 }
+                fetch("{{ route('adopter.updateProfile') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(res => {
+                    document.getElementById('fullscreen-loading').classList.add('d-none')
+                    if (res.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: res.title,
+                            text: res.message,
+                        })
+                        .then(() => {
+                            location.reload();
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: res.title,
+                            text: res.message,
+                        })
+                        .then(() => {
+                            location.reload();
+                        })
+                    }
+                })
             })
+        }
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            Swal.fire({
+                icon: "question",
+                title: "Konfirmasi Logout",
+                text: "Apakah Anda yakin ingin logout?",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Logout",
+                cancelButtonText: "Kembali",
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logout-form').submit();
+                }
+            });
         }
     </script>
 

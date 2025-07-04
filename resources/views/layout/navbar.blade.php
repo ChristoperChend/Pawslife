@@ -32,18 +32,33 @@
         object-fit: cover;
     }
 
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+
     @media (max-width: 991.98px) {
+        .container {
+            --bs-gutter-x: 0 !important;
+        }
+
         .navbar-nav .nav-item {
             text-align: center;
         }
+
         .auth-section {
             display: flex;
             justify-content: center;
             padding-top: 1rem;
             padding-bottom: 0.5rem;
+        
         }
         .auth-section .btn {
             margin: 0 0.5rem;
+        }
+
+        .dropdown-menu {
+            text-align: center;
         }
     }
 </style>
@@ -56,7 +71,7 @@
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="toggle navigation">
-                <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-bars"></i>
             </button>
 
             <div class="collapse navbar-collapse justify-content-lg-end" id="navbarNav">
@@ -71,14 +86,37 @@
 
                     @if (Auth::check() && Auth::user()->tipe_pengguna == 'adopter')
                         <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="riwayatDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Riwayat
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="riwayatDropdown">
+                                <li><a class="dropdown-item" href="{{ route('adopter.showRiwayatPengajuanAdopsi') }}">Riwayat pengajuan adopsi</a></li>
+                                <li><a class="dropdown-item" href="{{ route('adopter.showRiwayatPenyerahanHewan') }}">Riwayat penyerahan hewan</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
-                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Data Hewan</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Daftar Pengajuan</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="daftarPengajuanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Daftar Pengajuan
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="daftarPengajuanDropdown">
+                                <li><a class="dropdown-item" href="#">Daftar pengajuan adopsi</a></li>
+                                <li><a class="dropdown-item" href="#">Daftar pengajuan penyerahan hewan</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="riwayatShelterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Riwayat
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="riwayatShelterDropdown">
+                                <li><a class="dropdown-item" href="#">Riwayat pengambilan hewan adopter</a></li>
+                                <li><a class="dropdown-item" href="#">Riwayat hewan yang telah diadopsi</a></li>
+                            </ul>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
                         <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
@@ -86,7 +124,7 @@
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @endif
                 </ul>

@@ -58,7 +58,7 @@
 @extends('layout.master')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container py-5">
         <div class="d-flex justify-content-center mb-4">
             <div class=" border border-2 rounded">
                 <div class="btn-group align-items-center">

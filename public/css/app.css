@@ -38,3 +38,9 @@ body {
 .cursor {
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 360px;
+    }
+}

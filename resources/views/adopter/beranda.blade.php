@@ -96,7 +96,7 @@
 @section('content')
     <img src="{{ asset('image/banner.jpeg') }}" class="banner" alt="Banner Beranda">
 
-    <div class="container">
+    <div class="container py-5">
         <div class="container position-absolute text-center banner-text">
             <h1 class=" fw-bold">Dapatkan teman terbaik baru hari ini</h1>
         </div>
