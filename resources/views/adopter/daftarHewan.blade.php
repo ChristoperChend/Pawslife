@@ -13,7 +13,7 @@
     }
 
     .daftar-hewan {
-        width: 250px;
+        width: 230px;
         height: 200px;
     }
 

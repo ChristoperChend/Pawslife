@@ -105,13 +105,13 @@
             <div class="row justify-content-center">
                 <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'kucing']) }}" class="col-12 col-sm-6 d-flex justify-content-center mb-3">
                     <div class="image-container cursor">
-                        <img src="{{ asset('image/kucing.jpeg') }}" class="hewan-image" alt="Kucing">
+                        <img src="{{ asset('image/cat logo2.png') }}" class="hewan-image" alt="Kucing">
                         <div class="overlay-text">Kucing</div>
                     </div>
                 </a>
                 <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'anjing']) }}" class="col-12 col-sm-6 d-flex justify-content-center mb-3">
                     <div class="image-container cursor">
-                        <img src="{{ asset('image/anjing.jpeg') }}" class="hewan-image" alt="Anjing">
+                        <img src="{{ asset('image/dog logo.png') }}" class="hewan-image" alt="Anjing">
                         <div class="overlay-text">Anjing</div>
                     </div>
                 </a>

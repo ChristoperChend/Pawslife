@@ -15,4 +15,8 @@ class shelter extends Model
     public function pengguna() {
         return $this->belongsTo(pengguna::class);
     }
+
+    public function hewan() {
+        return $this->hasMany(hewan::class);
+    }
 }

@@ -54,6 +54,7 @@ Route::prefix('adopter')->group(function () {
     Route::get('lepas_adopsi', [adopterController::class, 'showLepasAdopsi'])->name('adopter.showLepasAdopsi');
     Route::post('lepas_adopsi_post', [adopterController::class, 'lepasAdopsi'])->name('adopter.lepasAdopsi');
     Route::get('riwayat_penyerahan_hewan', [adopterController::class, 'showRiwayatPenyerahanHewan'])->name('adopter.showRiwayatPenyerahanHewan');
+    Route::get('detail_shelter', [adopterController::class, 'detailShelter'])->name('adopter.detailShelter');
 });
 
 Route::prefix('shelter')->group(function () {

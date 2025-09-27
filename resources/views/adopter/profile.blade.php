@@ -6,7 +6,7 @@
         margin-bottom: 1.5rem;
     }
 
-    div h5 {
+    .detail-row div h5 {
         margin-bottom: 0px;
         font-weight: normal !important;
         font-size: 18px;

@@ -72,7 +72,15 @@
                         <!-- Status -->
                         <div class="text-start me-5" style="flex-shrink: 0;">
                             <h5 class="fw-bold mb-3">Status</h5>
-                            <h6 class="mb-0">{{ $items->status_pengajuan }}</h6>
+                            {{-- {{ dd($selesaiMasaPercobaan) }} --}}
+                            @if ($items->selesai_masa_percobaan)
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" onclick="kembalikanHewan()">Kembalikan</button>
+                                    <button type="button" class="btn btn-outline-primary w-30 fw-bold ms-4" onclick="adopsiHewan()">Adopsi</button>
+                                </div>
+                            @else
+                                <h6 class="mb-0">{{ $items->status_pengajuan }}</h6>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -80,4 +88,85 @@
         @endforeach
         <div class="d-flex justify-content-center mt-4">{{ $riwayat->links() }}</div>
     </div>
+
+    <script>
+        function kembalikanHewan() {
+            Swal.fire({
+                icon: "question",
+                title: "Alasan Melakukan Adopsi",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Selanjutnya",
+                cancelButtonText: "Kembali",
+                reverseButtons: true,
+                width: '800px',
+                html: '<div><hr> <h6 class="text-start">Apa alasan anda ingin melakukan adopsi pada hewan ini?</h6> <textarea class="form-control" rows="4" id="alasan_adopsi"></textarea> <hr></div>',
+                preConfirm: () => {
+                    const alasan = document.getElementById('alasan_adopsi').value;
+                    if (!alasan) {
+                        Swal.showValidationMessage('Alasan wajib diisi!');
+                    }
+                    return alasan;
+                }
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: "question",
+                        title: "Apakah anda yakin mengembalikan hewan?",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yakin",
+                        cancelButtonText: "Kembali",
+                        reverseButtons: true,
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            
+                        }
+                    })
+                }
+            })
+        }
+
+        function adopsiHewan() {
+            Swal.fire({
+                icon: "question",
+                title: "Alasan Mengembalikan Hewan",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Selanjutnya",
+                cancelButtonText: "Kembali",
+                reverseButtons: true,
+                width: '800px',
+                html: '<div><hr> <h6 class="text-start">Apa alasan anda ingin mengembalikan hewan ini?</h6> <textarea class="form-control" rows="4" id="alasan_adopsi"></textarea> <hr></div>',
+                preConfirm: () => {
+                    const alasan = document.getElementById('alasan_adopsi').value;
+                    if (!alasan) {
+                        Swal.showValidationMessage('Alasan wajib diisi!');
+                    }
+                    return alasan;
+                }
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: "question",
+                        title: "Apakah anda yakin melakukan adopsi?",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yakin",
+                        cancelButtonText: "Kembali",
+                        reverseButtons: true,
+                    })
+                }
+                }
+            })
+        }
+    </script>
 @endsection
