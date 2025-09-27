@@ -16,7 +16,8 @@ body {
 
 .primary-color {
 	/* background-color: rgb(86, 2, 31); */
-	background-color: #1158dd;
+	 /* background: linear-gradient(90deg, #60a5fa, #8b5cf6); */
+	 background: linear-gradient(90deg, #60a5fa, #8b5cf6);
 	/* background-color: #6256CA; */
 }
 

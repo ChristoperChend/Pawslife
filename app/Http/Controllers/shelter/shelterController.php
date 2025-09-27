@@ -84,22 +84,13 @@ class shelterController
                 'status_hewan' => 'siap_di_adopsi'
                 ]);
                 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Berhasil Menambahkan Hewan'
-                ]);
-            }catch(Exception $e){
-                Log::error('Gagal menambahkan hewan, error detail: '.$e->getMessage());
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Berhasil Menambahkan Hewan'
-                ]);
+                return redirect()->route('beranda.shelterBeranda')->with('success', 'Hewan berhasil ditambahan!');
+            }catch (Exception $e) {
+            Log::error('Gagal menambahkan hewan: '.$e->getMessage());
+            return back()->withErrors(['general' => 'Terjadi kesalahan. Coba lagi.'])->withInput();
             }
-          
         }
-
-        
-        return back();
+        return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
 }
 

@@ -1,5 +1,12 @@
 @extends('layout.master')
 <style>
+    .hero-wrap{
+        border-bottom: 1px solid var(--line);
+    }
+    .hero{
+        margin: 0 auto; padding: 36px 12px 18px;
+    }
+
     .card {
         background-color: #ffffff;
         border: 1px solid #dee2e6;
@@ -21,15 +28,16 @@
 @section('content')
 
     <div class="container py-5">
-        <div class=" row d-flex  mb-4">
-            <h3 class="fw-bold mb-0">
-                Selamat Datang Shelter {{$shelterDatas->nama_shelter}}!
-            </h3>
+         <div class="hero-wrap">
+            <div class="hero">
+                <h3 class="mb-1">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h3>
+                <p>Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.</p>
+            </div>
         </div>
 
         <div class="d-flex justify-content-between ms-3 ">
-            <a href="#" class="align-self-center px-5;">
-                Lihat Semua >
+            <a href="{{ route('shelter.tambahHewan') }}" class="align-self-center px-5;">
+                Lihat Semua >>
             </a>
             <a href="{{ route('shelter.tambahHewan') }}">
                 <button type="button" class="btn btn-outline-primary me-3">+ Tambah Hewan</button>
@@ -72,3 +80,19 @@
     </div>
 
 @endsection
+
+@if (session('success'))
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: @json(session('success')),
+      showConfirmButton: false,
+      timer: 2200,
+      timerProgressBar: true
+    });
+  });
+</script>
+@endif
