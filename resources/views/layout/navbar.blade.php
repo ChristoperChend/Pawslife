@@ -4,18 +4,26 @@
     }
 
     .navbar{
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e5e5;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
     
     .nav-link {
-        color: black;
-        font-weight: bold;
-        padding-right: 20px !important;
+        color: #333;
+        font-weight: 500;
+        padding: 0.5rem 1rem !important;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
     }
 
     .nav-link:hover {
-        /* color: #007bff; */
-        transform: translateY(-2px);
+        color: var(--primary-color);
+        /* transform: translateY(-2px); */
+    }
+
+    .nav-link.active {
+        color: var(--primary-color) !important;
+        border-bottom: 2px solid var(--primary-color);
     }
 
     .auth-text {
@@ -78,7 +86,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         @if (Auth::check())
-                            <a class="nav-link" href="{{ route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') }}">Beranda</a>
+                            <a class="nav-link {{request()->routeIs('beranda.*') ? 'active' : ''}}" href="{{ route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') }}">Beranda</a>
                         @else
                             <a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a>
                         @endif
@@ -98,7 +106,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
-                        <li class="nav-item"><a class="nav-link" href="">Data Hewan</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('shelter.data.hewan') ? 'active' : ''}}" href="{{ route('shelter.data.hewan') }}">Data Hewan</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="daftarPengajuanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Daftar Pengajuan

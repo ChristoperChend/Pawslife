@@ -17,7 +17,8 @@
     <div class="d-flex flex-column min-vh-100">
         @include('layout.navbar')
 
-        <div class="position-relative" style="background-color: #EFEEF1">
+        {{-- EFEEF1 --}}
+        <div class="position-relative" style="background-color: white">
             @yield('content')
         </div>
         <div class="mt-auto">

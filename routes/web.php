@@ -58,9 +58,10 @@ Route::prefix('adopter')->group(function () {
 });
 
 Route::prefix('shelter')->group(function () {
-    Route::get('/beranda', [shelterController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
-    Route::get('/tambahHewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
-    Route::post('/tambahHewanPost', [shelterController::class, 'halamanTambahHewanPost'])->name('shelter.tambahHewanPost');
+    Route::get('beranda', [shelterController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
+    Route::get('tambah-hewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
+    Route::post('tambah-hewanPost', [shelterController::class, 'halamanTambahHewanPost'])->name('shelter.tambahHewanPost');
+    Route::get('data-hewan', [shelterController::class, 'getDataHewan'])->name('shelter.data.hewan');
 });
 
 Route::prefix('admin')->group(function () {

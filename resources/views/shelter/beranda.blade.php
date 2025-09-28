@@ -36,7 +36,7 @@
         </div>
 
         <div class="d-flex justify-content-between ms-3 ">
-            <a href="{{ route('shelter.tambahHewan') }}" class="align-self-center px-5;">
+            <a href="{{ route('shelter.data.hewan') }}" class="align-self-center px-5;">
                 Lihat Semua >>
             </a>
             <a href="{{ route('shelter.tambahHewan') }}">
