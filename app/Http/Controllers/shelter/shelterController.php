@@ -12,18 +12,12 @@ use Illuminate\Support\Facades\File;
 
 class shelterController
 {
-     public function shelterBeranda()
+    public function shelterBeranda()
     {   
         $user = Auth::user();
-        $dataHewan = hewan::where('shelter_id', $user->id)->get();
-        // dump($dataHewan);
+        $dataHewan = hewan::where('shelter_id', $user->id)->orderBy('id', 'desc')->take(10)->get();
 
         $shelterDatas   = Shelter::where( 'id',$user->id)->first();
-        // dd($shelterDatas);
-        // if you’re using the default guard:
-        // $currentShelter = Auth::user();
-        // OR, if you set up a custom 'shelter' guard in config/auth.php:
-        // $currentShelter = Auth::guard('shelter')->user();
 
         return view('shelter.beranda', [
             'shelterDatas'   => $shelterDatas,
@@ -92,5 +86,11 @@ class shelterController
         }
         return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
+
+    public function getDataHewan(){
+        return view('shelter.daftarHewan');
+    }
 }
+
+
 
