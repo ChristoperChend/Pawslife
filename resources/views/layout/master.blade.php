@@ -18,7 +18,7 @@
         @include('layout.navbar')
 
         {{-- EFEEF1 --}}
-        <div class="position-relative" style="background-color: white">
+        <div class="position-relative" style="background-color: rgba(234, 234, 234, 0.199)">
             @yield('content')
         </div>
         <div class="mt-auto">

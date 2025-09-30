@@ -5,11 +5,6 @@
         --card-bg: #ffffff;
         --page-bg: #f5f6fb;
         --muted: #6b7280;
-        --accent: #2563eb;
-        --ring: rgba(37, 99, 235, .25);
-        --accent-start: #60a5fa;  
-        --accent-end:   #8b5cf6;   
-        --accent-ring:  rgba(96,165,250,.32); 
     }
 
     body { background: var(--page-bg); }
@@ -42,7 +37,7 @@
 
     .card-accent{
         height: 6px;
-        background: linear-gradient(90deg, #60a5fa, #8b5cf6);
+        background: var(--primary-color);
     }
 
     .form-shell{
@@ -101,7 +96,7 @@
     }
 
     .btn-primary{
-        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        background: var(--primary-color);
         color: #fff;
         border: none !important;
         border-width: 0 !important;
@@ -111,9 +106,9 @@
     .btn-primary:hover{
         transform: translateY(-1px);
         filter: saturate(1.05);
+        color: var(--primary-color);
         box-shadow:
-            0 10px 22px rgba(96,165,250,.30),
-            0 3px 10px rgba(139,92,246,.22);
+            0 10px 22px rgba(96,165,250,.30);
     }
 
     .form-footer .btn.btn-light{
@@ -255,8 +250,8 @@
             </div>
 
             <div class="form-footer">
-                <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-light back-btn border">Kembali</a>
-                <button type="submit" class="btn btn-primary">
+                <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-light border">Kembali</a>
+                <button type="submit" class="btn btn-primary primary-color" style="color: white">
                     Simpan
                 </button>
             </div>

@@ -87,8 +87,20 @@ class shelterController
         return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
 
-    public function getDataHewan(){
-        return view('shelter.daftarHewan');
+    public function getDataHewan(Request $request){
+        $user = Auth::user();
+        $q = trim($request->query('q', ''));
+        $dataHewan = hewan::query()
+            ->where('shelter_id', $user->id)
+            ->when($q !== '', function($query) use ($q){
+                $safe = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $q);
+                $query->where('nama_hewan', 'LIKE', "%{$safe}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('shelter.dataHewan', compact('dataHewan', 'q'));
     }
 }
 
