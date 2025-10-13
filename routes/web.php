@@ -7,6 +7,7 @@ use App\Http\Controllers\loginController;
 use App\Http\Controllers\mailController;
 use App\Http\Controllers\registerController;
 use App\Http\Controllers\shelter\shelterController;
+use App\Models\shelter;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -62,6 +63,13 @@ Route::prefix('shelter')->group(function () {
     Route::get('tambah-hewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
     Route::post('tambah-hewanPost', [shelterController::class, 'halamanTambahHewanPost'])->name('shelter.tambahHewanPost');
     Route::get('data-hewan', [shelterController::class, 'getDataHewan'])->name('shelter.data.hewan');
+    Route::get('detail-hewan/{id}', [shelterController::class, 'detailHewan'])->name('shelter.detail.hewan');
+    Route::put('perbarui-data-hewan/{id}', [shelterController::class, 'updateDataHewan'])->name('shelter.perbarui.data.hewan');
+    Route::delete('hapus-data-hewan/{id}', [shelterController::class, 'hapusDataHewan'])->name('shelter.hapus.data.hewan');
+    Route::get('daftar-pengajuan-penyerahan-hewan', [shelterController::class, 'getDaftarPengajuanPenyerahanHewan'])->name('shelter.daftar.pengajuan.penyerahan.hewan');
+    Route::get('daftar-pengajuan-adopsi-hewan', [shelterController::class, 'getDaftarPengajuanAdopsiHewan'])->name('shelter.daftar.pengajuan.adopsi.hewan');
+    Route::post('terima-pengajuan-adopsi/{id}', [shelterController::class, 'terimaPengajuanAdopsi'])->name('shelter.terima.pengajuan.adopsi');
+    Route::post('tolak-pengajuan-adopsi/{id}', [shelterController::class, 'tolakPengajuanAdopsi'])->name('shelter.tolak.pengajuan.adopsi');
 });
 
 Route::prefix('admin')->group(function () {

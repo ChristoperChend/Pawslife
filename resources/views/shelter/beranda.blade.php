@@ -99,7 +99,7 @@
                             @endif
                         </h5>
                         <p class="card-text text-muted mb-2">Berat: {{ $hewan->berat }} kg</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-auto">Lihat Detail</a>
+                        <a href="{{ route('shelter.detail.hewan', $hewan->id) }}" class="btn btn-sm btn-outline-primary mt-auto">Lihat Detail</a>
                     </div>
                 </div>
             </div>
