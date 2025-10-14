@@ -108,12 +108,12 @@
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('shelter.data.hewan') ? 'active' : ''}}" href="{{ route('shelter.data.hewan') }}">Data Hewan</a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="daftarPengajuanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link {{request()->routeIs('shelter.daftar.pengajuan.*') ? 'active' : ''}}" href="#" id="daftarPengajuanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Daftar Pengajuan
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="daftarPengajuanDropdown">
-                                <li><a class="dropdown-item" href="#">Daftar pengajuan adopsi</a></li>
-                                <li><a class="dropdown-item" href="#">Daftar pengajuan penyerahan hewan</a></li>
+                                <li><a class="dropdown-item {{request()->routeIs('shelter.daftar.pengajuan.adopsi.hewan') ? 'active' : ''}}" href="{{ route('shelter.daftar.pengajuan.adopsi.hewan') }}">Daftar pengajuan adopsi</a></li>
+                                <li><a class="dropdown-item {{request()->routeIs('shelter.daftar.pengajuan.penyerahan.hewan') ? 'active' : ''}}" href="{{ route('shelter.daftar.pengajuan.penyerahan.hewan') }}">Daftar pengajuan penyerahan hewan</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

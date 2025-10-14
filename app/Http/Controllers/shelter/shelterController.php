@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\shelter;
 
+use App\Models\formPengajuanAdopsi;
 use App\Models\hewan;
 use App\Models\shelter;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class shelterController
 {
@@ -87,8 +90,143 @@ class shelterController
         return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
 
-    public function getDataHewan(){
-        return view('shelter.daftarHewan');
+    public function getDataHewan(Request $request){
+        $user = Auth::user();
+        $q = trim($request->query('q', ''));
+        $dataHewan = hewan::query()
+            ->where('shelter_id', $user->id)
+            ->when($q !== '', function($query) use ($q){
+                $safe = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $q);
+                $query->where('nama_hewan', 'LIKE', "%{$safe}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('shelter.dataHewan', compact('dataHewan', 'q'));
+    }
+
+    public function detailHewan($id){
+        $hewan = hewan::findOrFail($id);
+        return view('shelter.detailHewan', compact('hewan'));
+    }
+
+    public function updateDataHewan(Request $request, $id){
+        $hewan = hewan::findOrFail($id);
+        $rules = [
+            'nama_hewan'     => 'required|string|max:255',
+            'jenis_hewan'    => 'required|string|max:255',
+            'jenis_kelamin'  => 'required|in:jantan,betina',
+            'berat'          => 'required|numeric|min:0.1',
+            'ras'            => 'required|string|max:255',
+            'status_steril'  => 'required|in:sudahSteril,belumSteril',
+            'status_vaksin'  => 'required|in:sudahVaksin,belumVaksin',
+            'catatan_medis'  => 'required|string|max:500',
+            'foto_hewan'     => $hewan->foto_hewan 
+                                ? 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+                                : 'required|image|mimes:jpeg,png,jpg|max:2048'
+        ];
+
+        $validate = $request->validate($rules);
+
+        //Handle photo
+        if($request->has('foto_hewan')){
+            $destinationPath = public_path('image/daftarHewan');
+
+            if(!empty($request->old_foto_hewan) && File::exists(public_path($request->old_foto_hewan))){
+                File::delete(public_path($request->old_foto_hewan));
+            }
+
+            $file = $request->file('foto_hewan');
+            $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+            $file->move($destinationPath, $fileName);
+
+            $validate['foto_hewan'] = 'image/daftarHewan/' . $fileName;
+        }else {
+            // Simpan foto lama jika tidak ada foto baru
+            $validate['foto_hewan'] = $request->old_foto_hewan;
+        }
+
+        $hewan->update($validate);
+
+        return redirect()->back()->with('success', 'Data hewan berhasil diperbarui!');
+    }
+
+    public function hapusDataHewan($id){
+        $hewan = hewan::findOrFail($id);
+        if ($hewan->foto_hewan && File::exists(public_path($hewan->foto_hewan))) {
+            File::delete(public_path($hewan->foto_hewan));
+        }
+        $hewan->delete();
+
+        return redirect()->route('shelter.data.hewan')->with('success', 'Berhasil menghapus data hewan!');
+    }
+
+    public function getDaftarPengajuanPenyerahanHewan(){
+        return view('shelter.daftarPengajuanPenyerahanHewan');
+    }
+
+    public function getDaftarPengajuanAdopsiHewan(){
+        Paginator::useBootstrap();
+        $data = formPengajuanAdopsi::orderBy('id', 'desc')->paginate(10);
+        return view('shelter.daftarPengajuanAdopsiHewan', compact('data'));
+    }
+
+    public function terimaPengajuanAdopsi(Request $request, $id){
+        $request->validate([
+            'alasan' => 'required|string|max:500'
+        ]);
+
+        $pengajuan = formPengajuanAdopsi::find($id);
+
+        if(!$pengajuan){
+            return response()->json([
+                'success' => false,
+                'message' => 'Data pengajuan tidak ditemukan.'
+            ], 404);
+        }
+
+        $pengajuan->status_pengajuan = 'setuju';
+        $pengajuan->alasan_persetujuan_pengajuan_adopsi = $request->alasan;
+        $pengajuan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengajuan adopsi berhasil disetujui'
+        ]);
+    }
+
+    public function tolakPengajuanAdopsi(Request $request, $id){
+        try{
+            $request->validate([
+                'alasan' => 'required|string|max:500'
+            ]);
+
+            $pengajuan = formPengajuanAdopsi::find($id);
+
+            if(!$pengajuan){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data pengajuan tidak ditemukan.'
+                ], 404);
+            }
+
+            $pengajuan->status_pengajuan = 'ditolak';
+            $pengajuan->alasan_penolakan_pengajuan_adopsi = $request->alasan;
+            $pengajuan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan adopsi berhasil ditolak'
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+      
     }
 }
 

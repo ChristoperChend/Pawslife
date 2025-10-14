@@ -1,7 +1,22 @@
 @extends('layout.master')
 <style>
+    .page-header {
+        max-width: 960px;
+        margin: 24px auto 0;
+        text-align: center;
+    }
+    .hero h2{
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+    .page-subtitle{
+        color: #6b7280;
+        font-size: .95rem;
+    }
+
     .hero-wrap{
-        border-bottom: 1px solid var(--line);
+        max-width: 960px;
+        text-align: left;
     }
     .hero{
         margin: 0 auto; padding: 36px 12px 18px;
@@ -23,6 +38,22 @@
     .card-img-top {   
         object-fit: cover;   
     }
+
+    .btn-primary{
+        background: var(--primary-color);
+        color: #fff;
+        border: none !important;
+        border-width: 0 !important;
+        min-width: 100px;
+    }
+
+    .btn-primary:hover{
+        transform: translateY(-1px);
+        filter: saturate(1.05);
+        color: var(--primary-color);
+        box-shadow:
+            0 10px 22px rgba(96,165,250,.30);
+    }
 </style>
 
 @section('content')
@@ -30,8 +61,8 @@
     <div class="container py-5">
          <div class="hero-wrap">
             <div class="hero">
-                <h3 class="mb-1">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h3>
-                <p>Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.</p>
+                <h2 class="mb-1">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h3>
+                <p class="page-subtitle">Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.</p>
             </div>
         </div>
 
@@ -40,7 +71,7 @@
                 Lihat Semua >>
             </a>
             <a href="{{ route('shelter.tambahHewan') }}">
-                <button type="button" class="btn btn-outline-primary me-3">+ Tambah Hewan</button>
+                <button type="button" class="btn btn-primary primary-color me-3" style="color: white">+ Tambah Hewan</button>
             </a>
         </div>
 
@@ -68,10 +99,10 @@
                             @endif
                         </h5>
                         <p class="card-text text-muted mb-2">Berat: {{ $hewan->berat }} kg</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-auto">Lihat Detail</a>
+                        <a href="{{ route('shelter.detail.hewan', $hewan->id) }}" class="btn btn-sm btn-outline-primary mt-auto">Lihat Detail</a>
                     </div>
                 </div>
-                </div>
+            </div>
             @endforeach
         </div>
     </div>
