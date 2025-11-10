@@ -22,11 +22,31 @@
             --bs-gutter-x: 0;
         }
 
+        .choice {
+            display: inline-flex;
+            background-color: var(--primary-color);
+            border-radius: 50px; /* Sudut sangat membulat */
+            padding: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
         .choice a {
-            z-index: 111;
-            position: relative;
+            z-index: 111; 
             text-decoration: none;
-            color: white;
+            color: #fff;
+        }
+
+        .choice-btn {
+            text-decoration: none;
+            color: #495057;
+            padding: 8px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            text-align: center;
         }
 
         .form-section {
@@ -67,15 +87,25 @@
             float: right;
             display: block;
         }
+
+        .choice-btn.active-choice {
+            background-color: #20c997;
+            color: white;
+            box-shadow: 0 2px 5px rgba(32, 201, 151, 0.4);
+        }
+
+        .choice-btn:not(.active-choice):hover {
+            background-color: #dee2e6;
+            color: #343a40;
+        }
     </style>
 </head>
 
 <body>
     <div class="container-fluid login-container d-flex position-relative">
-        <div class="choice rounded-4 d-inline-block rounded px-4 py-3 my-2 ms-2 align-self-start bg-success">
-            <a class="pointer" onclick="gantiKeAdopter()">Adopter</a>
-            <a class="fw-bolder">|</a>
-            <a class="pointer" onclick="gantiKeShelter()">Shelter</a>
+        <div class="choice my-2 ms-2 align-self-start">
+            <a class="choice-btn pointer" id="btn_adopter" onclick="gantiKeAdopter()">Adopter</a>
+            <a class="choice-btn pointer" id="btn_shelter" onclick="gantiKeShelter()">Shelter</a>
         </div>
         <div class="col-7 form-section justify-content-center position-absolute py-5">
             <div>
@@ -245,20 +275,36 @@
         var dataAdopterTahap1 = {}
         var dataShelterTahap1 = {}
 
-        function gantiKeAdopter() {
-            document.getElementById('form_adopter').classList.remove('d-none')
-            document.getElementById('form_shelter').classList.add('d-none')
+        function toggleChoiceButton(activeId) {
+            const adopterBtn = document.getElementById('btn_adopter');
+            const shelterBtn = document.getElementById('btn_shelter');
 
-            document.getElementById('tahap_1_adopter').classList.remove('d-none')
-            document.getElementById('tahap_2_adopter').classList.add('d-none')
+            adopterBtn.classList.remove('active-choice');
+            shelterBtn.classList.remove('active-choice');
+
+            if (activeId === 'adopter') {
+                adopterBtn.classList.add('active-choice');
+            } else if (activeId === 'shelter') {
+                shelterBtn.classList.add('active-choice');
+            }
+        }
+
+        function gantiKeAdopter() {
+            document.getElementById('form_adopter').classList.remove('d-none');
+            document.getElementById('form_shelter').classList.add('d-none');
+            document.getElementById('tahap_1_adopter').classList.remove('d-none');
+            document.getElementById('tahap_2_adopter').classList.add('d-none');
+
+            toggleChoiceButton('adopter');
         }
 
         function gantiKeShelter() {
-            document.getElementById('form_adopter').classList.add('d-none')
-            document.getElementById('form_shelter').classList.remove('d-none')
+            document.getElementById('form_adopter').classList.add('d-none');
+            document.getElementById('form_shelter').classList.remove('d-none');
+            document.getElementById('tahap_1_shelter').classList.remove('d-none');
+            document.getElementById('tahap_2_shelter').classList.add('d-none');
 
-            document.getElementById('tahap_1_shelter').classList.remove('d-none')
-            document.getElementById('tahap_2_shelter').classList.add('d-none')
+            toggleChoiceButton('shelter');
         }
 
         function validasiAdopterTahap1() {

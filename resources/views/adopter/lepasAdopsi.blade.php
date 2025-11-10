@@ -9,13 +9,83 @@
         margin-bottom: 0;
         text-align: justify;
     }
+
+    .hint {
+        color: var(--muted);
+        font-size: .70rem;
+        margin-top: 4px;
+    }
+
+    .page-header {
+        max-width: 1060px;
+        margin: 24px auto 0;
+    }
+    .page-header h2 {
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+
+    .form-shell {
+        padding: 28px 28px 20px;
+    }
+
+    .form-card {
+        max-width: 1060px;
+        margin: 24px auto 48px;
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid #eef0f4;
+        box-shadow:
+            0 12px 24px rgba(16, 24, 40, 0.04),
+            0 2px 6px rgba(16, 24, 40, 0.04);
+        overflow: hidden;
+    }
+
+    .card-accent {
+        height: 6px;
+        background: var(--primary-color);
+    }
+
+    .section-title {
+        font-weight: 700;
+        font-size: 1rem;
+        margin: 8px 0 16px;
+        color: #111827;
+    }
+    .section-divider {
+        height: 1px;
+        background: #c8cace;
+        margin: 8px 0 0px;
+    }
+
+    .preview-box {
+        width: 120px; height: 120px;
+        border: 1px dashed #d1d5db;
+        border-radius: 12px;
+        display:flex; align-items:center; justify-content:center;
+        color:#9ca3af; font-size:.9rem; background:#fafafa;
+        overflow:hidden;
+    }
+
+    .preview-wrap {
+        display:flex;
+        gap:16px;
+        align-items:center;
+        flex-wrap:wrap;
+    }
+    
+    .preview-box img {
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
 </style>
 
 @extends('layout.master')
 
 @section('content')
     <div class="container py-5">
-        <div class="text-atas">
+        <div class="text-atas page-header">
             <h1 class="fw-bold text-center">Ajukan Penyerahan Hewan Peliharaan</h1>
             <hr>
 
@@ -31,78 +101,112 @@
             <hr>
         </div>
 
-        <form action="{{ route(name: 'adopter.lepasAdopsi') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="mb-3">
-                <label for="fotoHewan" class="fotoHewan">Foto Hewan <span class="text-danger">*</span></label>
-                <input type="file" class="form-control" id="fotoHewan" name="fotoHewan" accept="image/*">
-            </div>
+        <div class="form-card">
+            <div class="card-accent"></div>
 
-            <div class="mb-3">
-                <label for="namaHewan" class="form-label">Nama Hewan <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="namaHewan" name="namaHewan" placeholder="Masukkan nama hewan" value="{{ old('namaHewan') }}">
-            </div>
+            <form class="form-shell" action="{{ route(name: 'adopter.lepasAdopsi') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-            <div class="mb-3">
-                <label for="jenisHewan" class="form-label">Jenis Hewan<span class="text-danger">*</span></label>
-                <select class="form-select" name="jenisHewan" id="jenisHewan"  >
-                    <option value="" disabled selected hidden>Pilih Jenis Hewan</option>
-                    <option value="anjing" {{old('jenisHewan') === 'anjing' ? 'selected' : ''}}>Anjing</option>
-                    <option value="kucing" {{old('jenisHewan') === 'kucing' ? 'selected' : ''}}>Kucing</option>
-                </select>
-            </div>
+                <div class="section-title">Informasi Dasar</div>
+                <div class="section-divider"></div>
 
-            <div class="mb-3">
-                <label for="jeniskelaminHewan" class="form-label">Jenis Kelamin Hewan <span class="text-danger">*</span></label>
-                <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
-                    <option value="" disabled selected hidden>Masukkan Jenis Kelamin Hewan</option>
-                    <option value="jantan"  {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
-                    <option value="betina"  {{old('jenisKelaminHewan') === 'betina' ? 'selected' : ''}}>Betina</option>
-                </select>
-            </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="namaHewan" class="form-label">Nama Hewan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="namaHewan" name="namaHewan" placeholder="Masukkan nama hewan" value="{{ old('namaHewan') }}">
+                        @error('namaHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
 
-            <div class="mb-3">
-                <label for="statusVaksinHewan" class="form-label">Status Vaksin Hewan <span class="text-danger">*</span></label>
-                <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
-                    <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                    <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah di Vaksin</option>
-                    <option value="belumVaksin"{{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum di Vaksin</option>
-                </select>
-            </div>
+                    <div class="col-md-6">
+                        <label for="jenisHewan" class="form-label">Jenis Hewan <span class="text-danger">*</span></label>
+                        <select class="form-select" name="jenisHewan" id="jenisHewan">
+                            <option value="" disabled selected hidden>Pilih Jenis Hewan</option>
+                            <option value="anjing" {{old('jenisHewan') === 'anjing' ? 'selected' : ''}}>Anjing</option>
+                            <option value="kucing" {{old('jenisHewan') === 'kucing' ? 'selected' : ''}}>Kucing</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <label for="statusSterilHewan" class="form-label">Status Steril Hewan <span class="text-danger">*</span></label>
-                <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
-                    <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                    <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah di Steril</option>
-                    <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum di Steril</option>
-                </select>
-            </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="jeniskelaminHewan" class="form-label">Jenis Kelamin Hewan <span class="text-danger">*</span></label>
+                        <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
+                            <option value="" disabled selected hidden>Masukkan Jenis Kelamin Hewan</option>
+                            <option value="jantan"  {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
+                            <option value="betina"  {{old('jenisKelaminHewan') === 'betina' ? 'selected' : ''}}>Betina</option>
+                        </select>
+                    </div>
 
-            <div class="mb-3">
-                <label for="beratHewan" class="form-label">Berat Hewan <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
-            </div>
+                    <div class="col-md-6">
+                        <label for="statusVaksinHewan" class="form-label">Status Vaksin Hewan <span class="text-danger">*</span></label>
+                        <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
+                            <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
+                            <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah di Vaksin</option>
+                            <option value="belumVaksin"{{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum di Vaksin</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <label for="rasHewan" class="form-label">Ras Hewan <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan Ras Hewan">
-            </div>
-            
-            <div class="mb-3">
-                <label for="catatanMedisHewan" class="form-label">Catatan Medis</label>
-                <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan" placeholder="Masukkan Catatan Medis Hewan">
-            </div>
-            
-            <div class="mb-5">
-                <label for="alasanPenyerahanHewan" class="form-label">Alasan Menyerahkan Hewan</label>
-                <input type="text" class="form-control" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan">
-            </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="statusSterilHewan" class="form-label">Status Steril Hewan <span class="text-danger">*</span></label>
+                        <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
+                            <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
+                            <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah di Steril</option>
+                            <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum di Steril</option>
+                        </select>
+                    </div>
 
-            <div class="d-flex justify-content-end mt-4">
-                <button type="button" class="btn btn-outline-primary w-30 fw-bold" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
-            </div>
-        </form>
+                    <div class="col-md-6">
+                        <label for="beratHewan" class="form-label">Berat Hewan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
+                        @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="rasHewan" class="form-label">Ras Hewan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan Ras Hewan">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="catatanMedisHewan" class="form-label">Catatan Medis</label>
+                        <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan" placeholder="Masukkan Catatan Medis Hewan">
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label for="alasanPenyerahanHewan" class="form-label">Alasan Menyerahkan Hewan</label>
+                        <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
+                    </div>
+                </div>
+                
+                <div class="section-title mt-4">Foto</div>
+                <div class="section-divider"></div>
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="fotoHewan" class="form-label label-row">Foto Hewan <span class="text-danger">*</span></label>
+                        <div class="preview-wrap">
+                            <div class="preview-box" id="preview">
+                                Pratinjau
+                            </div>
+                            <div style="flex:1; min-width:220px">
+                                <input type="file" class="form-control" id="fotoHewan" name="fotoHewan" accept="image/*">
+                                <div class="hint">Format JPG/PNG, maks 3MB.</div>
+                                @error('fotoHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     @include('layout.loading')

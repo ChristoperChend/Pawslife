@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
 :root {
     /* --primary-color: #60a5fa; 
@@ -15,7 +16,7 @@
 
 body {
     /* margin: 0 4rem; */
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Quicksand", monospace;
     /* font-family: 'Poppins', sans-serif; */
     /* min-width: 100%; */
     min-height: 100vh;

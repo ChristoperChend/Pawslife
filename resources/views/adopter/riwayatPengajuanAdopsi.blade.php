@@ -8,32 +8,66 @@
     .foto-hewan img {
         width: 100%;
         height: 100%;
-        /* object-fit: cover; */
+        border-radius: 12px;
     }
 
-    .garis-vertikal {
+    .riwayat-card-item {
+        border-radius: 12px;
+        transition: box-shadow 0.3s ease;
+        border: 1px solid #dee2e6;
+    }
+
+    .riwayat-card-item:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .riwayat-content-wrapper {
+        background: white; 
+        border-radius: 12px;
+    }
+
+    .riwayat-hewan-nama {
+        font-size: 1.3rem;
+        color: #343a40;
+    }
+
+    .riwayat-hewan-jenis {
+        font-size: 1rem;
+        color: #343a40;
+    }
+
+    .garis-vertikal-riwayat {
         width: 1px;
-        height: 100px;
-        background-color: #000;
-        margin-right: 1rem;
+        height: 80px;
+        background-color: #e9ecef;
     }
 
-    .info-status-container {
-        align-items: center;
+    .status-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .status-badge {
+        font-size: 1rem !important;
+        padding: 0.5em 1em !important;
+        font-weight: 600 !important;
+        min-width: 120px !important;
+        display: inline-block !important;
+    }
+
+    .riwayat-btn-aksi {
+        font-size: 1rem !important;
+        padding: 5px 10px !important;
+        font-weight: 600 !important;
+    }
+
+    .tooltip-info {
+        cursor: pointer;
+        font-size: 0.9em;
+        color: #6c757d;
     }
 
     @media (max-width: 768px) {
-        .info-status-container {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .garis-vertikal {
-            width: 100%;
-            height: 1px;
-            margin: 1rem 0;
-        }
-
         .foto-hewan {
             width: auto;
             height: 150px;
@@ -51,35 +85,68 @@
         </div>
 
         @foreach ($riwayat as $items)
-            <div class="card shadow-sm mb-5">
+            <div class="card riwayat-card-item shadow-sm mb-5">
                 <div class="d-flex align-items-center bg-light" style="padding: 1rem;">
-                    <!-- Foto Hewan -->
                     <div class="foto-hewan me-4">
                         <img src="{{ asset('storage/' . $items->hewan->foto_hewan) }}" alt="Foto Hewan">
                     </div>
 
-                    <!-- Info Hewan + Status -->
-                    <div class="d-flex flex-grow-1 info-status-container">
-                        <!-- Info Hewan -->
-                        <div class="flex-grow-1">
-                            <h5 class="fw-bold mb-3">{{ $items->hewan->nama_hewan }}</h5>
-                            <h6 class="mb-0">{{ $items->hewan->jenis_hewan }}</h6>
-                        </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-0 text-muted small">Nama Hewan</p>
+                        <h5 class="fw-bold mb-3 riwayat-hewan-nama">{{ $items->hewan->nama_hewan }}</h5>
+                        
+                        <p class="mb-0 text-muted small">Jenis Hewan</p>
+                        <h6 class="fw-bold riwayat-hewan-jenis">{{ $items->hewan->jenis_hewan }}</h6>
+                    </div>
+                    
 
-                        <!-- Garis -->
-                        <div class="garis-vertikal"></div>
+                    <div class="d-flex align-items-center ms-auto info-status-wrapper">
+                        <div class="garis-vertikal-riwayat me-4 d-none d-md-block"></div>
 
-                        <!-- Status -->
-                        <div class="text-start me-5" style="flex-shrink: 0;">
-                            <h5 class="fw-bold mb-3">Status</h5>
-                            {{-- {{ dd($selesaiMasaPercobaan) }} --}}
-                            @if ($items->selesai_masa_percobaan)
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" onclick="kembalikanHewan()">Kembalikan</button>
-                                    <button type="button" class="btn btn-outline-primary w-30 fw-bold ms-4" onclick="adopsiHewan()">Adopsi</button>
+                        <div class="text-end status-section">
+                            <p class="fw-bold mb-2 status-label">Status Pengajuan</p>
+                            
+                            @if ($items->status_pengajuan == "Masa percobaan")
+                                @php
+                                    $updatedAt = \Carbon\Carbon::parse($items->updated_at);
+                                    $totalHoursPassed = $updatedAt->diffInHours(now());
+                                    $daysPassed = floor($totalHoursPassed / 24); 
+                                    $daysRemaining = 7 - $daysPassed;
+                                    $daysRemainingDisplay = max(0, $daysRemaining); 
+                                @endphp
+                                <h6 class="fw-bold">
+                                        Masa Percobaan Sisa {{ $daysRemainingDisplay }} hari
+                                        <i 
+                                            class="fa-solid fa-circle-info tooltip-info"
+                                            data-bs-toggle="tooltip" 
+                                            data-bs-placement="top" 
+                                            title="Jika masa percobaan sudah selesai, hewan akan otomatis diadopsi."
+                                        ></i>
+                                </h6>
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-outline-danger btn-sm riwayat-btn-aksi" 
+                                        onclick="kembalikanHewan({{ $items->hewan->id }})"
+                                    >
+                                        Kembalikan
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-success btn-sm riwayat-btn-aksi" 
+                                        onclick="adopsiHewan({{ $items->hewan->id }})"
+                                    >
+                                        Adopsi
+                                    </button>
                                 </div>
                             @else
-                                <h6 class="mb-0">{{ $items->status_pengajuan }}</h6>
+                                <span class="badge status-badge {{ 
+                                    $items->status_pengajuan == 'Diadopsi' ? 'text-bg-success' : 
+                                    ($items->status_pengajuan == 'Dikembalikan' ? 'text-bg-danger' : 
+                                    'text-bg-warning') 
+                                }}">
+                                    {{ $items->status_pengajuan }}
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -89,8 +156,10 @@
         <div class="d-flex justify-content-center mt-4">{{ $riwayat->links() }}</div>
     </div>
 
+    @include('layout.loading')
+
     <script>
-        function kembalikanHewan() {
+        function adopsiHewan(hewanId) {
             Swal.fire({
                 icon: "question",
                 title: "Alasan Melakukan Adopsi",
@@ -111,10 +180,11 @@
                 }
             })
             .then((result) => {
+                const alasanAdopsi = result.value;
                 if (result.isConfirmed) {
                     Swal.fire({
                         icon: "question",
-                        title: "Apakah anda yakin mengembalikan hewan?",
+                        title: "Apakah anda yakin melakukan adopsi?",
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
@@ -124,14 +194,50 @@
                     })
                     .then((result) => {
                         if (result.isConfirmed) {
-                            
+                            document.getElementById('fullscreen-loading').classList.remove('d-none')
+                            fetch('{{ route('adopter.adopsiHewan') }}', {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                },
+                                body: JSON.stringify({
+                                    hewan_id: hewanId,
+                                    alasan_adopsi: alasanAdopsi
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(res => {
+                                document.getElementById('fullscreen-loading').classList.add('d-none')
+                                if (res.errors) {
+                                    
+                                } else if (res.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: res.title,
+                                        text: res.message
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: res.title,
+                                        text: res.message
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                }
+                            })
                         }
                     })
                 }
             })
         }
 
-        function adopsiHewan() {
+        function kembalikanHewan(hewanId) {
             Swal.fire({
                 icon: "question",
                 title: "Alasan Mengembalikan Hewan",
@@ -152,11 +258,12 @@
                 }
             })
             .then((result) => {
+                const alasanAdopsi = result.value;
                 if (result.isConfirmed) {
                     if (result.isConfirmed) {
                     Swal.fire({
                         icon: "question",
-                        title: "Apakah anda yakin melakukan adopsi?",
+                        title: "Apakah anda yakin mengembalikan hewan?",
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
@@ -164,9 +271,57 @@
                         cancelButtonText: "Kembali",
                         reverseButtons: true,
                     })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('fullscreen-loading').classList.remove('d-none')
+                            fetch('{{ route('adopter.kembalikanHewan') }}', {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                },
+                                body: JSON.stringify({
+                                    hewan_id: hewanId,
+                                    alasan_adopsi: alasanAdopsi
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(res => {
+                                document.getElementById('fullscreen-loading').classList.add('d-none')
+                                if (res.errors) {
+                                    
+                                } else if (res.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: res.title,
+                                        text: res.message
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: res.title,
+                                        text: res.message
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                }
+                            })
+                        }
+                    })
                 }
                 }
             })
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
     </script>
 @endsection

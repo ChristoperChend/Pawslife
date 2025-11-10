@@ -8,32 +8,41 @@
     .foto-hewan img {
         width: 100%;
         height: 100%;
-        /* object-fit: cover; */
+        border-radius: 12px;
     }
 
-    .garis-vertikal {
+    .riwayat-card-item {
+        border-radius: 12px;
+        transition: box-shadow 0.3s ease;
+        border: 1px solid #dee2e6;
+    }
+
+    .riwayat-card-item:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .riwayat-hewan-nama {
+        font-size: 1.3rem;
+        color: #343a40;
+    }
+
+    .riwayat-hewan-jenis {
+        font-size: 1rem;
+        color: #343a40;
+    }
+
+    .garis-vertikal-riwayat {
         width: 1px;
-        height: 100px;
-        background-color: #000;
-        margin-right: 1rem;
+        height: 80px;
+        background-color: #e9ecef;
     }
 
-    .info-status-container {
-        align-items: center;
+    .status-label {
+        font-size: 0.9rem;
+        color: #6c757d;
     }
 
     @media (max-width: 768px) {
-        .info-status-container {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .garis-vertikal {
-            width: 100%;
-            height: 1px;
-            margin: 1rem 0;
-        }
-
         .foto-hewan {
             width: auto;
             height: 150px;
@@ -51,28 +60,29 @@
         </div>
 
         @foreach ($riwayat as $items)
-            <div class="card shadow-sm mb-5">
+            <div class="card riwayat-card-item shadow-sm mb-5">
                 <div class="d-flex align-items-center bg-light" style="padding: 1rem;">
-                    <!-- Foto Hewan -->
                     <div class="foto-hewan me-4">
                         <img src="{{ asset('storage/' . $items->foto_hewan) }}" alt="Foto Hewan">
                     </div>
 
-                    <!-- Info Hewan + Status -->
-                    <div class="d-flex flex-grow-1 info-status-container">
-                        <!-- Info Hewan -->
-                        <div class="flex-grow-1">
-                            <h5 class="fw-bold mb-3">{{ $items->nama_hewan }}</h5>
-                            <h6 class="mb-0">{{ $items->jenis_hewan }}</h6>
-                        </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-0 text-muted small">Nama Hewan</p>
+                        <h5 class="fw-bold mb-3 riwayat-hewan-nama">{{ $items->nama_hewan }}</h5>
+                        
+                        <p class="mb-0 text-muted small">Jenis Hewan</p>
+                        <h6 class="fw-bold riwayat-hewan-jenis">{{ $items->jenis_hewan }}</h6>
+                    </div>
 
-                        <!-- Garis -->
-                        <div class="garis-vertikal"></div>
+                    <div class="d-flex align-items-center ms-auto info-status-wrapper">
+                        <div class="garis-vertikal-riwayat me-4 d-none d-md-block"></div>
 
-                        <!-- Status -->
-                        <div class="text-start me-5" style="flex-shrink: 0;">
-                            <h5 class="fw-bold mb-3">Status</h5>
-                            <h6 class="mb-0">{{ $items->status_penyerahan }}</h6>
+                        <div class="text-end status-section">
+                            <p class="fw-bold mb-2 status-label">Status Penyerahan</p>
+                            
+                            <div class="d-flex justify-content-end">
+                                <h6 class="mb-0">{{ $items->status_penyerahan }}</h6>
+                            </div>
                         </div>
                     </div>
                 </div>

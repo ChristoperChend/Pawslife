@@ -5,28 +5,27 @@
         border-radius: 10px;
     }
 
-    .detail-row div h5 {
-        margin-bottom: 0px;
-        font-weight: normal;
-        font-size: 18px;
-        margin-bottom: 5px;
+    .detail-field-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #cacaca;
+        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        padding: 10px 15px;
+        position: relative;
+        transition: all 0.2s ease;
     }
 
-    .nama-hewan {
-        background: white !important;
+    .detail-field-wrapper:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
     }
 
-    .detail-row {
-        margin-bottom: 15px;
-    }
-    .detail-row label {
-        margin-bottom: 0;
-        color: black !important;
-        background: white !important;
-    }
-
-    .mr {
-        margin-right: 0.7em !important;
+    .detail-label {
+        font-size: 0.95rem;
+        font-weight: 500 !important;
+        color: #495057 !important;
     }
 
     .ajukan-adopsi {
@@ -42,75 +41,88 @@
         <div class="row">
             <div class="col-12 col-md-6 text-center">
                 <img src="{{ asset('storage/' . $detailHewan->foto_hewan) }}" class="hewan-image img-fluid" alt="Hewan Image">
-                <label class="border shadow-sm w-75 p-2 mb-3 mt-3 rounded-2 nama-hewan text-black">{{ $detailHewan->nama_hewan ?? 'data tidak ada' }}</label>
+                <h2 class="hewan-nama-title mt-3 mb-0 fw-bold">{{ $detailHewan->nama_hewan ?? 'Nama Hewan' }}</h2>
             </div>
 
             <div class="col-12 col-md-6">
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Nama shelter</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3 d-flex al
-                        ign-items-center justify-content-between">
-                            {{ $detailHewan->shelter->nama_shelter ?? 'data tidak ada' }}
+                        <h5 class="detail-label"><i class="fa-solid fa-house me-1"></i> Nama Shelter</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->shelter->nama_shelter ?? 'data tidak ada' }}</span>
                             <a href="{{ route('adopter.detailShelter', ['id' => $detailHewan->shelter->id]) }}" class="text-decoration-none cursor">
                                 <i class="fa-solid fa-chevron-right fa-2xs" style="color: #000000;"></i>
                             </a>
-                        </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Jenis hewan</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->jenis_hewan ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-paw me-1"></i> Jenis hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->jenis_hewan ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Ras hewan</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->ras ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-tag me-1"></i> Ras hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->ras ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Jenis kelamin hewan</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->jenis_kelamin ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid {{ $detailHewan->jenis_kelamin == 'jantan' ? 'fa-mars' : 'fa-venus' }} me-1"></i> Jenis kelamin hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->jenis_kelamin ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Berat hewan</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->berat ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-weight-scale me-1"></i> Berat hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->berat ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Apakah hewan sudah disteril</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->status_steril ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-syringe me-1"></i> Apakah hewan sudah disteril</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->status_steril ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Apakah hewan sudah divaksin</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->status_vaksin ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-shield-virus me-1"></i> Apakah hewan sudah divaksin</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->status_vaksin ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row detail-row">
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5>Catatan medis hewan</h5>
-                        <label class="border shadow-sm w-100 p-2 text-white rounded-2 mb-3">{{ $detailHewan->catatan_medis ?? 'data tidak ada' }}</label>
+                        <h5 class="detail-label"><i class="fa-solid fa-notes-medical me-1"></i> Catatan medis hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->catatan_medis ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-outline-primary w-30 fw-bold"><a href="{{ route('beranda.adopterBeranda') }}" class="text-decoration-none">Kembali</a></button>
-                    <button type="button" class="btn btn-outline-primary w-30 fw-bold ms-4 mr" onclick="ajukanAdopsi()">Ajukan Adopsi</button>
+                <div class="d-flex justify-content-end mt-5 gap-3">
+                    <a href="{{ route('beranda.adopterBeranda') }}" class="btn btn-outline-secondary fw-bold btn-aksi-custom">Kembali</a>
+                    <button type="button" class="btn btn-primary fw-bold btn-aksi-custom" onclick="ajukanAdopsi()">Ajukan Adopsi</button>
                 </div>
             </div>
         </div>

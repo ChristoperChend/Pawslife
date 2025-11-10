@@ -1,31 +1,43 @@
 <style>
     .hewan-container {
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-radius: 10px;
         position: relative;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+        
+    .hewan-container:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
     }
 
-    .hewan-container h5,
-    .hewan-container h6 {
-        margin: 2px;
-        color: black !important;
-        padding-left: 10px;
-    }
 
     .daftar-hewan {
-        width: 250px;
-        height: 200px;
+        width: 275px;
+        height: 225px;
+        border-radius: 10px 10px 0px 0px;
     }
 
     .heart-icon {
         position: absolute;
-        top: 25px;
-        right: 7px;
+        top: 1rem;
+        right: 1rem;
+        z-index: 10;
         color: black;
-        font-size: 28px;
-        z-index: 2;
+        font-size: 20px;
         cursor: pointer;
-        transition: color 0.2s;
+        transition: all 0.25s ease;
+
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 23px 12px 23px 12px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .heart-icon:hover {
+        transform: scale(1.1);
+        color: #ff4d4d;
     }
 
     .heart-icon.liked {
@@ -34,6 +46,16 @@
 
     h4 {
         min-height: 264px;
+    }
+
+    .card-title-hewan {
+        font-size: 1.25rem;
+        color: #212529;
+    }
+
+    .card-subtitle-hewan {
+        font-size: 0.9rem;
+        color: #6c757d !important;
     }
 
     #jenis-hewan:focus,
@@ -87,17 +109,23 @@
             @if (!$listFavorit->isEmpty())
             @foreach ($listFavorit as $favorit)
                 <div class="col d-flex justify-content-center">
-                    <div class="card hewan-container shadow-sm">
+                    <div class="card hewan-container border-0 shadow-sm">
+                        <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
                         <span class="heart-icon {{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $favorit->hewan->id }})">
                             <i class="{{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                         </span>
-                        <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan">
-                        <a href="{{ route('adopter.detailHewan', ['id' => $favorit->hewan->id]) }}" class="text-decoration-none">
-                            <h5 class="pt-2">{{ $favorit->hewan->nama_hewan ?? '-' }}</h5>
-                            <h6 class="fw-bold mb-3">{{ $favorit->hewan->ras ?? '-' }}</h6>
-                            <h6>{{ $favorit->hewan->status_steril ?? '-' }} | {{ $favorit->hewan->status_vaksin ?? '-' }}</h6>
-                            <h6 class="pb-2">{{ $favorit->hewan->shelter->nama_shelter ?? '-' }}</h6>
-                        </a>
+
+                        <div class="p-3">
+                            <a href="{{ route('adopter.detailHewan', ['id' => $favorit->hewan->id]) }}" class="text-decoration-none">
+                                <h5 class="card-title-hewan fw-bold mb-0 text-truncate">{{ $favorit->hewan->nama_hewan ?? '-' }}</h5>
+                                <p class="card-subtitle-hewan mb-2 text-muted small">{{ $favorit->hewan->ras ?? '-' }}</p>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge {{ ($favorit->hewan->status_steril ?? 'belum steril') == 'sudah steril' ? 'text-bg-success' : 'text-bg-warning' }}">{{ $favorit->hewan->status_steril ?? '-' }}</span>
+                                    <span class="badge {{ ($favorit->hewan->status_vaksin ?? 'belum vaksin') == 'sudah vaksin' ? 'text-bg-primary' : 'text-bg-secondary' }}">{{ $favorit->hewan->status_vaksin ?? '-' }}</span>
+                                </div>
+                                <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $favorit->hewan->shelter->nama_shelter ?? '-' }}</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             @endforeach

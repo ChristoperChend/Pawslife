@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\adopter;
 
+use App\Models\adopter;
 use App\Models\favorit;
 use App\Models\formPengajuanAdopsi;
 use App\Models\formPenyerahanHewan;
@@ -37,7 +38,8 @@ class adopterController extends Controller
         if(!Auth::check()) {
             $adopter_id = 0;
         } else {
-            $adopter_id = Auth::user()->id;
+            $adopter = adopter::where('pengguna_id', Auth::user()->id)->first();
+            $adopter_id = $adopter ? $adopter->id : 0;
         }
         $query = hewan::with('shelter');
         if ($request->has('id')) {
@@ -48,7 +50,6 @@ class adopterController extends Controller
     }
 
     private function simplifyAlamat($alamat) {
-        // Ambil hanya Kecamatan & Kota
         if (preg_match('/Kecamatan\s([^,]*)|Kec\.?\s?([^,]*)/i', $alamat, $matches)) {
             $kecamatan = $matches[1] ?: $matches[2];
         } else {
@@ -83,11 +84,10 @@ class adopterController extends Controller
             $data = $response->json();
             $address = $data[0]['address'] ?? [];
 
-            // Prioritaskan city_district atau suburb jika ada
             if (isset($address['city_district'])) {
-                return $address['city_district'];  // Biasanya "Jakarta Selatan", "Jakarta Barat"
+                return $address['city_district'];
             } elseif (isset($address['suburb'])) {
-                return $address['suburb'];  // Alternatif
+                return $address['suburb'];
             } elseif (isset($address['city'])) {
                 return $address['city'];
             } elseif (isset($address['county'])) {
@@ -167,7 +167,6 @@ class adopterController extends Controller
         $query = favorit::with(['hewan.shelter'])
             ->where('adopter_id', $adopter_id);
 
-        // Filter berdasarkan dropdown jika ada
         if ($request->filled('jenis_hewan')) {
             $query->whereHas('hewan', function($q) use ($request) {
                 $q->where('jenis_hewan', $request->jenis_hewan);
@@ -222,7 +221,7 @@ class adopterController extends Controller
 
             $sudahAda = formPengajuanAdopsi::where('adopter_id', $request->adopter_id)
                 ->where('hewan_id', $request->hewan_id)
-                ->whereIn('status_pengajuan', ['Diajukan ke shelter'])
+                ->whereIn('status_pengajuan', ['Diajukan'])
                 ->exists();
             
             if ($sudahAda) {
@@ -239,7 +238,7 @@ class adopterController extends Controller
                 'adopter_id' => $request->adopter_id,
                 'hewan_id' => $request->hewan_id,
                 'shelter_id' => $request->shelter_id,
-                'status_pengajuan' => 'Diajukan ke shelter',
+                'status_pengajuan' => 'Diajukan',
                 'alasan' => $request->alasan
             ]);
 
@@ -267,7 +266,7 @@ class adopterController extends Controller
         $riwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)->latest()->paginate(4);
 
         foreach ($riwayat as $item) {
-            $item->selesai_masa_percobaan = $item->updated_at < now()->subDays(7);
+            $item->selesai_masa_percobaan = $item->updated_at->addDays(7)->isPast();
         }
         
         return view('adopter.riwayatPengajuanAdopsi', compact('riwayat'));
@@ -312,7 +311,8 @@ class adopterController extends Controller
                     'message' => 'Lakukan login terlebih dahulu sebelum melakukan penyerahan hewan peliharaan',
                 ]);
             } else {
-                $adopter_id = Auth::user()->id;
+                $adopter = adopter::where('pengguna_id', Auth::user()->id)->first();
+                $adopter_id = $adopter ? $adopter->id : 0;
             }
 
             DB::beginTransaction();
@@ -337,7 +337,6 @@ class adopterController extends Controller
             ]);
 
             DB::commit();
-
             if (!$formPenyerahanHewan) {
                 return response()->json([
                     'error' => true,
@@ -376,5 +375,88 @@ class adopterController extends Controller
 
         $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
         return view('adopter.detailShelter', compact('detailShelter', 'listHewan', 'favoritHewanIds'));
+    }
+
+    public function adopsiHewan(Request $request) {
+        DB::beginTransaction();
+        try {
+            $adopter_id = Auth::user()->id;
+
+            $pengajuan = formPengajuanAdopsi::where('adopter_id', $adopter_id)
+                    ->where('hewan_id', $request->hewan_id)
+                    ->first();
+
+            Log::debug("pengajuan", [
+                "ini" => $pengajuan
+            ]);
+            if (!$pengajuan) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Adopsi Hewan Gagal',
+                    'message' => 'Terjadi kesalahan ketika melakukan adopsi.'
+                ]);
+            }
+
+            $pengajuan->status_pengajuan = 'Diadopsi';
+            $pengajuan->alasan = $request->alasan_adopsi;
+            $pengajuan->updated_at = now();
+            $pengajuan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Adopsi Hewan Berhasil',
+                'message' => 'Hewan telah diadopsi!'
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error adopsiHewan: '. $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'title' => 'Error',
+                'message' => 'Terjadi kesalahan saat adopsi hewan, silahkan coba lagi.'
+            ]);
+        }
+    }
+
+    public function kembalikanHewan(Request $request) {
+        DB::beginTransaction();
+        try {
+            $adopter_id = Auth::user()->id;
+
+            $pengajuan = formPengajuanAdopsi::where('adopter_id', $adopter_id)
+                    ->where('hewan_id', $request->hewan_id)
+                    ->first();
+
+            if (!$pengajuan) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Pengembalian Hewan Gagal',
+                    'message' => 'Terjadi kesalahan ketika melakukan pengembalian.'
+                ]);
+            }
+
+            $pengajuan->status_pengajuan = 'Dikembalikan';
+            $pengajuan->alasan = $request->alasan_adopsi;
+            $pengajuan->updated_at = now();
+            $pengajuan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Pengembalian Hewan Berhasil',
+                'message' => 'Hewan telah dikembalikan!'
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error kembalikanHewan: '. $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'title' => 'Error',
+                'message' => 'Terjadi kesalahan saat mengembalikan hewan, silahkan coba lagi.'
+            ]);
+        }
     }
 }

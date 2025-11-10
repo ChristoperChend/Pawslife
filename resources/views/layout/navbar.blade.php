@@ -3,22 +3,33 @@
         width: 55px;
     }
 
-    .navbar{
-        background-color: #ffffff;
-        border-bottom: 1px solid #e5e5e5;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    .navbar {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        z-index: 1050;
+        padding: 12px 20px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px); 
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
     }
     
     .nav-link {
         color: #333;
-        font-weight: 500;
+        font-weight: 700;
+        font-size: 17px;
         padding: 0.5rem 1rem !important;
         transition: color 0.3s ease, border-bottom 0.3s ease;
     }
 
     .nav-link:hover {
         color: var(--primary-color);
-        /* transform: translateY(-2px); */
     }
 
     .nav-link.active {
@@ -88,23 +99,24 @@
                         @if (Auth::check())
                             <a class="nav-link {{request()->routeIs('beranda.*') ? 'active' : ''}}" href="{{ route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') }}">Beranda</a>
                         @else
-                            <a class="nav-link" href="{{ route('beranda.adopterBeranda') }}">Beranda</a>
+                            <a class="nav-link {{request()->routeIs('beranda.*') ? 'active' : ''}}" href="{{ route('beranda.adopterBeranda') }}">Beranda</a>
                         @endif
                     </li>
 
                     @if (Auth::check() && Auth::user()->tipe_pengguna == 'adopter')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="riwayatDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Riwayat
+                            <a class="nav-link
+                                {{request()->routeIs('adopter.showRiwayatPengajuanAdopsi') || request()->routeIs('adopter.showRiwayatPenyerahanHewan') ? 'active' : ''}}"
+                                href="#" id="riwayatDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Riwayat
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="riwayatDropdown">
                                 <li><a class="dropdown-item" href="{{ route('adopter.showRiwayatPengajuanAdopsi') }}">Riwayat pengajuan adopsi</a></li>
                                 <li><a class="dropdown-item" href="{{ route('adopter.showRiwayatPenyerahanHewan') }}">Riwayat penyerahan hewan</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.showLepasAdopsi') ? 'active' : ''}}" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('tentangKami') ? 'active' : ''}}" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'shelter')
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('shelter.data.hewan') ? 'active' : ''}}" href="{{ route('shelter.data.hewan') }}">Data Hewan</a></li>
                         <li class="nav-item dropdown">
@@ -127,13 +139,13 @@
                         </li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
-                        <li class="nav-item"><a class="nav-link" href="">Shelter</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="">Riwayat</a></li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.showLepasAdopsi') ? 'active' : ''}}" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('tentangKami') ? 'active' : ''}}" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @endif
                 </ul>
 
@@ -156,8 +168,8 @@
                             @endif
                         </button>
                         @else
-                            <a href="{{ route('login') }}" class="auth-text me-3 cursor">Log In</a>
-                            <a href="{{ route('register') }}" class="auth-text cursor">Daftar Sekarang</a>
+                            <a href="{{ route('login') }}" class="nav-link me-3 cursor">Log In</a>
+                            <a href="{{ route('register') }}" class="nav-link cursor">Daftar Sekarang</a>
                     @endauth
                 </div>
             </div>

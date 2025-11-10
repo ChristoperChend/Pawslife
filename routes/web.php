@@ -56,6 +56,8 @@ Route::prefix('adopter')->group(function () {
     Route::post('lepas_adopsi_post', [adopterController::class, 'lepasAdopsi'])->name('adopter.lepasAdopsi');
     Route::get('riwayat_penyerahan_hewan', [adopterController::class, 'showRiwayatPenyerahanHewan'])->name('adopter.showRiwayatPenyerahanHewan');
     Route::get('detail_shelter', [adopterController::class, 'detailShelter'])->name('adopter.detailShelter');
+    Route::post('adopsi_hewan', [adopterController::class, 'adopsiHewan'])->name('adopter.adopsiHewan');
+    Route::post('kembalikan_hewan', [adopterController::class, 'kembalikanHewan'])->name('adopter.kembalikanHewan');
 });
 
 Route::prefix('shelter')->group(function () {
