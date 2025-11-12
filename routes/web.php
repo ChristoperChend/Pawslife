@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\admin\adminController;
 use App\Http\Controllers\adopter\adopterController;
 use App\Http\Controllers\berandaController;
-use App\Http\Controllers\favoritController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\mailController;
 use App\Http\Controllers\registerController;
 use App\Http\Controllers\shelter\shelterController;
-use App\Models\shelter;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
@@ -76,4 +75,9 @@ Route::prefix('shelter')->group(function () {
 
 Route::prefix('admin')->group(function () {
     Route::get('beranda', [berandaController::class, 'adminBeranda'])->name('beranda.adminBeranda');
+    Route::get('detail_shelter', [adminController::class, 'detailShelter'])->name('admin.detailShelter');
+    Route::get('profile', [adminController::class, 'profile'])->name('admin.profile');
+    Route::get('riwayat_pendaftaran', [adminController::class, 'riwayatPendaftaran'])->name('admin.riwayatPendaftaran');
+    Route::post('tolak_shelter', [adminController::class, 'tolakShelter'])->name('admin.tolakShelter');
+    Route::post('setuju_shelter', [adminController::class, 'setujuShelter'])->name('admin.setujuShelter');
 });

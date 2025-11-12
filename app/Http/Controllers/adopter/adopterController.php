@@ -386,9 +386,6 @@ class adopterController extends Controller
                     ->where('hewan_id', $request->hewan_id)
                     ->first();
 
-            Log::debug("pengajuan", [
-                "ini" => $pengajuan
-            ]);
             if (!$pengajuan) {
                 return response()->json([
                     'error' => true,
@@ -398,7 +395,7 @@ class adopterController extends Controller
             }
 
             $pengajuan->status_pengajuan = 'Diadopsi';
-            $pengajuan->alasan = $request->alasan_adopsi;
+            $pengajuan->alasan_persetujuan_pengajuan_adopsi = $request->alasan_adopsi;
             $pengajuan->updated_at = now();
             $pengajuan->save();
 
@@ -438,7 +435,7 @@ class adopterController extends Controller
             }
 
             $pengajuan->status_pengajuan = 'Dikembalikan';
-            $pengajuan->alasan = $request->alasan_adopsi;
+            $pengajuan->alasan_penolakan_pengajuan_adopsi = $request->alasan_adopsi;
             $pengajuan->updated_at = now();
             $pengajuan->save();
 

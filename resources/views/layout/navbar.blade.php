@@ -139,8 +139,7 @@
                         </li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @elseif (Auth::check() && Auth::user()->tipe_pengguna == 'admin')
-                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="">Shelter</a></li>
-                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link {{request()->routeIs('admin.riwayatPendaftaran') ? 'active' : ''}}" href="{{ route('admin.riwayatPendaftaran') }}">Riwayat</a></li>
                     @else
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
                         <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
@@ -164,6 +163,10 @@
                             @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
                                 <a>
                                     <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
+                                </a>
+                            @elseif(Auth::user()->tipe_pengguna === 'admin')
+                                <a href="{{ route('admin.profile') }}">
+                                    <i class="fa-solid fa-user"></i>
                                 </a>
                             @endif
                         </button>

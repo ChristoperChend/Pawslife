@@ -309,7 +309,7 @@ class registerController
                 'foto_shelter' => $fotoPath,
                 'dokumen_legal' => $fotoDokumenPath,
                 'deskripsi_shelter' => $request->deskripsi_shelter,
-                'status' => 'waiting for confirmation'
+                'status' => 'Diajukan'
             ]);
 
             if (!$shelter) {

@@ -22,7 +22,8 @@ class berandaController
     }
 
     public function adminBeranda() {
-        return view('admin.beranda');
+        $listShelter = Shelter::where('status', 'Diajukan')->get();
+        return view('admin.beranda', compact('listShelter'));
     }
 
     public function tentangKami() {
