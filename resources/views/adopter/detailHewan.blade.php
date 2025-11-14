@@ -3,6 +3,7 @@
         width: 600px;
         height: 450px !important;
         border-radius: 10px;
+        object-fit: cover;
     }
 
     .detail-field-wrapper {
@@ -40,7 +41,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-12 col-md-6 text-center">
-                <img src="{{ asset('storage/' . $detailHewan->foto_hewan) }}" class="hewan-image img-fluid" alt="Hewan Image">
+                <img src="{{ asset($detailHewan->foto_hewan) }}" class="hewan-image img-fluid" alt="Hewan Image">
                 <h2 class="hewan-nama-title mt-3 mb-0 fw-bold">{{ $detailHewan->nama_hewan ?? 'Nama Hewan' }}</h2>
             </div>
 

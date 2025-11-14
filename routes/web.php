@@ -61,16 +61,31 @@ Route::prefix('adopter')->group(function () {
 
 Route::prefix('shelter')->group(function () {
     Route::get('beranda', [shelterController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
+    
     Route::get('tambah-hewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
     Route::post('tambah-hewanPost', [shelterController::class, 'halamanTambahHewanPost'])->name('shelter.tambahHewanPost');
+    
     Route::get('data-hewan', [shelterController::class, 'getDataHewan'])->name('shelter.data.hewan');
     Route::get('detail-hewan/{id}', [shelterController::class, 'detailHewan'])->name('shelter.detail.hewan');
     Route::put('perbarui-data-hewan/{id}', [shelterController::class, 'updateDataHewan'])->name('shelter.perbarui.data.hewan');
     Route::delete('hapus-data-hewan/{id}', [shelterController::class, 'hapusDataHewan'])->name('shelter.hapus.data.hewan');
+    
     Route::get('daftar-pengajuan-penyerahan-hewan', [shelterController::class, 'getDaftarPengajuanPenyerahanHewan'])->name('shelter.daftar.pengajuan.penyerahan.hewan');
+    Route::post('terima-penyerahan-hewan/{id}', [shelterController::class, 'terimaPenyerahanAdopsi'])->name('shelter.terima.penyerahan.hewan');
+    Route::post('tolak-penyerahan-hewan/{id}', [shelterController::class, 'tolakPenyerahanAdopsi'])->name('shelter.tolak.penyerahan.hewan');
+    Route::get('data-penyerahan-hewan/{id}', [shelterController::class, 'getDataPenyerahanHewan'])->name('shelter.data.penyerahan.hewan');
+
     Route::get('daftar-pengajuan-adopsi-hewan', [shelterController::class, 'getDaftarPengajuanAdopsiHewan'])->name('shelter.daftar.pengajuan.adopsi.hewan');
     Route::post('terima-pengajuan-adopsi/{id}', [shelterController::class, 'terimaPengajuanAdopsi'])->name('shelter.terima.pengajuan.adopsi');
     Route::post('tolak-pengajuan-adopsi/{id}', [shelterController::class, 'tolakPengajuanAdopsi'])->name('shelter.tolak.pengajuan.adopsi');
+
+    Route::get('profile-adopter/{id}', [shelterController::class, 'getAdopterProfile'])->name('shelter.adopter.profile');
+
+    Route::get('riwayat-pengambilan-hewan-adopter', [shelterController::class, 'getRiwayatPengambilanHewan'])->name('shelter.riwayat.pengambilan.hewan');
+    Route::get('riwayat-pengajuan-adopsi-hewan', [shelterController::class, 'getRiwayatPengajuanAdopsi'])->name('shelter.riwayat.pengajuan.adopsi');
+
+    Route::get('profil-shelter', [shelterController::class, 'getProfilShelter'])->name('shelter.profil');
+    Route::put('perbarui-data-shelter/{id}', [shelterController::class, 'updateDataShelter'])->name('shelter.perbarui.data.shelter');
 });
 
 Route::prefix('admin')->group(function () {

@@ -71,7 +71,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listShelter->isEmpty())
                 @foreach ($listShelter as $shelter)
-                    @if ($shelter->status === 'confirm')
+                    @if ($shelter->status === 'diterima')
                         <a href="{{ route('adopter.detailShelter', ['id' => $shelter->id]) }}" class="col d-flex justify-content-center text-decoration-none">
                             <div class="card shelter-container border-0 shadow-lg">
                                 <img src="{{ asset('storage/' . $shelter->foto_shelter) }}" class="daftar-shelter" alt="Foto Shelter {{ $shelter->nama_shelter ?? 'Shelter' }}">

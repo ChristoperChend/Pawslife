@@ -127,7 +127,9 @@ class adopterController extends Controller
                 'hewan_id' => 'required|exists:hewan,id',
             ]);
 
-            $adopter_id = Auth::user()->id;
+
+            $adopter = Auth::user()->adopter;
+            $adopter_id = $adopter->id;
 
             $favorit = favorit::where('adopter_id', $adopter_id)
                         ->where('hewan_id', $request->hewan_id)
@@ -261,7 +263,9 @@ class adopterController extends Controller
     }
 
     public function showRiwayatPengajuanAdopsi() {
-        $adopter_id = Auth::user()->id;
+        $adopter = Auth::user()->adopter;
+
+        $adopter_id = $adopter->id;
 
         $riwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)->latest()->paginate(4);
 
@@ -362,7 +366,8 @@ class adopterController extends Controller
     }
 
     public function showRiwayatPenyerahanHewan() {
-        $adopter_id = Auth::user()->id;
+        $adopter = Auth::user()->adopter;
+        $adopter_id = $adopter->id;
 
         $riwayat = formPenyerahanHewan::where('adopter_id', $adopter_id)->latest()->paginate(4);
         return view('adopter.riwayatPenyerahanHewan', compact('riwayat'));

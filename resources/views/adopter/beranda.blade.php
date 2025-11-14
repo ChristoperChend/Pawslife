@@ -12,7 +12,8 @@
 
     .banner-section {
         position: relative;
-        background: linear-gradient(135deg, #f2994a, #6dd5ed, #2193b0);
+        /* background: linear-gradient(135deg, #f2994a, #6dd5ed, #2193b0); */
+        background: var(--primary-color);
         color: white;
         text-align: center;
         padding: 170px 20px 160px 20px;
@@ -152,6 +153,7 @@
         width: 275px;
         height: 225px;
         border-radius: 10px 10px 0px 0px;
+        object-fit: cover;
     }
 
     .heart-icon {
@@ -254,7 +256,7 @@
                 @foreach ($listHewan as $hewan)
                     <div class="col d-flex justify-content-center">
                         <div class="card hewan-container border-0 shadow-sm">
-                            <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
+                            <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
                             <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
                                 <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                             </span>

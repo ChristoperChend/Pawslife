@@ -1,11 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Daftar Pengajuan Adopsi')
-
 @section('content')
-{{-- Include SweetAlert2 --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <style>
     .tolak-btn:hover {
         background-color: #dc3545 !important; 
@@ -25,44 +20,47 @@
         use Illuminate\Support\Str;
     @endphp
 
-    {{-- Cards --}}
     @forelse ($data as $item)
         <div class="card border mb-3 rounded-3 overflow-hidden bg-white">
             <div class="d-flex flex-wrap align-items-stretch">
                 
-                {{-- Foto Hewan --}}
                 <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                      style="width:140px; min-height:130px;">
-                    <img src="{{ asset($item->hewan->foto_hewan ?? 'images/no-image.png') }}" 
+                    <img src="{{ asset($item->hewan->foto_hewan) }}" 
                          alt="Foto Hewan"
                          class="rounded"
                          style="width:100px; height:100px; object-fit:cover; background:#e5e7eb;">
                 </div>
 
-                {{-- Info Hewan --}}
                 <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
                     <h5 class="fw-bold mb-1">{{ $item->hewan->nama_hewan ?? 'Nama tidak tersedia' }}</h5>
                     <p class="mb-0 text-muted">Jenis hewan: {{ Str::ucfirst($item->hewan->jenis_hewan ?? '-') }}</p>
                 </div>
 
-                {{-- Status Section --}}
+                
                 <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:200px;">
                     <div>
                         <h6 class="fw-bold mb-2">Status</h6>
-                        @if($item->status_pengajuan == 'setuju')
-                            <span 
-                                class="d-inline-flex align-items-center fw-semibold"
+                        {{-- @if($item->status_pengajuan == 'setuju')
+                            <div 
+                                class="d-inline-flex flex-column align-items-center justify-content-center fw-semibold text-center"
                                 style="
                                     background-color: #e8f0fe;
                                     color: #1967d2;
                                     border-radius: 6px;
                                     font-size: 0.9rem;
-                                    padding: 4px 10px;
-                                    min-width: 150px;
-                                    justify-content: center;
+                                    padding: 6px 12px;
+                                    min-width: 160px;
                                 ">
-                                Masa Percobaan
-                            </span>
+                                <span>Masa Percobaan</span>
+                                @if($item->tanggal_mulai_percobaan && $item->tanggal_akhir_percobaan)
+                                    <small class="fw-normal mt-1" style="font-size: 0.78rem; color:#3c4043;">
+                                        {{ \Carbon\Carbon::parse($item->tanggal_mulai_percobaan)->format('d M Y') }}
+                                        –
+                                        {{ \Carbon\Carbon::parse($item->tanggal_akhir_percobaan)->format('d M Y') }}
+                                    </small>
+                                @endif
+                            </div>
                         @elseif($item->status_pengajuan == 'ditolak')
                             <span 
                                 class="d-inline-flex align-items-center fw-semibold"
@@ -75,15 +73,56 @@
                                     min-width: 150px;
                                     justify-content: center;
                                 ">
-                                Ditolak
+                                Pengajuan Ditolak
+                            </span>
+                        @elseif($item->status_pengajuan == 'diadopsi')
+                            <span 
+                                class="d-inline-flex align-items-center fw-semibold"
+                                style="
+                                    background-color: #e8f0fe;
+                                    color: #1967d2;
+                                    border-radius: 6px;
+                                    font-size: 0.9rem;
+                                    padding: 4px 10px;
+                                    min-width: 150px;
+                                    justify-content: center;
+                                ">
+                                Diadopsi
+                            </span>
+                        @elseif($item->status_pengajuan == 'dikembalikan')
+                            <span 
+                                class="d-inline-flex align-items-center fw-semibold"
+                                style="
+                                    background-color: #e8f0fe;
+                                    color: #1967d2;
+                                    border-radius: 6px;
+                                    font-size: 0.87rem;
+                                    padding: 4px 10px;
+                                    min-width: 150px;
+                                    justify-content: center;
+                                ">
+                                Hewan Dikembalikan
                             </span>
                         @else
                             <div class="d-flex justify-content-start gap-2 mb-2">
-                                <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn">
+                                <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn"
+                                data-id="{{ $item->id }}">
                                     Tolak
                                 </button>
 
-                                {{-- Terima button triggers SweetAlert --}}
+                                <button class="btn btn-sm btn-primary fw-semibold px-3 text-white terima-btn" 
+                                    data-id="{{ $item->id }}">
+                                    Terima
+                                </button>
+                            </div>
+                        @endif --}}
+                        @if ($item->status_pengajuan === 'diajukan' )
+                              <div class="d-flex justify-content-start gap-2 mb-2">
+                                <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn"
+                                data-id="{{ $item->id }}">
+                                    Tolak
+                                </button>
+
                                 <button class="btn btn-sm btn-primary fw-semibold px-3 text-white terima-btn" 
                                     data-id="{{ $item->id }}">
                                     Terima
@@ -92,7 +131,7 @@
                         @endif
                     </div>
 
-                    <a href="#" 
+                    <a href="{{ route('shelter.adopter.profile', $item->adopter_id) }}" 
                        class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1">
                         <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
                         <span>Informasi Adopter</span>
@@ -106,15 +145,14 @@
         </div>
     @endforelse
 
-    <div class="d-flex justify-content-center mt-4 mb-5">
-        {{ $data->links('pagination::bootstrap-5') }}
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        {{$data->links()}}
     </div>
 </div>
 
-{{-- SweetAlert Script --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.terima-btn').forEach(button => {
+     document.querySelectorAll('.terima-btn').forEach(button => {
         button.addEventListener('click', function () {
             const pengajuanId = this.dataset.id;
 
@@ -149,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 padding: '1.5rem 1.5rem 1rem',
                 customClass: { popup: 'rounded-3 shadow-sm' },
                 didOpen: () => {
-
                     const kembali = document.getElementById('btnKembali');
                     const lanjut = document.getElementById('btnSelanjutnya');
 
@@ -162,32 +199,67 @@ document.addEventListener('DOMContentLoaded', function () {
                             return;
                         }
 
-                        // POST request to backend
-                        fetch(`/shelter/terima-pengajuan-adopsi/${pengajuanId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ alasan })
-                        })
-                        .then(res => res.json())
-                        .then(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: 'Hewan memasuki tahap percobaan adopsi',
-                                confirmButtonText: 'OK',
-                                customClass: { confirmButton: 'btn btn-primary text-white px-4 fw-semibold' },
-                                buttonsStyling: false
-                            }).then(() => location.reload());
-                        })
-                        .catch(() => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi kesalahan!',
-                                text: 'Tidak dapat memproses permintaan.',
-                            });
+                        Swal.fire({
+                            icon: 'question',
+                            title: '<h4 style="font-weight:700; font-size:18px; margin-bottom:8px;">Apakah anda yakin menerima pengajuan adopsi?</h4>',
+                            html: `
+                                <p style="font-size:14px; color:#444; margin-bottom:0; line-height:1.4;">
+                                    Anda harus mengantarkan hewan peliharaan pada alamat adopter.
+                                </p>
+                                <div class="swal-buttons mt-3" 
+                                    style="display:flex; justify-content:center; gap:10px; width:100%; margin-top:18px;">
+                                    <button type="button" id="btnKembaliKonfirmasi" 
+                                        class="btn border btn-light fw-semibold px-4 py-2 flex-fill" 
+                                        style="width:110px; font-size:14px;">
+                                        Kembali
+                                    </button>
+                                    <button type="button" id="btnYakinKonfirmasi" 
+                                        class="btn btn-primary text-white fw-semibold px-4 py-2 flex-fill" 
+                                        style="width:110px; font-size:14px;">
+                                        Yakin
+                                    </button>
+                                </div>
+                            `,
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            width: 420,              
+                            padding: '1.2rem 1.2rem', 
+                            customClass: { popup: 'rounded-3 shadow-sm' },
+                            didOpen: () => {
+                                const kembaliKonfirmasi = document.getElementById('btnKembaliKonfirmasi');
+                                const yakinKonfirmasi = document.getElementById('btnYakinKonfirmasi');
+
+                                kembaliKonfirmasi.addEventListener('click', () => Swal.close());
+
+                                yakinKonfirmasi.addEventListener('click', () => {
+                                    fetch(`/shelter/terima-pengajuan-adopsi/${pengajuanId}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({ alasan })
+                                    })
+                                    .then(res => res.json())
+                                    .then(() => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil!',
+                                            text: 'Hewan memasuki tahap percobaan adopsi',
+                                            confirmButtonText: 'OK',
+                                            customClass: { confirmButton: 'btn btn-primary text-white px-4 fw-semibold' },
+                                            buttonsStyling: false
+                                        }).then(() => location.reload());
+                                    })
+                                    .catch(() => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Terjadi kesalahan!',
+                                            text: 'Tidak dapat memproses permintaan.',
+                                        });
+                                    });
+                                });
+                            }
                         });
                     });
                 }

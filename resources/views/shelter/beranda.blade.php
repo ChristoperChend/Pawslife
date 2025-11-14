@@ -5,10 +5,12 @@
         margin: 24px auto 0;
         text-align: center;
     }
+    
     .hero h2{
         font-weight: 800;
         letter-spacing: .3px;
     }
+    
     .page-subtitle{
         color: #6b7280;
         font-size: .95rem;
@@ -17,9 +19,15 @@
     .hero-wrap{
         max-width: 960px;
         text-align: left;
+        margin: 0 auto 24px;
     }
+    
     .hero{
-        margin: 0 auto; padding: 36px 12px 18px;
+        margin: 0 auto; 
+        padding: 24px 32px;
+        border-radius: 1rem;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
     .card {
@@ -30,6 +38,7 @@
         min-height: 300px;
         width: 250px;
     }
+    
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
@@ -45,6 +54,9 @@
         border: none !important;
         border-width: 0 !important;
         min-width: 100px;
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 10px 24px;
     }
 
     .btn-primary:hover{
@@ -54,17 +66,47 @@
         box-shadow:
             0 10px 22px rgba(96,165,250,.30);
     }
+    
+    .btn-light {
+        background: white;
+        color: #2c6ade;
+        border: 2px solid #2c6ade;
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 10px 24px;
+    }
+    
+    .btn-light:hover {
+        background: #f8fafc;
+        border-color: #2c6ade;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(96,165,250,.30);
+    }
 </style>
 
 @section('content')
 
     <div class="container py-5">
          <div class="hero-wrap">
-            <div class="hero">
-                <h2 class="mb-1">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h3>
-                <p class="page-subtitle">Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.</p>
-            </div>
+    <div class="hero d-flex align-items-center justify-content-between py-4 px-3" style="background: linear-gradient(135deg, #f2994a, #6dd5ed, #2193b0); border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="hero-content">
+            <h2 class="mb-2 text-white" style="font-weight: 800; font-size: 2.2rem; letter-spacing: -0.5px;">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h2>
+            <p class="page-subtitle text-white opacity-90 mb-0" style="font-size: 1.1rem; max-width: 600px;">
+                Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.
+            </p>
         </div>
+        <div class="hero-actions">
+            <a href="{{ route('shelter.data.hewan') }}" class="btn btn-light btn-lg me-3" style="border-radius: 50px; font-weight: 600; padding: 10px 24px;">
+                Lihat Semua >>
+            </a>
+            <a href="{{ route('shelter.tambahHewan') }}">
+                <button type="button" class="btn btn-primary btn-lg" style="border-radius: 50px; font-weight: 600; padding: 10px 24px; background: #2c6ade; border: none;">
+                    + Tambah Hewan
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
 
         <div class="d-flex justify-content-between ms-3 ">
             <a href="{{ route('shelter.data.hewan') }}" class="align-self-center px-5;">
