@@ -67,6 +67,11 @@ body {
     box-shadow: 0 6px 18px rgba(116, 116, 116, 0.25);
 }
 
+.swal-actions-gap {
+    gap: 10px;
+    display: flex;
+}
+
 .primary-color {
 	background: var(--primary-color);
 }
