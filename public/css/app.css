@@ -7,38 +7,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
 :root {
-    /* --primary-color: #60a5fa; 
-    --primary-gradient: linear-gradient(90deg, #60a5fa, #8b5cf6); */
-    --primary-color: #2c6ade;   
-    /* --primary-color: #ff48c8;    */
-    /* --primary-gradient: linear-gradient(90deg, #60a5fa, #8b5cf6); */
+    --primary-color: #2c6ade;
 }
 
 body {
-    /* margin: 0 4rem; */
     font-family: "Quicksand", monospace;
-    /* font-family: 'Poppins', sans-serif; */
-    /* min-width: 100%; */
     min-height: 100vh;
     height: 100dvh;
 }
 
+.btn-primary-color {
+    color: var(--primary-color);
+    padding: 5px 20px 5px 20px;
+    border: 1px solid var(--primary-color);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.btn-primary-color:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-merah-color {
+    color: #dc3545;
+    padding: 5px 20px 5px 20px;
+    border: 1px solid #dc3545;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.btn-merah-color:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-kembali {
+    border: 1px solid rgba(131, 131, 131, 0.223);
+    transition: all 0.3s ease;
+    padding: 5px 20px 5px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.btn-kembali:hover {
+    transform: translateY(-2px);
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(116, 116, 116, 0.25);
+}
+
 .primary-color {
-	/* background-color: rgb(86, 2, 31); */
-	/* background: var(--primary-gradient); */
 	background: var(--primary-color);
-	/* background-color: #6256CA; */
 }
 
 .nav-color {
-	/* background-color: rgb(86, 2, 31); */
 	background-color:white;
-	/* background-color:#6256CA; */
-	/* background-color:#1158dd; */
-}
-
-.secondary-color {
-	background-color: #F97316;
 }
 
 .container {
