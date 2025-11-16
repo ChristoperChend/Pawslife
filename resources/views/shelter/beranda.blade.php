@@ -17,18 +17,34 @@
     }
 
     .hero-wrap{
-        max-width: 960px;
+        max-width: 1355px;
+        margin: 0 auto 24px; 
         text-align: left;
         margin: 0 auto 24px;
+
     }
     
     .hero{
         margin: 0 auto; 
+        width: 100%;
         padding: 24px 32px;
         border-radius: 1rem;
         background: white;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                min-height: 180px;
     }
+
+    .hero-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 600px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1.3;
+}
 
     .card {
         background-color: #ffffff;
@@ -48,100 +64,101 @@
         object-fit: cover;   
     }
 
-    .btn-primary{
-        background: var(--primary-color);
-        color: #fff;
-        border: none !important;
-        border-width: 0 !important;
-        min-width: 100px;
-        border-radius: 50px;
-        font-weight: 600;
-        padding: 10px 24px;
+   .hero-card {
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem 1.5rem;
     }
 
-    .btn-primary:hover{
-        transform: translateY(-1px);
-        filter: saturate(1.05);
-        color: var(--primary-color);
-        box-shadow:
-            0 10px 22px rgba(96,165,250,.30);
+
+
+    .hero-card .btn-outline-light {
+        background: rgba(255,255,255,0.15);
+        border-color: white !important;
+        color: white !important;
+        backdrop-filter: blur(10px);
     }
-    
-    .btn-light {
-        background: white;
-        color: #2c6ade;
-        border: 2px solid #2c6ade;
-        border-radius: 50px;
+
+    .hero-card .btn-outline-light:hover {
+        background: rgba(255,255,255,0.25) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255,255,255,0.2);
+    }
+
+    .hero-card .btn-primary {
+        background: var(--primary-color);
+        border: none;
+        color: white;
         font-weight: 600;
-        padding: 10px 24px;
+        padding: 0.75rem 1.5rem;
     }
-    
-    .btn-light:hover {
-        background: #f8fafc;
-        border-color: #2c6ade;
-        transform: translateY(-1px);
-        box-shadow: 0 10px 22px rgba(96,165,250,.30);
+
+    .hero-card .btn-primary:hover {
+        /* background: #255cb5; */
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(44, 106, 222, 0.4);
     }
 </style>
 
 @section('content')
 
     <div class="container py-5">
-         <div class="hero-wrap">
-    <div class="hero d-flex align-items-center justify-content-between py-4 px-3" style="background: linear-gradient(135deg, #f2994a, #6dd5ed, #2193b0); border-radius: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-        <div class="hero-content">
-            <h2 class="mb-2 text-white" style="font-weight: 800; font-size: 2.2rem; letter-spacing: -0.5px;">Selamat Datang, Shelter {{ $shelterDatas->nama_shelter }}!</h2>
-            <p class="page-subtitle text-white opacity-90 mb-0" style="font-size: 1.1rem; max-width: 600px;">
-                Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk menambah hewan baru.
-            </p>
-        </div>
-        <div class="hero-actions">
-            <a href="{{ route('shelter.data.hewan') }}" class="btn btn-light btn-lg me-3" style="border-radius: 50px; font-weight: 600; padding: 10px 24px;">
-                Lihat Semua >>
-            </a>
-            <a href="{{ route('shelter.tambahHewan') }}">
-                <button type="button" class="btn btn-primary btn-lg" style="border-radius: 50px; font-weight: 600; padding: 10px 24px; background: #2c6ade; border: none;">
-                    + Tambah Hewan
-                </button>
-            </a>
-        </div>
-    </div>
-</div>
+        <div class="hero-wrap col-12">
+            <div class="hero-card position-relative overflow-hidden rounded-4 shadow-sm" 
+                style="background: linear-gradient(135deg, #2c6ade, #71dff7); padding: 2rem 1.5rem;">
 
-        <div class="d-flex justify-content-between ms-3 ">
-            <a href="{{ route('shelter.data.hewan') }}" class="align-self-center px-5;">
-                Lihat Semua >>
+                <!-- Gradient Overlay for Text Readability -->
+                <div class="position-absolute top-0 start-0 w-100 h-100 opacity-80" 
+                    style="background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);"></div>
+
+                <div class="hero-content position-relative z-2 d-flex flex-column align-items-start justify-content-center gap-2">
+                    <h2 class="text-white fw-bold mb-0 lh-base" style="font-size: 1.8rem; max-width: 600px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                        Selamat Datang, {{ $shelterDatas->nama_shelter }}!
+                    </h2>
+                    <p class="text-white opacity-90 mb-0" style="font-size: 1.1rem; max-width: 600px; line-height: 1.5;">
+                        Kelola data hewan Anda di sini. Gunakan tombol di kanan untuk melihat semua daftar hewan dan menambah hewan baru.
+                    </p>
+                </div>
+
+                <div class="hero-actions position-relative z-2 d-flex gap-3 ms-auto">
+                    <a href="{{ route('shelter.data.hewan') }}" class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill fw-semibold" style="transition: all 0.3s ease; border-width: 2px;">
+                        Lihat Semua Hewan
+                    </a>
+                    <a href="{{ route('shelter.tambahHewan') }}" class="btn btn-primary btn-lg px-4 py-2 rounded-pill fw-semibold" style="transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(44, 106, 222, 0.3);">
+                        + Tambah Hewan
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end ms-3 ">
+            {{-- <a href="{{ route('shelter.data.hewan') }}" class="align-self-center px-5;">
+                Lihat Semua Hewan
             </a>
             <a href="{{ route('shelter.tambahHewan') }}">
                 <button type="button" class="btn btn-primary primary-color me-3" style="color: white">+ Tambah Hewan</button>
-            </a>
+            </a> --}}
         </div>
 
         <div class="row row-cols-5 g-3">
             @foreach ($dataHewan as $hewan)
-            <div class="col py-3">
+             @php
+                $isDog = str_contains($hewan->jenis_hewan, 'anjing');
+                $isCat = str_contains($hewan->jenis_hewan, 'kucing');
+            @endphp
+            <div class="col py-3 d-flex justify-content-center">
                 <div class="card h-100 bg-white shadow-sm">
 
                     <img src="{{ asset($hewan->foto_hewan) }}" class="card-img-top" alt="{{ $hewan->nama_hewan }}" style="height:200px;">
 
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title  d-flex align-items-center gap-2">
-                            {{ ucfirst($hewan->nama_hewan) }}
-
-                            {{-- jenis_hewan badge --}}
-                            <span class="badge " style="height: 18px; font-size: 10px; background-color: rgb(0, 23, 126);">
-                                {{ ucfirst($hewan->jenis_hewan) }}
-                            </span>
-
-                            {{-- jenis_kelamin icon --}}
-                            @if ($hewan->jenis_kelamin === 'jantan')
-                                <i class="fa-solid fa-mars" aria-label="Jantan"  style="font-size: 18px; color: rgb(0, 101, 252);"></i>
-                            @elseif ($hewan->jenis_kelamin === 'betina')
-                                <i class="fa-solid fa-venus" aria-label="Betina" style="font-size: 18px; color: rgb(255, 32, 107);"></i>
-                            @endif
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title mb-3" style="display: flex; justify-content: center; align-items: center; gap: 0.4rem;">
+                            {{ $hewan->nama_hewan }}
+                            <i class="fa-solid {{ $isDog ? 'fa-bone' : 'fa-paw' }}"></i>
                         </h5>
-                        <p class="card-text text-muted mb-2">Berat: {{ $hewan->berat }} kg</p>
-                        <a href="{{ route('shelter.detail.hewan', $hewan->id) }}" class="btn btn-sm btn-outline-primary mt-auto">Lihat Detail</a>
+                        <a href="{{ route('shelter.detail.hewan', $hewan->id) }}" class="btn-primary-color" style="text-decoration:none; text-align: center;">Lihat Detail</a>
                     </div>
                 </div>
             </div>

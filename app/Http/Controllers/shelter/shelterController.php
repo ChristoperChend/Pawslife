@@ -23,7 +23,7 @@ class shelterController
     {   
         $user = Auth::user();
 
-        $hewanIds = Hewan::where('shelter_id', $user->id)->pluck('id');
+        $hewanIds = Hewan::where('shelter_id', $user->shelter->id)->pluck('id');
         if ($hewanIds->isNotEmpty()) {
             formPengajuanAdopsi::whereIn('hewan_id', $hewanIds)
                 ->where('status_pengajuan', 'setuju')
@@ -35,7 +35,7 @@ class shelterController
                 ]);
         }
 
-        $dataHewan = hewan::where('shelter_id', $user->id)->orderBy('id', 'desc')->take(10)->get();
+        $dataHewan = hewan::where('shelter_id', $user->shelter->id)->orderBy('id', 'desc')->take(10)->get();
 
         $shelterDatas   = Shelter::where( 'pengguna_id',$user->id)->first();
 
@@ -72,7 +72,7 @@ class shelterController
         
         if($request->hasFile('fotoHewan')){
             $user = Auth::user();
-            $shelter_id = $user->id;
+            $shelter_id = $user->shelter->id;
 
             
             $file = $request->file('fotoHewan');
@@ -111,7 +111,7 @@ class shelterController
         $user = Auth::user();
         $q = trim($request->query('q', ''));
         $dataHewan = hewan::query()
-            ->where('shelter_id', $user->id)
+            ->where('shelter_id', $user->shelter->id)
             ->when($q !== '', function($query) use ($q){
                 $safe = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $q);
                 $query->where('nama_hewan', 'LIKE', "%{$safe}%");
