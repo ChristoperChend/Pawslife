@@ -13,7 +13,11 @@ class berandaController
     public function adopterBeranda() {
         $user = Auth::user();
         $listHewan = hewan::with('shelter')->inRandomOrder()->limit(8)->get();
-        $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        if (Auth::check() && Auth::user()->adopter) {
+            $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        } else {
+            $favoritHewanIds = [];
+        }
         return view('adopter.beranda', compact('user', 'listHewan', 'favoritHewanIds'));
     }
 

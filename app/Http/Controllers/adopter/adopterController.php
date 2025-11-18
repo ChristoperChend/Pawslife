@@ -50,7 +50,11 @@ class adopterController extends Controller
         }
 
         $listHewan = $query->paginate(12);
-        $favoritHewanIds = Favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        if (Auth::check() && Auth::user()->adopter) {
+            $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        } else {
+            $favoritHewanIds = [];
+        }
 
         return view('adopter.daftarHewan', compact('listHewan', 'favoritHewanIds'));
     }
@@ -236,7 +240,11 @@ class adopterController extends Controller
             });
         }
         $listFavorit = $query->paginate(12);
-        $favoritHewanIds = favorit::where('adopter_id', $adopter_id)->pluck('hewan_id')->toArray();
+        if (Auth::check() && Auth::user()->adopter) {
+            $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        } else {
+            $favoritHewanIds = [];
+        }
         return view('adopter.daftarFavorit', compact('listFavorit', 'favoritHewanIds'));   
     }
 
@@ -485,7 +493,11 @@ class adopterController extends Controller
 
         $listHewan = hewan::where('shelter_id', $detailShelter->id)->paginate(4);
 
-        $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        if (Auth::check() && Auth::user()->adopter) {
+            $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+        } else {
+            $favoritHewanIds = [];
+        }
         return view('adopter.detailShelter', compact('detailShelter', 'listHewan', 'favoritHewanIds'));
     }
 
