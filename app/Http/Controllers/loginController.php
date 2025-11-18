@@ -42,15 +42,15 @@ class loginController extends Controller
                 return redirect()->route('beranda.adopterBeranda');
             } else if ($user->tipe_pengguna === 'shelter') {
                 $shelter = shelter::where('pengguna_id', $user->id)->first();
-                if ($shelter && $shelter->status === 'Diajukan') {
+                if ($shelter && $shelter->status === 'diajukan') {
                     Auth::logout();
                     Alert::warning('Akun shelter Anda menunggu konfirmasi admin.');
                     return back();
-                } else if ($shelter->status === 'Ditolak') {
+                } else if ($shelter->status === 'ditolak') {
                     Auth::logout();
                     Alert::warning('Akun shelter Anda ditolak oleh admin.');
                     return back();
-                } else if ($shelter->status === 'Diterima') {
+                } else if ($shelter->status === 'diterima') {
                     return redirect()->route('beranda.shelterBeranda');
                 }
             } else if ($user->tipe_pengguna === 'admin') {

@@ -8,7 +8,7 @@
     .foto-hewan img {
         width: 100%;
         height: 100%;
-        border-radius: 12px;
+        object-fit: cover;
     }
 
     .riwayat-card-item {
@@ -27,12 +27,12 @@
     }
 
     .riwayat-hewan-nama {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         color: #343a40;
     }
 
     .riwayat-hewan-jenis {
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: #343a40;
     }
 
@@ -56,7 +56,7 @@
     }
 
     .riwayat-btn-aksi {
-        font-size: 1rem !important;
+        font-size: 0.85rem !important;
         padding: 5px 10px !important;
         font-weight: 600 !important;
     }
@@ -84,75 +84,124 @@
             <hr>
         </div>
 
-        @foreach ($riwayat as $items)
-            <div class="card riwayat-card-item shadow-sm mb-5">
-                <div class="d-flex align-items-center bg-light" style="padding: 1rem;">
-                    <div class="foto-hewan me-4">
-                        <img src="{{ asset('storage/' . $items->hewan->foto_hewan) }}" alt="Foto Hewan">
+        @forelse ($riwayat as $items)
+            <div class="card riwayat-card-item mb-3 shadow-sm overflow-hidden bg-white">
+                <div class="d-flex flex-wrap align-items-stretch">
+                    <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
+                        style="width: 140px; min-height: 130px;"
+                    >
+                        <img src="{{ asset($items->hewan->foto_hewan) }}" 
+                            alt="Foto Hewan"
+                            class="rounded"
+                            style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
                     </div>
-
-                    <div class="flex-grow-1">
+    
+                    <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
                         <p class="mb-0 text-muted small">Nama Hewan</p>
-                        <h5 class="fw-bold mb-3 riwayat-hewan-nama">{{ $items->hewan->nama_hewan }}</h5>
+                        <h5 class="fw-bold mb-1 riwayat-hewan-nama">{{ $items->hewan->nama_hewan }}</h5>
                         
                         <p class="mb-0 text-muted small">Jenis Hewan</p>
                         <h6 class="fw-bold riwayat-hewan-jenis">{{ $items->hewan->jenis_hewan }}</h6>
                     </div>
                     
-
-                    <div class="d-flex align-items-center ms-auto info-status-wrapper">
-                        <div class="garis-vertikal-riwayat me-4 d-none d-md-block"></div>
-
-                        <div class="text-end status-section">
-                            <p class="fw-bold mb-2 status-label">Status Pengajuan</p>
-                            
-                            @if ($items->status_pengajuan == "Masa percobaan")
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
+                        <div>
+                            <h6 class="fw-bold mb-2">Status</h6>
+                            @if ($items->status_pengajuan == "setuju")
                                 @php
-                                    $updatedAt = \Carbon\Carbon::parse($items->updated_at);
-                                    $totalHoursPassed = $updatedAt->diffInHours(now());
-                                    $daysPassed = floor($totalHoursPassed / 24); 
-                                    $daysRemaining = 7 - $daysPassed;
-                                    $daysRemainingDisplay = max(0, $daysRemaining); 
+                                    $endDate = \Carbon\Carbon::parse($items->tanggal_akhir_percobaan)->startOfDay();
+                                    $today = now()->startOfDay();
+                                    if ($endDate->lt($today)) {
+                                        $daysRemainingDisplay = 0;
+                                    } else {
+                                        $daysRemainingDisplay = $today->diffInDays($endDate);
+                                    }
                                 @endphp
-                                <h6 class="fw-bold">
-                                        Masa Percobaan Sisa {{ $daysRemainingDisplay }} hari
-                                        <i 
-                                            class="fa-solid fa-circle-info tooltip-info"
-                                            data-bs-toggle="tooltip" 
-                                            data-bs-placement="top" 
-                                            title="Jika masa percobaan sudah selesai, hewan akan otomatis diadopsi."
-                                        ></i>
-                                </h6>
-                                <div class="d-flex gap-2 justify-content-end">
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-outline-danger btn-sm riwayat-btn-aksi" 
-                                        onclick="kembalikanHewan({{ $items->hewan->id }})"
-                                    >
-                                        Kembalikan
-                                    </button>
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-success btn-sm riwayat-btn-aksi" 
-                                        onclick="adopsiHewan({{ $items->hewan->id }})"
-                                    >
-                                        Adopsi
-                                    </button>
-                                </div>
-                            @else
-                                <span class="badge status-badge {{ 
-                                    $items->status_pengajuan == 'Diadopsi' ? 'text-bg-success' : 
-                                    ($items->status_pengajuan == 'Dikembalikan' ? 'text-bg-danger' : 
-                                    'text-bg-warning') 
-                                }}">
-                                    {{ $items->status_pengajuan }}
+                                @if ($endDate == $today)
+                                    <span 
+                                        class="d-inline-flex align-items-center fw-semibold"
+                                        style="
+                                            background-color: #e8f0fe;
+                                            color: #1967d2;
+                                            border-radius: 6px;
+                                            font-size: 0.9rem;
+                                            padding: 4px 10px;
+                                            min-width: 170px;
+                                            justify-content: center;
+                                        ">
+                                        Diadopsi
+                                    </span>
+                                @else
+                                    <h6 class="fw-bold" style="font-size: 14px">
+                                            Masa Percobaan Sisa {{ $daysRemainingDisplay }} hari
+                                            <i 
+                                                class="fa-solid fa-circle-info tooltip-info"
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-placement="top" 
+                                                title="Jika masa percobaan sudah selesai, hewan akan otomatis diadopsi."
+                                            ></i>
+                                    </h6>
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-merah-color btn-sm riwayat-btn-aksi" 
+                                            onclick="kembalikanHewan({{ $items->hewan->id }})"
+                                        >
+                                            Kembalikan
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-primary-color btn-sm riwayat-btn-aksi" 
+                                            onclick="adopsiHewan({{ $items->hewan->id }})"
+                                        >
+                                            Adopsi
+                                        </button>
+                                    </div>
+                                @endif
+                            @elseif($items->status_pengajuan == 'diajukan' || $items->status_pengajuan == 'diadopsi')
+                                <span 
+                                    class="d-inline-flex align-items-center fw-semibold"
+                                    style="
+                                        background-color: #e8f0fe;
+                                        color: #1967d2;
+                                        border-radius: 6px;
+                                        font-size: 0.9rem;
+                                        padding: 4px 10px;
+                                        min-width: 170px;
+                                        justify-content: center;
+                                    ">
+                                    {{ ucfirst($items->status_pengajuan) }}
+                                </span>
+                            @elseif($items->status_pengajuan == 'tolak' || $items->status_pengajuan == 'dikembalikan')
+                                <span 
+                                    class="d-inline-flex align-items-center fw-semibold"
+                                    style="
+                                        background-color: #ffe8ea;
+                                        color: #dc3545;
+                                        border-radius: 6px;
+                                        font-size: 0.9rem;
+                                        padding: 4px 10px;
+                                        min-width: 170px;
+                                        justify-content: center;
+                                    ">
+                                    {{ ucfirst($items->status_pengajuan) }}
                                 </span>
                             @endif
                         </div>
+                        <a href="{{ route('adopter.detailHewan', ['id' => $items->hewan_id]) }}" 
+                            class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
+                        >
+                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
+                            <span>Informasi Hewan</span>
+                        </a>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="text-center text-muted mt-5">
+                <p>Belum ada riwayat pengajuan adopsi.</p>
+            </div>
+        @endforelse
         <div class="d-flex justify-content-center mt-4">{{ $riwayat->links() }}</div>
     </div>
 
@@ -177,7 +226,14 @@
                         Swal.showValidationMessage('Alasan wajib diisi!');
                     }
                     return alasan;
-                }
+                },
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 const alasanAdopsi = result.value;
@@ -191,6 +247,13 @@
                         confirmButtonText: "Yakin",
                         cancelButtonText: "Kembali",
                         reverseButtons: true,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-question-primary',
+                            confirmButton: 'btn btn-primary-color',
+                            cancelButton: 'btn btn-merah-color'
+                        },
+                        buttonsStyling: false
                     })
                     .then((result) => {
                         if (result.isConfirmed) {
@@ -215,7 +278,13 @@
                                     Swal.fire({
                                         icon: 'success',
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            icon: 'swal-success-primary',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                     .then(() => {
                                         location.reload();
@@ -224,7 +293,12 @@
                                     Swal.fire({
                                         icon: "error",
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                     .then(() => {
                                         location.reload();
@@ -255,7 +329,14 @@
                         Swal.showValidationMessage('Alasan wajib diisi!');
                     }
                     return alasan;
-                }
+                },
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 const alasanAdopsi = result.value;
@@ -270,6 +351,13 @@
                         confirmButtonText: "Yakin",
                         cancelButtonText: "Kembali",
                         reverseButtons: true,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-question-primary',
+                            confirmButton: 'btn btn-primary-color',
+                            cancelButton: 'btn btn-merah-color'
+                        },
+                        buttonsStyling: false
                     })
                     .then((result) => {
                         if (result.isConfirmed) {
@@ -294,7 +382,13 @@
                                     Swal.fire({
                                         icon: 'success',
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            icon: 'swal-success-primary',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                     .then(() => {
                                         location.reload();
@@ -303,7 +397,12 @@
                                     Swal.fire({
                                         icon: "error",
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                     .then(() => {
                                         location.reload();

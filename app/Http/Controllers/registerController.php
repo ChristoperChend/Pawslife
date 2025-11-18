@@ -8,10 +8,10 @@ use App\Models\shelter;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class registerController
 {
@@ -132,34 +132,44 @@ class registerController
                 ]);
             }
 
-            DB::beginTransaction();
-        
-            $pengguna = pengguna::create([
-                'email' => $request->email,
-                'kata_sandi' => Hash::make($request->password),
-                'tipe_pengguna' => 'adopter'
-            ]);
+            $data = $request->except('foto');
 
-            $fotoPath = $request->file('foto')->store('foto_adopter', 'public');
+            if($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                $destinationPath = public_path('image/fotoAdopter');
+                if(!File::exists($destinationPath)){
+                    File::makeDirectory($destinationPath, 0775, true);
+                }
+                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+                $file->move($destinationPath, $fileName);
+                $data['foto'] = 'image/fotoAdopter/'.$fileName;
 
-            $adopter = adopter::create([
-                'pengguna_id' => $pengguna->id,
-                'nama_lengkap' => $request->nama_lengkap,
-                'alamat' => $request->alamat,
-                'usia' => $request->usia,
-                'pekerjaan' => $request->pekerjaan,
-                'no_handphone' => $request->no_handphone,
-                'no_whatsapp' => $request->no_whatsapp,
-                'foto_adopter' => $fotoPath,
-                'status' => ''
-            ]);
-
-            if (!$adopter) {
-                return response()->json([
-                    'error' => true,
-                    'title' => 'Gagal membuat akun',
-                    'message' => 'Terjadi kesalahan ketika melakukan registrasi'
+                DB::beginTransaction();
+            
+                $pengguna = pengguna::create([
+                    'email' => $request->email,
+                    'kata_sandi' => Hash::make($request->password),
+                    'tipe_pengguna' => 'adopter'
                 ]);
+    
+                $adopter = adopter::create([
+                    'pengguna_id' => $pengguna->id,
+                    'nama_lengkap' => $request->nama_lengkap,
+                    'alamat' => $request->alamat,
+                    'usia' => $request->usia,
+                    'pekerjaan' => $request->pekerjaan,
+                    'no_handphone' => $request->no_handphone,
+                    'no_whatsapp' => $request->no_whatsapp,
+                    'foto_adopter' => $data['foto'],
+                    'status' => ''
+                ]);
+                if (!$adopter) {
+                    return response()->json([
+                        'error' => true,
+                        'title' => 'Gagal membuat akun',
+                        'message' => 'Terjadi kesalahan ketika melakukan registrasi'
+                    ]);
+                }
             }
 
             DB::commit();
@@ -290,34 +300,54 @@ class registerController
                 ]);
             }
 
-            DB::beginTransaction();
+            $data = $request->except('foto_shelter');
+            $data = $request->except('dokumen_legal');
 
-            $pengguna = pengguna::create([
-                'email' => $request->email_shelter,
-                'kata_sandi' => Hash::make($request->password_shelter),
-                'tipe_pengguna' => 'shelter'
-            ]);
+            if($request->hasFile('foto_shelter') && $request->hasFile('dokumen_legal')) {
+                $file = $request->file('foto_shelter');
+                $destinationPath = public_path('image/fotoShelter');
+                if(!File::exists($destinationPath)){
+                    File::makeDirectory($destinationPath, 0775, true);
+                }
+                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+                $file->move($destinationPath, $fileName);
+                $data['foto_shelter'] = 'image/fotoShelter/'.$fileName;
 
-            $fotoPath = $request->file('foto_shelter')->store('foto_shelter', 'public');
-            $fotoDokumenPath = $request->file('dokumen_legal')->store('foto_dokumen_shelter', 'public');
+                $file = $request->file('dokumen_legal');
+                $destinationPath = public_path('image/dokumenLegalShelter');
+                if(!File::exists($destinationPath)){
+                    File::makeDirectory($destinationPath, 0775, true);
+                }
+                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+                $file->move($destinationPath, $fileName);
+                $data['dokumen_legal'] = 'image/dokumenLegalShelter/'.$fileName;
 
-            $shelter = shelter::create([
-                'pengguna_id' => $pengguna->id,
-                'nama_shelter' => $request->nama_shelter,
-                'alamat_shelter' => $request->alamat_shelter,
-                'no_telepon_shelter' => $request->no_telepon_shelter,
-                'foto_shelter' => $fotoPath,
-                'dokumen_legal' => $fotoDokumenPath,
-                'deskripsi_shelter' => $request->deskripsi_shelter,
-                'status' => 'Diajukan'
-            ]);
-
-            if (!$shelter) {
-                return response()->json([
-                    'error' => true,
-                    'title' => 'Gagal membuat akun',
-                    'message' => 'Terjadi kesalahan ketika melakukan registrasi'
+                DB::beginTransaction();
+    
+                $pengguna = pengguna::create([
+                    'email' => $request->email_shelter,
+                    'kata_sandi' => Hash::make($request->password_shelter),
+                    'tipe_pengguna' => 'shelter'
                 ]);
+
+                $shelter = shelter::create([
+                    'pengguna_id' => $pengguna->id,
+                    'nama_shelter' => $request->nama_shelter,
+                    'alamat_shelter' => $request->alamat_shelter,
+                    'no_telepon_shelter' => $request->no_telepon_shelter,
+                    'foto_shelter' => $data['foto_shelter'],
+                    'dokumen_legal' => $data['dokumen_legal'],
+                    'deskripsi_shelter' => $request->deskripsi_shelter,
+                    'status' => 'diajukan'
+                ]);
+
+                if (!$shelter) {
+                    return response()->json([
+                        'error' => true,
+                        'title' => 'Gagal membuat akun',
+                        'message' => 'Terjadi kesalahan ketika melakukan registrasi'
+                    ]);
+                }
             }
 
             DB::commit();

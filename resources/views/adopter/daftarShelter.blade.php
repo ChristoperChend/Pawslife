@@ -23,7 +23,7 @@
         font-size: .95rem;
     }
     .shelter-container {
-        border-radius: 10px;
+        border-radius: 10px !important;
         transition: transform 0.4s ease, box-shadow 0.4s ease;
         transform: translateY(0) scale(1);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -37,6 +37,8 @@
     .daftar-shelter {
         width: 300px;
         height: 250px;
+        border-radius: 10px 10px 0px 0px;
+        object-fit: cover;
     }
 
     .card-title-shelter {
@@ -54,10 +56,6 @@
         font-size: 0.8rem;
         color: #495057 !important;
     }
-
-    h4 {
-        min-height: 240px;
-    }
 </style>
 
 @extends('layout.master')
@@ -66,7 +64,7 @@
     <div class="container py-5">
         <form class="search-wrap" role="search" method="GET" action="{{ route('adopter.daftarShelter') }}">
             <i class="fa-solid fa-search"></i>
-            <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Search Shelter atau Lokasi" value="{{ request('search') }}">
+            <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Cari shelter berdasarkan nama atau Lokasi..." value="{{ request('search') }}">
         </form>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listShelter->isEmpty())
@@ -74,7 +72,7 @@
                     @if ($shelter->status === 'diterima')
                         <a href="{{ route('adopter.detailShelter', ['id' => $shelter->id]) }}" class="col d-flex justify-content-center text-decoration-none">
                             <div class="card shelter-container border-0 shadow-lg">
-                                <img src="{{ asset('storage/' . $shelter->foto_shelter) }}" class="daftar-shelter" alt="Foto Shelter {{ $shelter->nama_shelter ?? 'Shelter' }}">
+                                <img src="{{ asset($shelter->foto_shelter) }}" class="daftar-shelter" alt="Foto Shelter {{ $shelter->nama_shelter ?? 'Shelter' }}">
 
                                 <div class="p-3">
                                     <h5 class="card-title-shelter fw-bold mb-0 text-truncate">{{ $shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</h5>

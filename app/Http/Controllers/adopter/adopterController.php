@@ -15,22 +15,43 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 
 class adopterController extends Controller
 {
+    private function checkLogin() {
+        if (!Auth::check()) {
+            return redirect()->route('login')
+                ->with('error', 'Silakan login terlebih dahulu.');
+        }
+        return null;
+    }
+
     public function daftarHewan(Request $request) {
-        $query = hewan::with('shelter');
+        $query = Hewan::with('shelter');
+
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_hewan', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('jenis_hewan', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('jenis_kelamin', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
         if ($request->filled('jenis_hewan')) {
-            $query->where('jenis_hewan', $request->jenis_hewan);
+            $jenisHewan = $request->jenis_hewan;
+            $query->where('jenis_hewan', $jenisHewan); 
         }
-        if ($request->filled('jenis_kelamin')) {
-            $query->where('jenis_kelamin', $request->jenis_kelamin);
-        }
+
         if ($request->filled('shelter_id')) {
-            $query->where('shelter_id', $request->shelter_id);
+            $shelter_id = $request->shelter_id;
+            $query->where('shelter_id', $shelter_id); 
         }
+
         $listHewan = $query->paginate(12);
-        $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
+        $favoritHewanIds = Favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
+
         return view('adopter.daftarHewan', compact('listHewan', 'favoritHewanIds'));
     }
 
@@ -49,6 +70,26 @@ class adopterController extends Controller
         return view('adopter.detailHewan', compact('detailHewan', 'adopter_id'));
     }
 
+    public function detailPenyerahanHewan(Request $request) {
+        $data = formPenyerahanHewan::where('id', $request->id)
+        ->where('adopter_id', $request->adopter_id)
+        ->first();
+
+        if ($data && $data->status_steril === 'belum_steril') {
+            $data->status_steril = 'Belum steril';
+        } elseif ($data && $data->status_steril === 'sudah_steril') {
+            $data->status_steril = 'Sudah steril';
+        } 
+        
+        if ($data && $data->status_vaksin === 'belum_vaksin') {
+            $data->status_vaksin = 'Belum vaksin';
+        } elseif ($data && $data->status_vaksin === 'sudah_vaksin') {
+            $data->status_vaksin = 'Sudah vaksin';
+        }
+
+        return view('adopter.dataPenyerahanHewan', compact('data'));
+    }
+
     private function simplifyAlamat($alamat) {
         if (preg_match('/Kecamatan\s([^,]*)|Kec\.?\s?([^,]*)/i', $alamat, $matches)) {
             $kecamatan = $matches[1] ?: $matches[2];
@@ -65,6 +106,10 @@ class adopterController extends Controller
         return trim($kecamatan . ' ' . $kota);
     }
 
+    /**
+     * @param string $alamat
+     * @return string
+     **/
     private function getLokasiFromAlamat($alamat) {
         $alamatSederhana = $this->simplifyAlamat($alamat);
 
@@ -72,44 +117,57 @@ class adopterController extends Controller
             return 'Lokasi tidak ditemukan';
         }
 
-        $response = Http::withHeaders([
-            'User-Agent' => 'PawsLife/1.0 (contact: christoper.chendra15@gmail.com)',
-        ])->get('https://nominatim.openstreetmap.org/search', [
-            'q' => $alamatSederhana,
-            'format' => 'json',
-            'addressdetails' => 1,
-        ]);
+        $cacheKey = 'lokasi_alamat_' . md5($alamatSederhana);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            $address = $data[0]['address'] ?? [];
+        return cache()->remember($cacheKey, 3600, function () use ($alamatSederhana) {
+            $response = Http::withHeaders([
+                'User-Agent' => 'PawsLife/1.0 (contact: christoper.chendra15@gmail.com)',
+            ])->get('https://nominatim.openstreetmap.org/search', [
+                'q' => $alamatSederhana,
+                'format' => 'json',
+                'addressdetails' => 1,
+            ]);
 
-            if (isset($address['city_district'])) {
-                return $address['city_district'];
-            } elseif (isset($address['suburb'])) {
-                return $address['suburb'];
-            } elseif (isset($address['city'])) {
-                return $address['city'];
-            } elseif (isset($address['county'])) {
-                return $address['county'];
-            } else {
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if (!empty($data) && isset($data[0]['address'])) {
+                    $address = $data[0]['address'];
+
+                    if (isset($address['city_district'])) {
+                        return $address['city_district'];
+                    } elseif (isset($address['suburb'])) {
+                        return $address['suburb'];
+                    } elseif (isset($address['city'])) {
+                        return $address['city'];
+                    } elseif (isset($address['county'])) {
+                        return $address['county'];
+                    }
+                }
                 return 'Lokasi tidak ditemukan';
             }
-        }
 
-        return 'Gagal memproses alamat';
+            return 'Gagal memproses alamat';
+        });
     }
 
     public function daftarShelter(Request $request) {
-        $search = $request->input('search');
+        $query = Shelter::query();
 
-        $listShelter = shelter::when($search, function ($query, $search) {
-            $query->where('nama_shelter', 'like', '%' . $search . '%');
-        })->paginate(12);
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_shelter', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('alamat_shelter', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        $listShelter = $query->paginate(12);
 
         foreach ($listShelter as $shelter) {
             $shelter->lokasi = $this->getLokasiFromAlamat($shelter->alamat_shelter);
         }
+
         return view('adopter.daftarShelter', compact('listShelter'));
     }
 
@@ -164,50 +222,82 @@ class adopterController extends Controller
     }
 
     public function daftarFavorit(Request $request) {
-        $adopter_id = Auth::id();
-
+        $adopter_id = Auth::user()->adopter->id;
+        
         $query = favorit::with(['hewan.shelter'])
             ->where('adopter_id', $adopter_id);
 
-        if ($request->filled('jenis_hewan')) {
-            $query->whereHas('hewan', function($q) use ($request) {
-                $q->where('jenis_hewan', $request->jenis_hewan);
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->whereHas('hewan', function ($q) use ($searchTerm) {
+                $q->where('nama_hewan', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('jenis_hewan', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('jenis_kelamin', 'LIKE', "%{$searchTerm}%");
             });
         }
-        if ($request->filled('jenis_kelamin')) {
-            $query->whereHas('hewan', function($q) use ($request) {
-                $q->where('jenis_kelamin', $request->jenis_kelamin);
-            });
-        }
-
         $listFavorit = $query->paginate(12);
-        $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
+        $favoritHewanIds = favorit::where('adopter_id', $adopter_id)->pluck('hewan_id')->toArray();
         return view('adopter.daftarFavorit', compact('listFavorit', 'favoritHewanIds'));   
     }
 
     public function profile() {
-        $adopter = Auth::user();
+        $adopter = Auth::user()->adopter;
         return view('adopter.profile', compact('adopter'));
     }
 
-    public function updateProfile(Request $request) {
+    public function updateProfile(Request $request, $id) {
+        $request->validate([
+            'nama_adopter' => 'required|string|max:255',
+            'alamat_adopter' => 'required|string',
+            'usia_adopter' => 'required|integer|min:1|max:120',
+            'nomor_telepon_adopter' => 'required|string|max:15',
+            'nomor_wa_adopter' => 'required|string|max:15',
+            'pekerjaan_adopter' => 'required|string|max:255',
+            'foto_adopter' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
         $user = Auth::user();
         $adopter = $user->adopter;
-        $field = $request->field;
-        $value = $request->value;
-        if (in_array($field, ['nama_lengkap', 'alamat', 'usia', 'no_handphone', 'no_whatsapp', 'pekerjaan'])) {
-            $adopter->$field = $value;
-            $adopter->save();
+
+        if (!$adopter || $adopter->id != $id) {
             return response()->json([
-                'success' => true,
-                'title' => 'Berhasil',
-                'message' => 'Berhasil mengubah data'
+                'error' => true,
+                'title' => '',
+                'message' => 'Silahlan lakukan login sebagai adopter.'
             ]);
         }
+
+        $adopter->nama_lengkap = $request->nama_adopter;
+        $adopter->alamat = $request->alamat_adopter;
+        $adopter->usia = $request->usia_adopter;
+        $adopter->no_handphone = $request->nomor_telepon_adopter;
+        $adopter->no_whatsapp = $request->nomor_wa_adopter;
+        $adopter->pekerjaan = $request->pekerjaan_adopter;
+
+        if ($request->hasFile('foto_adopter')) {
+            $file = $request->file('foto_adopter');
+            $folder = 'image/fotoAdopter';
+            $destinationPath = public_path($folder);
+            
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true, true);
+            }
+
+            if ($adopter->foto_adopter && File::exists(public_path($adopter->foto_adopter))) {
+                File::delete(public_path($adopter->foto_adopter));
+            }
+
+            $fileName = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move($destinationPath, $fileName);
+
+            $adopter->foto_adopter = $folder . '/' . $fileName;
+        }
+        $adopter->save();
+
         return response()->json([
-            'error' => true, 
-            'title' => 'Gagal',
-            'message' => 'Gagal mengubah data'
+            'success' => true,
+            'title' => 'Berhasil',
+            'message' => 'Berhasil mengubah data adopter.'
         ]);
     }
 
@@ -223,7 +313,7 @@ class adopterController extends Controller
 
             $sudahAda = formPengajuanAdopsi::where('adopter_id', $request->adopter_id)
                 ->where('hewan_id', $request->hewan_id)
-                ->whereIn('status_pengajuan', ['Diajukan'])
+                ->whereIn('status_pengajuan', ['diajukan'])
                 ->exists();
             
             if ($sudahAda) {
@@ -240,7 +330,7 @@ class adopterController extends Controller
                 'adopter_id' => $request->adopter_id,
                 'hewan_id' => $request->hewan_id,
                 'shelter_id' => $request->shelter_id,
-                'status_pengajuan' => 'Diajukan',
+                'status_pengajuan' => 'diajukan',
                 'alasan' => $request->alasan
             ]);
 
@@ -306,39 +396,56 @@ class adopterController extends Controller
                 'fotoHewan.max' => '*Ukuran foto maksimal 2MB.'
             ]);
 
-            $fotoPath = $request->file('fotoHewan')->store('foto_hewan_adopter', 'public');
+            $data = $request->except('fotoHewan');
 
-            if(!Auth::check()) {
+            if($request->hasFile('fotoHewan')) {
+                $file = $request->file('fotoHewan');
+                $destinationPath = public_path('image/daftarLepasHewan');
+                if(!File::exists($destinationPath)){
+                    File::makeDirectory($destinationPath, 0775, true);
+                }
+                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+                $file->move($destinationPath, $fileName);
+                $data['fotoHewan'] = 'image/daftarLepasHewan/'.$fileName;
+
+                if(!Auth::check()) {
+                    return response()->json([
+                        'error' => true,
+                        'title' => 'Error',
+                        'message' => 'Lakukan login terlebih dahulu sebelum melakukan penyerahan hewan peliharaan',
+                    ]);
+                } else {
+                    $adopter = adopter::where('pengguna_id', Auth::user()->id)->first();
+                    $adopter_id = $adopter ? $adopter->id : 0;
+                }
+
+                DB::beginTransaction();
+
+                $statusVaksin = $request->statusVaksinHewan === 'sudahVaksin' ? 'sudah_vaksin' : 'belum_vaksin';
+                $statusSteril = $request->statusSterilHewan === 'sudahSteril' ? 'sudah_steril' : 'belum_steril';
+
+                $formPenyerahanHewan = formPenyerahanHewan::create([
+                    'shelter_id' => null,
+                    'adopter_id' => $adopter_id,
+                    'nama_hewan' => $request->namaHewan,
+                    'ras' => $request->rasHewan,
+                    'berat' => $request->beratHewan,
+                    'status_steril' => $statusSteril,
+                    'status_vaksin' => $statusVaksin,
+                    'catatan_medis' => $request->catatanMedisHewan ?: '-',
+                    'foto_hewan' => $data['fotoHewan'],
+                    'jenis_hewan' => $request->jenisHewan,
+                    'alasan_penyerahan' => $request->alasanPenyerahanHewan ?: '-',
+                    'jenis_kelamin' => $request->jenisKelaminHewan,
+                    'status_penyerahan' => 'diajukan',
+                ]);
+            } else {
                 return response()->json([
                     'error' => true,
                     'title' => 'Error',
-                    'message' => 'Lakukan login terlebih dahulu sebelum melakukan penyerahan hewan peliharaan',
+                    'message' => 'Foto hewan peliharaan wajib diunggah!'
                 ]);
-            } else {
-                $adopter = adopter::where('pengguna_id', Auth::user()->id)->first();
-                $adopter_id = $adopter ? $adopter->id : 0;
             }
-
-            DB::beginTransaction();
-
-            $statusVaksin = $request->statusVaksinHewan === 'sudahVaksin' ? 'Sudah Vaksin' : 'Belum Vaksin';
-            $statusSteril = $request->statusSterilHewan === 'sudahSteril' ? 'Sudah Steril' : 'Belum Steril';
-
-            $formPenyerahanHewan = formPenyerahanHewan::create([
-                'shelter_id' => null,
-                'adopter_id' => $adopter_id,
-                'nama_hewan' => $request->namaHewan,
-                'ras' => $request->rasHewan,
-                'berat' => $request->beratHewan,
-                'status_steril' => $statusSteril,
-                'status_vaksin' => $statusVaksin,
-                'catatan_medis' => $request->catatanMedisHewan ?: '-',
-                'foto_hewan' => $fotoPath,
-                'jenis_hewan' => $request->jenisHewan,
-                'alasan_penyerahan' => $request->alasanPenyerahanHewan ?: '-',
-                'jenis_kelamin' => $request->jenisKelaminHewan,
-                'status_penyerahan' => 'Mencari shelter',
-            ]);
 
             DB::commit();
             if (!$formPenyerahanHewan) {
@@ -378,7 +485,7 @@ class adopterController extends Controller
 
         $listHewan = hewan::where('shelter_id', $detailShelter->id)->paginate(4);
 
-        $favoritHewanIds = favorit::where('adopter_id', Auth::id())->pluck('hewan_id')->toArray();
+        $favoritHewanIds = favorit::where('adopter_id', Auth::user()->adopter->id)->pluck('hewan_id')->toArray();
         return view('adopter.detailShelter', compact('detailShelter', 'listHewan', 'favoritHewanIds'));
     }
 
@@ -399,7 +506,7 @@ class adopterController extends Controller
                 ]);
             }
 
-            $pengajuan->status_pengajuan = 'Diadopsi';
+            $pengajuan->status_pengajuan = 'diadopsi';
             $pengajuan->alasan_persetujuan_pengajuan_adopsi = $request->alasan_adopsi;
             $pengajuan->updated_at = now();
             $pengajuan->save();
@@ -439,7 +546,7 @@ class adopterController extends Controller
                 ]);
             }
 
-            $pengajuan->status_pengajuan = 'Dikembalikan';
+            $pengajuan->status_pengajuan = 'dikembalikan';
             $pengajuan->alasan_penolakan_pengajuan_adopsi = $request->alasan_adopsi;
             $pengajuan->updated_at = now();
             $pengajuan->save();

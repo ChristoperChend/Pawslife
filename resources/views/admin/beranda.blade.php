@@ -22,12 +22,12 @@
     }
 
     .shelter-nama {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         color: #343a40;
     }
 
     .shelter-email {
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: #343a40;
     }
 
@@ -48,28 +48,33 @@
 
         @if (!$listShelter->isEmpty())
             @foreach ($listShelter as $items)
-                <div class="card shelter-card-item shadow-lg mb-4">
-                    <div class="d-flex p-3 p-md-4">
-                        <div class="foto-shelter me-4 me-md-5">
-                            <img src="{{ asset('storage/' . $items->foto_shelter) }}" alt="Foto shelter">
+                <div class="card shelter-card-item shadow-sm overflow-hidden bg-white">
+                    <div class="d-flex flex-wrap align-items-stretch">
+                        <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
+                            style="width: 140px; min-height: 130px;"
+                        >
+                            <img src="{{ asset($items->foto_shelter) }}" 
+                                alt="Foto Shelter"
+                                class="rounded"
+                                style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
                         </div>
-                        
-                        <div class="flex-grow-1">
-                            <p class="mb-0 text-muted small status-label">Nama Shelter</p>
-                            <h5 class="fw-bold mb-3 shelter-nama">{{ $items->nama_shelter }}</h5>
+
+                        <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
+                            <p class="mb-0 text-muted small">Nama Shelter</p>
+                            <h5 class="fw-bold mb-1 shelter-nama">{{ $items->nama_shelter }}</h5>
                             
-                            <p class="mb-0 text-muted small status-label">Email Shelter</p>
-                            <h6 class="fw-bold shelter-email">{{ $items->pengguna->email }}</h6>
+                            <p class="mb-0 text-muted small">Email Shelter</p>
+                            <h6 class="fw-bold shelter-jenis">{{ $items->pengguna->email }}</h6>
                         </div>
                         
-                        <div class="ms-auto d-flex align-items-end">
-                            <div class="info-lengkap-link">
-                                <span class="fw-bold status-label">
-                                    <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" class="text-decoration-none text-dark">
-                                        Informasi Lengkap <i class="fa-solid fa-chevron-right fa-xs ms-1"></i>
-                                    </a>
-                                </span>
-                            </div>
+                        <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
+                            <div></div>
+                            <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
+                                class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
+                            >
+                                <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
+                                <span>Informasi Lengkap</span>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -25,7 +25,7 @@
         .choice {
             display: inline-flex;
             background-color: var(--primary-color);
-            border-radius: 50px; /* Sudut sangat membulat */
+            border-radius: 50px;
             padding: 3px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
@@ -89,8 +89,8 @@
         }
 
         .choice-btn.active-choice {
-            background-color: #20c997;
-            color: white;
+            background-color: #fff;
+            color: black;
             box-shadow: 0 2px 5px rgba(32, 201, 151, 0.4);
         }
 
@@ -411,7 +411,12 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: res.title,
-                                text: response.message
+                                text: response.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             });
                         } else if (res.success) {
                             Swal.fire({
@@ -419,7 +424,13 @@
                                 title: res.title,
                                 text: res.message,
                                 showConfirmButton: false,
-                                timer: 1500
+                                timer: 1500,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                             .then(() => {
                                 window.location.href = res.redirect
@@ -531,7 +542,12 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: res.title,
-                                text: response.message
+                                text: response.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             });
                         } else if (res.success) {
                             Swal.fire({
@@ -539,7 +555,13 @@
                                 title: res.title,
                                 text: res.message,
                                 showConfirmButton: false,
-                                timer: 1500
+                                timer: 1500,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                             .then(() => {
                                 window.location.href = res.redirect

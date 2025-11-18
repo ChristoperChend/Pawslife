@@ -1,9 +1,12 @@
 <style>
     .hewan-image {
-        width: 600px;
-        height: 450px !important;
-        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
         object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .detail-field-wrapper {
@@ -39,13 +42,15 @@
 @section('content')
 
     <div class="container py-5">
-        <div class="row">
-            <div class="col-12 col-md-6 text-center">
-                <img src="{{ asset($detailHewan->foto_hewan) }}" class="hewan-image img-fluid" alt="Hewan Image">
-                <h2 class="hewan-nama-title mt-3 mb-0 fw-bold">{{ $detailHewan->nama_hewan ?? 'Nama Hewan' }}</h2>
-            </div>
+        <div class="text-center">
+            <h2>Detail Hewan</h2>
+        </div>
 
-            <div class="col-12 col-md-6">
+        <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
+            <div class="card-body p-5">
+                <div class="row-12 row-md-6 text-center mb-4">
+                    <img src="{{ asset($detailHewan->foto_hewan) }}" class="hewan-image" alt="{{ $detailHewan->nama_hewan }}">
+                </div>
                 <div class="row mb-4">
                     <div class="col-12">
                         <h5 class="detail-label"><i class="fa-solid fa-house me-1"></i> Nama Shelter</h5>
@@ -121,9 +126,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end mt-5 gap-3">
-                    <a href="{{ route('beranda.adopterBeranda') }}" class="btn btn-outline-secondary fw-bold btn-aksi-custom">Kembali</a>
-                    <button type="button" class="btn btn-primary fw-bold btn-aksi-custom" onclick="ajukanAdopsi()">Ajukan Adopsi</button>
+                <div class="d-flex justify-content-between mt-5 gap-3">
+                    <a href="{{ route('beranda.adopterBeranda') }}" style="margin-left: 12px;" class="btn btn-kembali">Kembali</a>
+                    <button type="button" style="margin-right: 12px" class="btn btn-primary-color" onclick="ajukanAdopsi()">Ajukan Adopsi</button>
                 </div>
             </div>
         </div>
@@ -150,7 +155,14 @@
                         Swal.showValidationMessage('Alasan wajib diisi!');
                     }
                     return alasan;
-                }
+                },
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 if (result.isConfirmed) {
@@ -165,7 +177,14 @@
                         cancelButtonText: "Kembali",
                         reverseButtons: true,
                         width: '800px',
-                        html: '<div class="ajukan-adopsi"><hr><h6>Kami menyediakan "Percobaan Adopsi" untuk memastikan kecocokan antara hewan dan calon pengadopsi.</h6><h6>1. Calon pengadopsi diberikan waktu <b>1 minggu</b> untuk mengenal dan merawat hewan yang diadopsi.</h6><h6>2. Jika selama masa percobaan terdapat kendala atau ketidaksesuaian, calon pengadopsi diperbolehkan mengembalikan hewan ke shelter asal tanpa konsekuensi dengan melakukan konfirmasi di <b>Riwayat pengajuan adopsi</b>.</h6><h6>3. Jika <b>TIDAK</b> melakukan konfirmasi setelah melewati <b>1 minggu</b> masa percobaan, maka masa percobaan akan otomatis berakhir.</h6><hr></div>'
+                        html: '<div class="ajukan-adopsi"><div class="text-center text-danger"><label class="fw-bold">* Pengajuan adopsi tidak bisa dibatalkan. *</label></div><hr><h6>Kami menyediakan "Percobaan Adopsi" untuk memastikan kecocokan antara hewan dan calon pengadopsi.</h6><h6>1. Calon pengadopsi diberikan waktu <b>1 minggu</b> untuk mengenal dan merawat hewan yang diadopsi.</h6><h6>2. Jika selama masa percobaan terdapat kendala atau ketidaksesuaian, calon pengadopsi diperbolehkan mengembalikan hewan ke shelter asal tanpa konsekuensi dengan melakukan konfirmasi di <b>Riwayat pengajuan adopsi</b>.</h6><h6>3. Jika <b>TIDAK</b> melakukan konfirmasi setelah melewati <b>1 minggu</b> masa percobaan, maka masa percobaan akan otomatis berakhir dan hewan otomatis diadopsi.</h6><hr></div>',
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-question-primary',
+                            confirmButton: 'btn btn-primary-color',
+                            cancelButton: 'btn btn-merah-color'
+                        },
+                        buttonsStyling: false
                     })
                     .then((result) => {
                         if (result.isConfirmed) {
@@ -191,13 +210,24 @@
                                     Swal.fire({
                                         icon: "success",
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            icon: 'swal-success-primary',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                 } else {
                                     Swal.fire({
                                         icon: "error",
                                         title: res.title,
-                                        text: res.message
+                                        text: res.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
                                     })
                                 }
                                 

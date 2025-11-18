@@ -165,6 +165,12 @@
                         icon: 'success',
                         title: res.title,
                         text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
 
                     document.getElementById('form-email').classList.add('d-none')
@@ -177,6 +183,11 @@
                         icon: 'error',
                         title: res.title,
                         text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                 }
             })
@@ -216,6 +227,11 @@
                         icon: 'error',
                         title: res.errors.title,
                         text: res.errors.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                 } else if (res.success) {
                     document.getElementById('title-masukkan-kata-sandi').classList.remove('d-none')
@@ -231,6 +247,11 @@
                         icon: 'error',
                         title: res.title,
                         text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                 }
             })
@@ -272,12 +293,23 @@
                         icon: 'error',
                         title: res.errors.title,
                         text: res.errors.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                 } else if (res.success) {
                     Swal.fire({
                         icon: 'success',
                         title: res.title,
                         text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     }).then(() => {
                         window.location.href = res.redirect
                     })
@@ -286,6 +318,11 @@
                         icon: 'error',
                         title: res.title,
                         text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                 }
             })

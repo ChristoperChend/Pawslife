@@ -3,46 +3,57 @@
         width: 600px;
         height: 450px !important;
         border-radius: 10px;
+        object-fit: cover;
     }
 
     .hewan-container {
-        border-radius: 10px;
-        position: relative;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        transform: translateY(0) scale(1);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 280px;  
+        border: none;
+        border-radius: 1rem;
+        background: #fff;
+        transition: transform .2s ease, box-shadow .2s ease;
+        overflow: hidden;
+        box-shadow: 0 6px 16px rgba(0,0,0,.06);
     }
         
     .hewan-container:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.08);
+    }
+
+    .hewan-container .ratio {
+        aspect-ratio: 4 / 3;
+        height: 240px; 
     }
 
     .daftar-hewan {
-        width: 275px;
-        height: 225px;
-        border-radius: 10px 10px 0px 0px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-bottom: 1px solid #f1f1f1;
+        transition: transform .3s ease;
     }
 
     .heart-icon {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.5rem;
+        right: 0.5rem;
         z-index: 10;
         color: black;
-        font-size: 20px;
+        font-size: 15px;
         cursor: pointer;
         transition: all 0.25s ease;
 
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 23px 12px 23px 12px;
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px 10px 20px 10px;
         border-radius: 50%;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .heart-icon:hover {
         transform: scale(1.1);
-        color: #ff4d4d;
+        color: #ff0000;
     }
 
     .heart-icon.liked {
@@ -116,7 +127,7 @@
     <div class="container py-5">
         <div class="row detail-shelter-container g-5 mb-5">
             <div class="col-12 col-md-5 text-center">
-                <img src="{{ asset('storage/' . $detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
+                <img src="{{ asset($detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
             </div>
 
             <div class="col-12 col-md-7">
@@ -146,51 +157,66 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="detail-label"><i class="fa-solid fa-address-card me-1"></i> Deskripsi Shelter</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <hr>
 
         <div>
-            <h2 class="fw-bold text-center">List Hewan {{ $detailShelter->nama_shelter }}</h2>
+            <h2 class="fw-bold text-center">List Hewan - {{ $detailShelter->nama_shelter }}</h2>
+
+            @if (!$listHewan->isEmpty())
+                <div class="text-end">
+                    <a href="{{ route('adopter.daftarHewan', ['shelter_id' => $detailShelter->id]) }}" class="btn btn-primary-color text-decoration-none">
+                        Lihat semua
+                    </a>
+                </div>
+            @endif
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
                 @if (!$listHewan->isEmpty())
-                @foreach ($listHewan as $hewan)
-                    <div class="col d-flex justify-content-center">
-                        <div class="card hewan-container shadow-sm">
-                            <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
-                            <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
-                                <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
-                            </span>
-                            
-                            <div class="p-3">
-                                <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
-                                    <h5 class="card-title-hewan fw-bold mb-0 text-truncate">{{ $hewan->nama_hewan ?? '-' }}</h5>
-                                    <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
-                                    <div class="d-flex flex-wrap gap-2 mb-3">
-                                        <span class="badge {{ ($hewan->status_steril ?? 'belum steril') == 'sudah steril' ? 'text-bg-success' : 'text-bg-warning' }}">{{ $hewan->status_steril ?? '-' }}</span>
-                                        <span class="badge {{ ($hewan->status_vaksin ?? 'belum vaksin') == 'sudah vaksin' ? 'text-bg-primary' : 'text-bg-secondary' }}">{{ $hewan->status_vaksin ?? '-' }}</span>
+                    @foreach ($listHewan as $hewan)
+                        @if ($hewan->status_hewan == "siap_di_adopsi")
+                            <div class="col d-flex justify-content-center">
+                                <div class="card hewan-container border-0 shadow-sm">
+                                    <div class="ratio">
+                                        <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
                                     </div>
-                                    <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
-                                </a>
+                                    <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
+                                        <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
+                                    </span>
+                                    
+                                    <div class="p-3"> 
+                                        <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                            <h5 class="card-title-hewan fw-bold mb-0 text-truncate">
+                                                {{ $hewan->nama_hewan ?? 'Nama Hewan' }}
+                                                @if (strtolower($hewan->jenis_hewan ?? '') === 'anjing')
+                                                    <i class="fa-solid fa-bone ms-1"></i>
+                                                @elseif (strtolower($hewan->jenis_hewan ?? '') === 'kucing')
+                                                    <i class="fa-solid fa-paw ms-1"></i>
+                                                @endif
+                                            </h5>
+                                            <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
+                                            <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                @endforeach
+                        @endif
+                    @endforeach
                 @else
                     <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar hewan</h4>
                 @endif
             </div>
-
-            @if (!$listHewan->isEmpty())
-                <div class="text-end mt-4">
-                    <a href="{{ route('adopter.daftarHewan', ['shelter_id' => $detailShelter->id]) }}" class="btn-lihat-semua text-decoration-none cursor fw-bold">
-                        Lihat semua 
-                        <i class="fa-solid fa-chevron-right fa-2xs"></i>
-                    </a>
-                </div>
-            @endif
         </div>
     </div>
 
@@ -215,7 +241,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     })
                     icon.classList.remove('fa-regular');
                     icon.classList.add('fa-solid');
@@ -224,7 +256,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     })
                     icon.classList.remove('fa-solid');
                     icon.classList.add('fa-regular');
@@ -233,7 +271,12 @@
                     Swal.fire({
                         icon: 'error',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     })
                 }
             });

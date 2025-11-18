@@ -1,8 +1,12 @@
 <style>
     .shelter-image {
-        width: 600px;
-        height: 450px !important;
-        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .dokumen-image {
@@ -105,60 +109,56 @@
 @extends('layout.master')
 
 @section('content')
-    <div class="container py-5">
-        <div class="row detail-shelter-container g-5 mb-5">
-            <div class="col-12 col-md-5 text-center">
-                <img src="{{ asset('storage/' . $detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
-            </div>
+    <div class="container py-4">
+        <div class="page-header text-center" style="max-width: 860px; margin: 2rem auto;">
+            <h2>Detail Shelter</h2>
+        </div>
 
-            <div class="col-12 col-md-7">
-                <div class="row mb-4">
-                    <div class="col-12">
+        <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="{{ asset($detailShelter->foto_shelter) }}" 
+                        alt="{{ $detailShelter->nama_shelter }}"  
+                        class="shelter-image mb-3">
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-12">
                         <h5 class="detail-label"><i class="fa-solid fa-house me-1"></i> Nama Shelter</h5>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->nama_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-phone me-1"></i> No Telepon</h5>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $detailShelter->no_telepon_shelter ?? 'Data tidak tersedia' }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-location-dot me-1"></i> Alamat</h5>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $detailShelter->alamat_shelter ?? 'Data tidak tersedia' }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12">
+                    <div class="col-md-12">
                         <h5 class="detail-label"><i class="fa-solid fa-envelope me-1"></i> Email Shelter</h5>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->pengguna->email ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-file-image me-1"></i> Dokumen Legalitas Pendirian</h5>
+                    <div class="col-md-12">
+                        <h5 class="detail-label"><i class="fa-solid fa-phone me-1"></i> No Telepon</h5>
                         <div class="detail-field-wrapper">
-                            <img src="{{ asset('storage/' . $detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
+                            <span class="detail-text">{{ $detailShelter->no_telepon_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
+                    <div class="col-md-12">
+                        <h5 class="detail-label"><i class="fa-solid fa-location-dot me-1"></i> Alamat</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->alamat_shelter ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <h5 class="detail-label"><i class="fa-solid fa-file-image me-1"></i> Dokumen Legalitas Pendirian</h5>
+                        <div class="detail-field-wrapper">
+                            <img src="{{ asset($detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
                         <h5 class="detail-label"><i class="fa-solid fa-address-card me-1"></i> Deskripsi Shelter</h5>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
@@ -167,8 +167,8 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-5 gap-3">
-                    <button type="button" class="btn btn-outline-danger btn-sm shelter-btn-aksi" onclick="tolakShelter('{{ $detailShelter->id }}')">Tolak</button>
-                    <button type="button" class="btn btn-outline-success btn-sm shelter-btn-aksi" onclick="setujuShelter('{{ $detailShelter->id }}')">Setuju</button>
+                    <button type="button" class="btn btn-merah-color" onclick="tolakShelter('{{ $detailShelter->id }}')">Tolak</button>
+                    <button type="button" class="btn btn-primary-color" style="margin-right: 8px" onclick="setujuShelter('{{ $detailShelter->id }}')">Setuju</button>
                 </div>
             </div>
         </div>
@@ -180,13 +180,21 @@
         function tolakShelter(id) {
             Swal.fire({
                 icon: "question",
-                title: "Apakah anda yakin bahwa data yang diberikan tidak valid?",
+                title: "Penolakan Shelter",
+                text: "Apakah anda yakin bahwa data yang diberikan tidak valid?",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yakin",
                 cancelButtonText: "Kembali",
                 reverseButtons: true,
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 if (result.isConfirmed) {
@@ -210,13 +218,24 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         } else {
                             Swal.fire({
                                 icon: "error",
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         }
                     })
@@ -227,13 +246,21 @@
         function setujuShelter(id) {
             Swal.fire({
                 icon: "question",
-                title: "Apakah anda yakin bahwa data yang diberikan valid dan benar adanya?",
+                title: "Persetujuan Shelter",
+                text: "Apakah anda yakin bahwa data yang diberikan valid dan benar adanya?",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yakin",
                 cancelButtonText: "Kembali",
                 reverseButtons: true,
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 if (result.isConfirmed) {
@@ -257,13 +284,24 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         } else {
                             Swal.fire({
                                 icon: "error",
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         }
                     })

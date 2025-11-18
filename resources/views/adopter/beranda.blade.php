@@ -12,13 +12,56 @@
 
     .banner-section {
         position: relative;
-        /* background: linear-gradient(135deg, #f2994a, #6dd5ed, #2193b0); */
-        background: var(--primary-color);
+        background: linear-gradient(135deg, #2c6ade, #71dff7);
         color: white;
         text-align: center;
         padding: 170px 20px 160px 20px;
         overflow: hidden;
         margin-top: -80px;
+    }
+
+    .banner-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: 
+            url('/image/bone-icon.svg') 5% 10%,
+            url('/image/paw-icon.svg') 15% 25%,
+            url('/image/bone-icon.svg') 25% 5%,
+            url('/image/paw-icon.svg') 35% 40%,
+            url('/image/bone-icon.svg') 45% 15%,
+            url('/image/paw-icon.svg') 55% 60%,
+            url('/image/bone-icon.svg') 65% 25%,
+            url('/image/paw-icon.svg') 75% 80%,
+            url('/image/bone-icon.svg') 85% 35%,
+            url('/image/paw-icon.svg') 95% 50%,
+
+            url('/image/bone-icon.svg') 10% 65%,
+            url('/image/paw-icon.svg') 20% 85%,
+            url('/image/bone-icon.svg') 30% 70%,
+            url('/image/paw-icon.svg') 40% 20%,
+            url('/image/bone-icon.svg') 50% 90%,
+            url('/image/paw-icon.svg') 60% 35%,
+            url('/image/bone-icon.svg') 70% 10%,
+            url('/image/paw-icon.svg') 80% 55%,
+            url('/image/bone-icon.svg') 90% 75%,
+            url('/image/paw-icon.svg') 5% 45%;
+
+        background-size: 
+            40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px,
+            40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px;
+        background-repeat: no-repeat;
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    .banner-section > * {
+        position: relative;
+        z-index: 1;
     }
 
     .banner-section h1 {
@@ -32,23 +75,6 @@
         font-size: 18px;
         margin-bottom: 25px;
         animation: fadeUp 0.6s ease-out forwards;
-    }
-
-    .banner-btn {
-        background: white;
-        color: #e76f51;
-        padding: 12px 28px;
-        font-weight: bold;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-        animation: fadeUp 0.6s ease-out forwards;
-    }
-
-    .banner-btn:hover {
-        background: #fcefe8;
-        transform: translateY(-3px);
     }
 
     .wave {
@@ -68,7 +94,7 @@
     }
 
     .wave path {
-        fill: #ffffff;
+        fill: rgb(250, 250, 250);
     }
 
     .button-container {
@@ -103,16 +129,24 @@
 
 
     .hewan-container {
-        border-radius: 10px;
-        position: relative;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        transform: translateY(0) scale(1);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 280px;  
+        border: none;
+        border-radius: 1rem;
+        background: #fff;
+        transition: transform .2s ease, box-shadow .2s ease;
+        overflow: hidden;
+        box-shadow: 0 6px 16px rgba(0,0,0,.06);
     }
         
     .hewan-container:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.08);
+    }
+
+    .hewan-container .ratio {
+        aspect-ratio: 4 / 3;
+        height: 240px; 
     }
 
     .hewan-image {
@@ -150,59 +184,40 @@
     }
 
     .daftar-hewan {
-        width: 275px;
-        height: 225px;
-        border-radius: 10px 10px 0px 0px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
+        border-bottom: 1px solid #f1f1f1;
+        transition: transform .3s ease;
     }
 
     .heart-icon {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.5rem;
+        right: 0.5rem;
         z-index: 10;
         color: black;
-        font-size: 20px;
+        font-size: 15px;
         cursor: pointer;
         transition: all 0.25s ease;
 
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 23px 12px 23px 12px;
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px 10px 20px 10px;
         border-radius: 50%;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .heart-icon:hover {
         transform: scale(1.1);
-        color: #ff4d4d;
+        color: #ff0000;
     }
 
     .heart-icon.liked {
         color: #ff0000;
     }
 
-    .btn-lihat-semua {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 17px;
-        color: #000;
-        border: 2px solid #000;
-        border-radius: 8px;
-        background-color: #fff;
-        padding: 8px 18px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-lihat-semua:hover {
-        background-color: var(--primary-color);
-        color: #fff;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
     .card-title-hewan {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         color: #212529;
     }
 
@@ -218,11 +233,19 @@
     <section class="banner-section">
         <h1>Dapatkan teman terbaik baru hari ini</h1>
         <p>Berikan cinta dan rumah baru untuk hewan yang membutuhkan. Temukan teman berbulu yang sempurna untuk keluarga Anda.</p>
-        <a href="{{ route('adopter.daftarHewan') }}" class="banner-btn">Mulai Adopsi <i class="fa-solid fa-arrow-right"></i></a>
 
         <div class="wave">
             <svg viewBox="0 0 500 150" preserveAspectRatio="none">
-                <path d="M0.00,49.98 C150.00,150.00 349.65,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"></path>
+                <path d="
+                    M0,100 
+                    C100,140 150,60 
+                    250,100 
+                    C350,140 400,60 
+                    500,100 
+                    L500,150 
+                    L0,150 
+                    Z"
+                ></path>
             </svg>
         </div>
     </section>
@@ -245,8 +268,8 @@
             </div>
         </div>
 
-        <div class="text-center mb-1">
-            <a href="{{ route('adopter.daftarHewan') }}"  class="btn-lihat-semua fw-bold text-decoration-none">
+        <div class="text-end" style="margin-right: 35px">
+            <a href="{{ route('adopter.daftarHewan') }}" class="btn btn-primary-color fw-bold text-decoration-none">
                 Lihat semua
             </a>
         </div>
@@ -254,26 +277,33 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listHewan->isEmpty())
                 @foreach ($listHewan as $hewan)
-                    <div class="col d-flex justify-content-center">
-                        <div class="card hewan-container border-0 shadow-sm">
-                            <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
-                            <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
-                                <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
-                            </span>
-                            
-                            <div class="p-3"> 
-                                <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
-                                    <h5 class="card-title-hewan fw-bold mb-0 text-truncate">{{ $hewan->nama_hewan ?? 'Nama Hewan' }}</h5>
-                                    <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
-                                    <div class="d-flex flex-wrap gap-2 mb-3">
-                                        <span class="badge {{ ($hewan->status_steril ?? 'belum steril') == 'sudah steril' ? 'text-bg-success' : 'text-bg-warning' }}">{{ $hewan->status_steril ?? '-' }}</span>
-                                        <span class="badge {{ ($hewan->status_vaksin ?? 'belum vaksin') == 'sudah vaksin' ? 'text-bg-primary' : 'text-bg-secondary' }}">{{ $hewan->status_vaksin ?? '-' }}</span>
-                                    </div>
-                                    <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
-                                </a>
+                    @if ($hewan->status_hewan == "siap_di_adopsi")
+                        <div class="col d-flex justify-content-center">
+                            <div class="card hewan-container border-0 shadow-sm">
+                                <div class="ratio">
+                                    <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
+                                </div>
+                                <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
+                                    <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
+                                </span>
+                                
+                                <div class="p-3"> 
+                                    <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                        <h5 class="card-title-hewan fw-bold mb-0 text-truncate">
+                                            {{ $hewan->nama_hewan ?? 'Nama Hewan' }}
+                                            @if (strtolower($hewan->jenis_hewan ?? '') === 'anjing')
+                                                <i class="fa-solid fa-bone ms-1"></i>
+                                            @elseif (strtolower($hewan->jenis_hewan ?? '') === 'kucing')
+                                                <i class="fa-solid fa-paw ms-1"></i>
+                                            @endif
+                                        </h5>
+                                        <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
+                                        <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             @else
                 <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar hewan</h4>
@@ -284,24 +314,6 @@
     @include('layout.loading')
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const clickableElements = document.querySelectorAll('a[href], button[type="submit"], button[data-loading]');
-
-            clickableElements.forEach(el => {
-                el.addEventListener('click', function(e) {
-                    const href = el.getAttribute('href');
-                    if (el.target === '_blank' || !href || href.startsWith('#') || href.startsWith('javascript:')) {
-                        return;
-                    }
-                    document.getElementById('fullscreen-loading').classList.remove('d-none');
-                });
-            });
-
-            window.addEventListener('load', () => {
-                document.getElementById('fullscreen-loading').classList.add('d-none');
-            });
-        });
-
         function toggleHeart(el, hewanId) {
             document.getElementById('fullscreen-loading').classList.remove('d-none')
             fetch("{{ route('adopter.tambahFavorit') }}", {
@@ -320,7 +332,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                     icon.classList.remove('fa-regular');
                     icon.classList.add('fa-solid');
@@ -329,7 +347,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-success-primary',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     });
                     icon.classList.remove('fa-solid');
                     icon.classList.add('fa-regular');
@@ -338,7 +362,12 @@
                     Swal.fire({
                         icon: 'error',
                         title: res.title,
-                        text: res.message
+                        text: res.message,
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            confirmButton: 'btn btn-primary-color',
+                        },
+                        buttonsStyling: false
                     })
                 }
             });

@@ -30,7 +30,7 @@
     }
 
     .profile-icon {
-        font-size: 350px;
+        font-size: 300px;
         color: #adb5bd;
         border: 2px solid #e9ecef;
         border-radius: 10px;
@@ -42,40 +42,42 @@
 
 @section('content')
 
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-12 col-md-6 text-center">
-                <i 
-                    class="fa-solid fa-circle-user profile-icon" 
-                    aria-hidden="true" 
-                    title="Foto Profil Pengguna"
-                ></i>
-            </div>
+    <div class="container py-4">
+        <div class="page-header text-center" style="max-width: 860px; margin: 2rem auto;">
+            <h2>Profil Admin</h2>
+        </div>
 
-            <div class="col-12 col-md-6">
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap</h5>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">Admin</span>
-                        </div>
-                    </div>
+        <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
+            <div class="card-body p-5">
+                <div class="col-md-12 text-center">
+                    <i 
+                        class="fa-solid fa-circle-user profile-icon" 
+                        aria-hidden="true" 
+                        title="Foto Profil Pengguna"
+                    ></i>
                 </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <h5 class="detail-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">Administrator</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
                         <h5 class="detail-label"><i class="fa-solid fa-envelope me-1"></i> Email</h5>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $admin->email ?? 'data tidak ada' }}</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="d-flex justify-content-end mt-5">
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                    <a href="#" onclick="confirmLogout(event)" class="btn btn-warning fw-bold btn-logout-custom">Logout</a>
+                    <div class="d-flex justify-content-end mt-5">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        <a href="#" onclick="confirmLogout(event)" class="btn btn-warning fw-bold btn-logout-custom">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,6 +98,13 @@
                 confirmButtonText: "Logout",
                 cancelButtonText: "Kembali",
                 reverseButtons: true,
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('logout-form').submit();

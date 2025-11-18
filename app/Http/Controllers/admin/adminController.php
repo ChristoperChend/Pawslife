@@ -40,7 +40,7 @@ class adminController extends Controller
                 ]);
             }
 
-            $shelter->status = 'Ditolak';
+            $shelter->status = 'ditolak';
             $shelter->save();
 
             return response()->json([
@@ -68,7 +68,7 @@ class adminController extends Controller
                 ]);
             }
 
-            $shelter->status = 'Diterima';
+            $shelter->status = 'diterima';
             $shelter->save();
 
             return response()->json([

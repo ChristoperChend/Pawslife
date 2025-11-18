@@ -72,6 +72,24 @@ body {
     display: flex;
 }
 
+.swal-question-primary:where(.swal2-icon).swal2-question {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.swal-success-primary:where(.swal2-icon).swal2-success {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.swal-success-primary:where(.swal2-icon).swal2-success [class^=swal2-success-line] {
+    background-color: var(--primary-color) !important;
+}
+
+.swal-success-primary:where(.swal2-icon).swal2-success .swal2-success-ring {
+    border: .25em solid rgba(44, 109, 174, .3) !important;
+}
+
 .primary-color {
 	background: var(--primary-color);
 }

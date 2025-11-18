@@ -59,35 +59,73 @@
             <hr>
         </div>
 
-        @foreach ($riwayat as $items)
-            <div class="card riwayat-card-item shadow-sm mb-5">
-                <div class="d-flex align-items-center bg-light" style="padding: 1rem;">
-                    <div class="foto-hewan me-4">
-                        <img src="{{ asset('storage/' . $items->foto_hewan) }}" alt="Foto Hewan">
+        @forelse ($riwayat as $items)
+            <div class="card riwayat-card-item mb-3 shadow-sm overflow-hidden bg-white">
+                <div class="d-flex flex-wrap align-items-stretch">
+                    <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
+                        style="width: 140px; min-height: 130px;"
+                    >
+                        <img src="{{ asset($items->foto_hewan) }}" 
+                            alt="Foto Hewan"
+                            class="rounded"
+                            style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
                     </div>
 
-                    <div class="flex-grow-1">
+                    <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
                         <p class="mb-0 text-muted small">Nama Hewan</p>
-                        <h5 class="fw-bold mb-3 riwayat-hewan-nama">{{ $items->nama_hewan }}</h5>
+                        <h5 class="fw-bold mb-1 riwayat-hewan-nama">{{ $items->nama_hewan }}</h5>
                         
                         <p class="mb-0 text-muted small">Jenis Hewan</p>
                         <h6 class="fw-bold riwayat-hewan-jenis">{{ $items->jenis_hewan }}</h6>
                     </div>
 
-                    <div class="d-flex align-items-center ms-auto info-status-wrapper">
-                        <div class="garis-vertikal-riwayat me-4 d-none d-md-block"></div>
-
-                        <div class="text-end status-section">
-                            <p class="fw-bold mb-2 status-label">Status Penyerahan</p>
-                            
-                            <div class="d-flex justify-content-end">
-                                <h6 class="mb-0">{{ $items->status_penyerahan }}</h6>
-                            </div>
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
+                        <div>
+                            <h6 class="fw-bold mb-2">Status</h6>
+                            @if($items->status_penyerahan == 'diajukan' || $items->status_penyerahan == 'setuju')
+                                <span 
+                                    class="d-inline-flex align-items-center fw-semibold"
+                                    style="
+                                        background-color: #e8f0fe;
+                                        color: #1967d2;
+                                        border-radius: 6px;
+                                        font-size: 0.9rem;
+                                        padding: 4px 10px;
+                                        min-width: 170px;
+                                        justify-content: center;
+                                    ">
+                                    {{ ucfirst($items->status_penyerahan) }}
+                                </span>
+                            @elseif($items->status_penyerahan == 'tolak')
+                                <span 
+                                    class="d-inline-flex align-items-center fw-semibold"
+                                    style="
+                                        background-color: #ffe8ea;
+                                        color: #dc3545;
+                                        border-radius: 6px;
+                                        font-size: 0.9rem;
+                                        padding: 4px 10px;
+                                        min-width: 170px;
+                                        justify-content: center;
+                                    ">
+                                    {{ ucfirst($items->status_penstatus_penyerahangajuan) }}
+                                </span>
+                            @endif
                         </div>
+                        <a href="{{ route('adopter.detailPenyerahanHewan', ['id' => $items->id, 'adopter_id' => $items->adopter_id]) }}" 
+                            class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
+                        >
+                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
+                            <span>Informasi Hewan</span>
+                        </a>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="text-center text-muted mt-5">
+                <p>Belum ada riwayat penyerahan hewan peliharaan.</p>
+            </div>
+        @endforelse
         <div class="d-flex justify-content-center mt-4">{{ $riwayat->links() }}</div>
     </div>
 @endsection

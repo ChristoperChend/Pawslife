@@ -90,10 +90,10 @@
             <hr>
 
             <h5>Pertimbangan Awal</h5>
-            <p class="mb-4">1. Untuk hewan peliharaan pribadi, pertimbangkan opsi lain terlebih dahulu, seperti mencarikan pemilik baru yang terpercaya dan mampu merawat hewan anda dengan baik.</p>
+            <p class="mb-4">Untuk hewan peliharaan pribadi, pertimbangkan opsi lain terlebih dahulu, seperti mencarikan pemilik baru yang terpercaya dan mampu merawat hewan anda dengan baik.</p>
             
             <h5>Perlengkapan Yang Disarankan</h5>
-            <p>1. Untuk membantu hewan beradaptasi di lingkungan baru, mohon sediakan barang-barang pribadinya jika ada seperti</p>
+            <p>Untuk membantu hewan beradaptasi di lingkungan baru, mohon sediakan barang-barang pribadinya jika ada seperti</p>
             <li>Tempat tidur</li>
             <li>Mainan kesayangan</li>
             <li>Makanan favorit atau peralatan makan</li>
@@ -104,20 +104,20 @@
         <div class="form-card">
             <div class="card-accent"></div>
 
-            <form class="form-shell" action="{{ route(name: 'adopter.lepasAdopsi') }}" method="POST" enctype="multipart/form-data">
+            <form class="form-shell bg-white" action="{{ route(name: 'adopter.lepasAdopsi') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="section-title">Informasi Dasar</div>
                 <div class="section-divider"></div>
 
                 <div class="row g-4">
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="namaHewan" class="form-label">Nama Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="namaHewan" name="namaHewan" placeholder="Masukkan nama hewan" value="{{ old('namaHewan') }}">
                         @error('namaHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="jenisHewan" class="form-label">Jenis Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="jenisHewan" id="jenisHewan">
                             <option value="" disabled selected hidden>Pilih Jenis Hewan</option>
@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="row g-4">
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="jeniskelaminHewan" class="form-label">Jenis Kelamin Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
                             <option value="" disabled selected hidden>Masukkan Jenis Kelamin Hewan</option>
@@ -137,7 +137,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="statusVaksinHewan" class="form-label">Status Vaksin Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
@@ -148,7 +148,7 @@
                 </div>
 
                 <div class="row g-4">
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="statusSterilHewan" class="form-label">Status Steril Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
@@ -157,7 +157,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="beratHewan" class="form-label">Berat Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
                         @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
@@ -165,12 +165,12 @@
                 </div>
 
                 <div class="row g-4">
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="rasHewan" class="form-label">Ras Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan Ras Hewan">
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 ">
                         <label for="catatanMedisHewan" class="form-label">Catatan Medis</label>
                         <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan" placeholder="Masukkan Catatan Medis Hewan">
                     </div>
@@ -212,6 +212,23 @@
     @include('layout.loading')
 
     <script>
+        const fileInput = document.getElementById('fotoHewan');
+        const preview = document.getElementById('preview');
+
+        fileInput?.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) { preview.innerHTML = 'Pratinjau'; return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = ev.target.result;
+                img.alt = 'Foto hewan';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+        
         function kirimPenyerahan() {
             Swal.fire({
                 icon: "question",
@@ -222,7 +239,14 @@
                 confirmButtonText: "Yakin",
                 cancelButtonText: "Kembali",
                 reverseButtons: true,
-                text: 'Apakah anda yakin melakukan penyerahan hewan peliharaan anda?'
+                text: 'Apakah anda yakin melakukan penyerahan hewan peliharaan anda?',
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             })
             .then((result) => {
                 if (result.isConfirmed) {
@@ -265,13 +289,24 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         } else {
                             Swal.fire({
                                 icon: "error",
                                 title: res.title,
-                                text: res.message
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
                             })
                         }
                     })

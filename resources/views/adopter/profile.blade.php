@@ -1,9 +1,18 @@
 <style>
+    .page-header h2 {
+        font-weight: 700;
+        font-size: 1.9rem;
+        margin-bottom: .5rem;
+    }
+
     .adopter-image {
-        width: 600px! important;
-        height: 450px !important;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .detail-row div h5 {
@@ -39,6 +48,7 @@
         font-size: 0.95rem;
         font-weight: 500 !important;
         color: #495057 !important;
+        margin-bottom: 10px
     }
 
     .detail-field-wrapper {
@@ -59,10 +69,15 @@
     }
 
     .detail-text {
-        flex-grow: 1;
-        color: #212529; 
-        font-size: 1rem;
-        font-weight: 600;
+        flex-grow: 1 !important;
+        color: #212529 !important; 
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+    }
+
+    .form-control:focus {
+        box-shadow: none !important;
     }
 
     .detail-input {
@@ -113,179 +128,108 @@
 
 @section('content')
 
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-12 col-md-6 text-center">
-                <img src="{{ asset('storage/' . $adopter->adopter->foto_adopter) }}" class="adopter-image img-fluid" alt="Adopter Image">
-            </div>
+    <div class="container py-4">
+        <div class="page-header text-center" style="max-width: 860px; margin: 2rem auto;">
+            <h2>Profil Adopter</h2>
+        </div>
+        <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
+            <div class="card-body p-5">
+                <form action="{{ route('adopter.updateProfile', $adopter->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+    
+                    <div class="text-center mb-4">
+                        <img src="{{ asset($adopter->foto_adopter) }}" 
+                            alt="Foto Adopter" class="adopter-image mb-3">
+                        <div class="mb-3" style="max-width: 320px; margin: 0 auto;">
+                            <label class="form-label fw-semibold">Ganti Foto Adopter</label>
+                            <input type="file" name="foto_adopter" class="form-control" accept=".jpg, .jpeg, .png">
+                        </div>
+                    </div>
 
-            <div class="col-12 col-md-6">
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_nama_lengkap" class="detail-text">{{ $adopter->adopter->nama_lengkap ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_nama_lengkap" value="{{ $adopter->adopter->nama_lengkap }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_nama_lengkap" onclick="editField('nama_lengkap'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_nama_lengkap" onclick="saveField('nama_lengkap'); return false;">Simpan</button>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="nama_adopter" class="form-control detail-text" 
+                                value="{{ old('nama_adopter', $adopter->nama_lengkap) }}" required>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-envelope me-1"></i> Email</h5>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $adopter->email ?? 'data tidak ada' }}</span>
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-envelope me-1"></i> Email</label>
+                            <div class="detail-field-wrapper">
+                                <span class="detail-text">{{ $adopter->pengguna->email ?? 'data tidak ada' }}</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-map-location-dot me-1"></i> Alamat</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_alamat" class="detail-text">{{ $adopter->adopter->alamat ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_alamat" value="{{ $adopter->adopter->alamat }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_alamat" onclick="editField('alamat'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_alamat" onclick="saveField('alamat'); return false;">Simpan</button>
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-map-location-dot me-1"></i> Alamat <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <textarea 
+                                    name="alamat_adopter" 
+                                    class="form-control detail-text" 
+                                    rows="3" 
+                                    required
+                                >{{ old('alamat_adopter', $adopter->alamat) }}</textarea>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-calendar-day me-1"></i> Usia</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_usia" class="detail-text">{{ $adopter->adopter->usia ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_usia" value="{{ $adopter->adopter->usia }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_usia" onclick="editField('usia'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_usia" onclick="saveField('usia'); return false;">Simpan</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-mobile-screen-button me-1"></i> No Handphone</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_no_handphone" class="detail-text">{{ $adopter->adopter->no_handphone ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_no_handphone" value="{{ $adopter->adopter->no_handphone }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_no_handphone" onclick="editField('no_handphone'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_no_handphone" onclick="saveField('no_handphone'); return false;">Simpan</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-brands fa-whatsapp me-1"></i> No Whatsapp</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_no_whatsapp" class="detail-text">{{ $adopter->adopter->no_whatsapp ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_no_whatsapp" value="{{ $adopter->adopter->no_whatsapp }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_no_whatsapp" onclick="editField('no_whatsapp'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_no_whatsapp" onclick="saveField('no_whatsapp'); return false;">Simpan</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-briefcase me-1"></i> Pekerjaan</h5>
-                        <div class="detail-field-wrapper">
-                            <span id="text_pekerjaan" class="detail-text">{{ $adopter->adopter->pekerjaan ?? 'data tidak ada' }}</span>
-                            <input type="text" id="input_pekerjaan" value="{{ $adopter->adopter->pekerjaan }}" class="form-control d-none detail-input">
-                            
-                            <a href="#" class="edit-link text-decoration-none" id="edit_pekerjaan" onclick="editField('pekerjaan'); return false;">edit</a>
-                            <button class="btn btn-primary btn-sm save-btn d-none" id="save_pekerjaan" onclick="saveField('pekerjaan'); return false;">Simpan</button>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="d-flex justify-content-end mt-5">
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                    <a href="#" onclick="confirmLogout(event)" class="btn btn-warning fw-bold btn-logout-custom">Logout</a>
-                </div>
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-calendar-day me-1"></i> Usia <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="usia_adopter" class="form-control detail-text" 
+                                value="{{ old('usia_adopter', $adopter->usia) }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-mobile-screen-button me-1"></i> No Handphone <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="nomor_telepon_adopter" class="form-control detail-text" 
+                                value="{{ old('nomor_telepon_adopter', $adopter->no_handphone) }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-brands fa-whatsapp me-1"></i> No Whatsapp <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="nomor_wa_adopter" class="form-control detail-text" 
+                                value="{{ old('nomor_wa_adopter', $adopter->no_whatsapp) }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fa-solid fa-briefcase me-1"></i> Pekerjaan <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="pekerjaan_adopter" class="form-control detail-text" 
+                                value="{{ old('pekerjaan_adopter', $adopter->pekerjaan) }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 align-items-center">
+                        <div class="col-md-6 d-flex justify-content-start gap-3 flex-wrap">
+                            <a href="{{ url()->previous() }}" class="btn btn-kembali">Kembali</a>
+                            <a href="#" onclick="confirmLogout(event)" class="btn btn-merah-color">Logout</a>
+                        </div>
+
+                        <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
+                            <button type="submit" class="btn btn-primary-color">Simpan</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
     @include('layout.loading')
 
     <script>
-        function editField(field) {
-            document.getElementById('text_' + field).style.display = 'none'
-            document.getElementById('input_' + field).classList.remove('d-none')
-            document.getElementById('edit_' + field).classList.add('d-none')
-            document.getElementById('save_' + field).classList.remove('d-none')
-        }
-
-        function saveField(field) {
-            Swal.fire({
-                icon: "question",
-                title: "Perubahan Data",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yakin",
-                cancelButtonText: "Kembali",
-                reverseButtons: true,
-                text: 'Apakah anda yakin mengubah data?'
-            })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('fullscreen-loading').classList.remove('d-none')
-                    const data = {
-                        value: document.getElementById('input_' + field).value,
-                        field: field
-                    }
-                    fetch("{{ route('adopter.updateProfile') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify(data)
-                    }).then(res => res.json())
-                    .then(res => {
-                        document.getElementById('fullscreen-loading').classList.add('d-none')
-                        if (res.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: res.title,
-                                text: res.message,
-                            })
-                            .then(() => {
-                                location.reload();
-                            })
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: res.title,
-                                text: res.message,
-                            })
-                            .then(() => {
-                                location.reload();
-                            })
-                        }
-                    }).catch(error => {
-                        document.getElementById('fullscreen-loading').classList.add('d-none');
-                        Swal.fire('Error!', 'Terjadi kesalahan saat menyimpan data.', 'error');
-                        location.reload();
-                    });
-                } else {
-                    location.reload()
-                }
-            })
-        }
-
         function confirmLogout(event) {
             event.preventDefault();
             Swal.fire({
@@ -298,12 +242,110 @@
                 confirmButtonText: "Logout",
                 cancelButtonText: "Kembali",
                 reverseButtons: true,
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    icon: 'swal-question-primary',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-merah-color'
+                },
+                buttonsStyling: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('logout-form').submit();
                 }
             });
         }
-    </script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[method="POST"][enctype="multipart/form-data"]');
+
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(form); 
+                    Swal.fire({
+                        icon: 'question',
+                        title: 'Apakah Anda yakin?',
+                        text: 'Apakah Anda yakin ingin mengubah data adopter?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yakin',
+                        cancelButtonText: 'Kembali',
+                        reverseButtons: true,
+                        confirmButtonColor: '#0d6efd',
+                        cancelButtonColor: '#6c757d',
+                        customClass: {
+                            actions: 'swal-actions-gap',
+                            icon: 'swal-question-primary',
+                            confirmButton: 'btn btn-primary-color',
+                            cancelButton: 'btn btn-merah-color'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('fullscreen-loading').classList.remove('d-none');
+                            fetch(form.action, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                }
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                document.getElementById('fullscreen-loading').classList.add('d-none');
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: data.title,
+                                        text: data.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            icon: 'swal-success-primary',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: data.title,
+                                        text: data.message,
+                                        customClass: {
+                                            actions: 'swal-actions-gap',
+                                            confirmButton: 'btn btn-primary-color',
+                                        },
+                                        buttonsStyling: false
+                                    })
+                                    .then(() => {
+                                        location.reload();
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                document.getElementById('fullscreen-loading').classList.add('d-none');
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Gagal",
+                                    text: "Terjadi kesalahan saat mengirim data.",
+                                    customClass: {
+                                        actions: 'swal-actions-gap',
+                                        confirmButton: 'btn btn-primary-color',
+                                    },
+                                    buttonsStyling: false
+                                })
+                                .then(() => {
+                                    location.reload();
+                                })
+                                console.error(err);
+                            });
+                        }
+                    });
+                });
+            }
+        });
+</script>
 
 @endsection
