@@ -1,24 +1,6 @@
 @extends('layout.master')
 
 <style>
-    .btn-kembali {
-        background: var(--primary-color) !important;
-        color: white !important;
-        border: 1px solid rgba(131, 131, 131, 0.223) !important;
-        min-width: 100px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 0.6rem 1.4rem;
-        transition: all 0.2s ease-in-out;
-        text-decoration: none;
-    }
-
-    .btn-kembali:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(116, 116, 116, 0.25);
-    }
-
     .readonly-field {
         background: #fff !important;
         border: 1px solid #d1d5db !important;
@@ -27,6 +9,9 @@
         font-weight: 500;
         padding: 0.55rem 0.9rem;
         box-shadow: none !important;
+    }
+    .form-control{
+        border-left: 5px solid var(--primary-color) !important;
     }
 </style>
 
@@ -40,7 +25,7 @@
         <div class="card-body p-5">
 
             <div class="text-center mb-4">
-                <img src="{{ asset('storage/' . $data->foto_adopter) }}" 
+                <img src="{{ asset($data->foto_adopter) }}" 
                      alt="{{ $data->nama_lengkap }}"
                      class="img-fluid rounded shadow-sm"
                      style="width: 230px; height: 230px; object-fit: cover;">
@@ -86,7 +71,7 @@
             <div class="row text-center mt-4">
                 <div class="col-md-12">
                     <a href="{{ url()->previous() }}"
-                       class="btn btn-kembali w-100">
+                       class="btn btn-primary-color w-100">
                        Kembali
                     </a>
                 </div>

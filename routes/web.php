@@ -73,7 +73,7 @@ Route::prefix('shelter')->group(function () {
     
     Route::get('daftar-pengajuan-penyerahan-hewan', [shelterController::class, 'getDaftarPengajuanPenyerahanHewan'])->name('shelter.daftar.pengajuan.penyerahan.hewan');
     Route::post('terima-penyerahan-hewan/{id}', [shelterController::class, 'terimaPenyerahanAdopsi'])->name('shelter.terima.penyerahan.hewan');
-    Route::post('tolak-penyerahan-hewan/{id}', [shelterController::class, 'tolakPenyerahanAdopsi'])->name('shelter.tolak.penyerahan.hewan');
+    // Route::post('tolak-penyerahan-hewan/{id}', [shelterController::class, 'tolakPenyerahanAdopsi'])->name('shelter.tolak.penyerahan.hewan');
     Route::get('data-penyerahan-hewan/{id}', [shelterController::class, 'getDataPenyerahanHewan'])->name('shelter.data.penyerahan.hewan');
 
     Route::get('daftar-pengajuan-adopsi-hewan', [shelterController::class, 'getDaftarPengajuanAdopsiHewan'])->name('shelter.daftar.pengajuan.adopsi.hewan');

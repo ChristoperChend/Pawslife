@@ -55,7 +55,8 @@ class shelterController
             'namaHewan'=> 'required',
             'jenisHewan' =>'required|in:anjing,kucing',
             'jenisKelaminHewan' =>'required|in:jantan,betina',
-            'statusVaksinHewan' =>'required|in:sudahVaksin, belumVaksin',
+            'statusVaksinHewan' =>'required|in:sudah_vaksin, belum_vaksin',
+            'statusSterilHewan' =>'required|in:sudah_steril, belum_steril',
             'beratHewan' =>'required|numeric',
             'fotoHewan' =>'required|image',
         ],[
@@ -63,6 +64,7 @@ class shelterController
             'jenisHewan.required' => '*Jenis Hewan Harus di Pilih',
             'jenisKelaminHewan.required' => '*Jenis Kelamin Hewan Harus di Isi',
             'statusVaksinHewan.required' => '*Status Vaksin Hewan Harus di Isi',
+            'statusSterilHewan.required' => '*Status Steril Hewan Harus di Isi',
             'beratHewan.required' => '*Berat Hewan Harus di Isi',
             'beratHewan.numeric' => '*Berat Hewan Hanya Boleh Berupa Angka',
             'fotoHewan.required' => '*Foto Hewan Harus di Isi',
@@ -107,21 +109,38 @@ class shelterController
         return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
 
-    public function getDataHewan(Request $request){
+    public function getDataHewan(Request $request)
+    {
+        Paginator::useBootstrap();
+
         $user = Auth::user();
-        $q = trim($request->query('q', ''));
-        $dataHewan = hewan::query()
+
+        // Raw query from request (for showing back in the input)
+        $qRaw = trim($request->query('q', ''));
+
+        $q = mb_strtolower($qRaw, 'UTF-8');
+
+        $dataHewan = Hewan::query()
             ->where('shelter_id', $user->shelter->id)
-            ->when($q !== '', function($query) use ($q){
+            ->when($q !== '', function ($query) use ($q) {
                 $safe = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $q);
-                $query->where('nama_hewan', 'LIKE', "%{$safe}%");
+
+                $query->where(function ($sub) use ($safe) {
+                    $sub->whereRaw('LOWER(nama_hewan) LIKE ?', ["%{$safe}%"])
+                        ->orWhereRaw('LOWER(jenis_hewan) LIKE ?', ["%{$safe}%"])
+                        ->orWhereRaw('LOWER(jenis_kelamin) LIKE ?', ["%{$safe}%"]);
+                });
             })
             ->orderByDesc('id')
             ->paginate(12)
             ->withQueryString();
 
-        return view('shelter.dataHewan', compact('dataHewan', 'q'));
+        return view('shelter.dataHewan', [
+            'dataHewan' => $dataHewan,
+            'q'         => $qRaw,
+        ]);
     }
+
 
     public function detailHewan($id){
         $hewan = hewan::findOrFail($id);
@@ -136,8 +155,8 @@ class shelterController
             'jenis_kelamin'  => 'required|in:jantan,betina',
             'berat'          => 'required|numeric|min:0.1',
             'ras'            => 'required|string|max:255',
-            'status_steril'  => 'required|in:sudahSteril,belumSteril',
-            'status_vaksin'  => 'required|in:sudahVaksin,belumVaksin',
+            'status_steril'  => 'required|in:sudah_steril,belum_steril',
+            'status_vaksin'  => 'required|in:sudah_vaksin,belum_vaksin',
             'catatan_medis'  => 'required|string|max:500',
             'foto_hewan'     => $hewan->foto_hewan 
                                 ? 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -183,7 +202,7 @@ class shelterController
         Paginator::useBootstrap();
         $id = auth::user();
         // dd($id);
-        $data = formPenyerahanHewan::where('shelter_id', $id['id'])
+        $data = formPenyerahanHewan::where('shelter_id', '=', NULL)
         ->where('status_penyerahan', '=', 'diajukan')
         ->latest('id')->paginate(5);
         return view('shelter.daftarPengajuanPenyerahanHewan', compact('data'));
@@ -279,33 +298,75 @@ class shelterController
         }
 
         $penyerahan->status_penyerahan = 'setuju';
+        $penyerahan->shelter_id = auth::user()->shelter->id;
         $penyerahan->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Penyerahan adopsi berhasil disetujui'
-        ]);
-    }
+        $oldPath = public_path($penyerahan->foto_hewan);
 
-    public function tolakPenyerahanAdopsi($id)
-    {
-        $hewan = formPenyerahanHewan::find($id);
-
-        if (!$hewan) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal memproses data hewan!'
-            ], 404);
+        // Folder tujuan
+        $destinationPath = public_path('image/daftarHewan');
+        if (! File::exists($destinationPath)) {
+            File::makeDirectory($destinationPath, 0775, true);
         }
 
-        $hewan->status_penyerahan = 'tolak';
-        $hewan->save();
+        // Default: pakai path lama kalau file tidak ditemukan
+        $fotoHewan = $penyerahan->foto_hewan;
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pengajuan penyerahan hewan berhasil ditolak!'
-        ]);
+        // Kalau file fisiknya ada, copy ke folder baru dengan nama unik
+        if (File::exists($oldPath)) {
+            $originalName = basename($oldPath);
+            $fileName     = time() . '_' . preg_replace('/\s+/', '_', $originalName);
+
+            File::copy($oldPath, $destinationPath . '/' . $fileName);
+
+            $fotoHewan = 'image/daftarHewan/' . $fileName;
+        }
+        try{
+            hewan::create([
+            'shelter_id' => auth::user()->shelter->id,
+            'nama_hewan' => $penyerahan->nama_hewan,
+            'ras' => $penyerahan->ras,
+            'berat' => $penyerahan->berat,
+            'status_steril' => $penyerahan->status_steril,
+            'status_vaksin' => $penyerahan->status_vaksin,
+            'catatan_medis' => $penyerahan->catatan_medis,
+            'foto_hewan' => $fotoHewan,
+            'jenis_hewan' => $penyerahan->jenis_hewan,
+            'jenis_kelamin' => $penyerahan->jenis_kelamin,
+            'status_hewan' => 'siap_di_adopsi'
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Penyerahan adopsi berhasil disetujui'
+            ]);
+        }catch (Exception $e) {
+            Log::error('Gagal menambahkan hewan: '.$e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Penyerahan adopsi gagal disetujui'
+            ]);
+        }
     }
+
+    // public function tolakPenyerahanAdopsi($id)
+    // {
+    //     $hewan = formPenyerahanHewan::find($id);
+
+    //     if (!$hewan) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Gagal memproses data hewan!'
+    //         ], 404);
+    //     }
+
+    //     $hewan->status_penyerahan = 'tolak';
+    //     $hewan->save();
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Pengajuan penyerahan hewan berhasil ditolak!'
+    //     ]);
+    // }
 
     public function getDataPenyerahanHewan($id){
         $data = formPenyerahanHewan::find($id);
@@ -316,7 +377,7 @@ class shelterController
         Paginator::useBootstrap();
         $id = auth::user();
 
-        $data = formPenyerahanHewan::where('shelter_id', $id['id'])
+        $data = formPenyerahanHewan::where('shelter_id', $id->shelter->id)
         ->where(function ($query) {
             $query->where('status_penyerahan', 'setuju')
                 ->orWhere('status_penyerahan', 'tolak');
@@ -328,7 +389,7 @@ class shelterController
     }
     public function getRiwayatPengajuanAdopsi(){
         Paginator::useBootstrap();
-        $id = auth::user();
+        $id = auth::user()->shelter;
 
         $data = formPengajuanAdopsi::where('shelter_id', $id['id'])
         ->where(function ($query) {
@@ -344,7 +405,7 @@ class shelterController
     }
 
     public function getProfilShelter(){
-        $userId = auth()->id();
+        $userId = auth::user()->shelter->id;
         $data = shelter::where('id', $userId)->first();
         return view('shelter.profilShelter', compact('data'));
     }

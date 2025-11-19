@@ -91,11 +91,14 @@
         line-height: 1.2;
     }
 
+    .mission-text p,
     .story-text p {
         font-size: 1.125rem;
         line-height: 1.7;
         color: #4a5568;
         margin-bottom: 1.5rem;
+        text-align: justify;
+        text-align-last: left;
     }
 
     .story-image-wrapper {

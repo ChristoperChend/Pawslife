@@ -33,9 +33,25 @@
                 </div>
 
                 <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
-                    <h5 class="fw-bold mb-1">{{ $item->hewan->nama_hewan ?? 'Nama tidak tersedia' }}</h5>
-                    <p class="mb-0 text-muted">Jenis hewan: {{ Str::ucfirst($item->hewan->jenis_hewan ?? '-') }}</p>
+                    <p class="mb-1">
+                        <span class="text-muted small" style="letter-spacing:.03em;">
+                            Nama hewan:
+                        </span>
+                        <span class="fw-semibold ms-1">
+                            {{  Str::ucfirst($item->hewan->nama_hewan ?? 'Nama tidak tersedia') }}
+                        </span>
+                    </p>
+
+                    <p class="mb-0">
+                        <span class="text-muted small" style="letter-spacing:.03em;">
+                            Jenis hewan:
+                        </span>
+                        <span class="fw-semibold ms-1">
+                            {{ Str::ucfirst($item->hewan->jenis_hewan ?? '-') }}
+                        </span>
+                    </p>
                 </div>
+
 
                 
                 <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:200px;">
@@ -118,12 +134,12 @@
                         @endif --}}
                         @if ($item->status_pengajuan === 'diajukan' )
                               <div class="d-flex justify-content-start gap-2 mb-2">
-                                <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn"
+                                <button class="btn btn-merah-color tolak-btn"
                                 data-id="{{ $item->id }}">
                                     Tolak
                                 </button>
 
-                                <button class="btn btn-sm btn-primary fw-semibold px-3 text-white terima-btn" 
+                                <button class="btn btn-primary-color terima-btn" 
                                     data-id="{{ $item->id }}">
                                     Terima
                                 </button>

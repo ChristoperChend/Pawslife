@@ -23,6 +23,20 @@
         font-size: .95rem;
     }
 
+    
+    .card-accent{
+        height: 6px;
+        background: var(--primary-color);
+    }
+
+    .form-control{
+        border-left: 5px solid var(--primary-color) !important;
+    }
+
+    .form-control, .form-select {
+        border-left: 5px solid var(--primary-color) !important;
+    }
+
     .form-card{
         max-width: 960px;
         margin: 24px auto 48px;
@@ -33,11 +47,6 @@
             0 12px 24px rgba(16, 24, 40, 0.04),
             0 2px 6px rgba(16, 24, 40, 0.04);
         overflow: hidden;
-    }
-
-    .card-accent{
-        height: 6px;
-        background: var(--primary-color);
     }
 
     .form-shell{
@@ -164,8 +173,8 @@
                     </label>
                     <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
                         <option value="" disabled selected hidden>Pilih status steril</option>
-                        <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah Steril</option>
-                        <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum Steril</option>
+                        <option value="sudah_steril" {{old('statusSterilHewan') === 'sudah_steril' ? 'selected' : ''}}>Sudah Steril</option>
+                        <option value="belum_steril" {{old('statusSterilHewan') === 'belum_steril' ? 'selected' : ''}}>Belum Steril</option>
                     </select>
                 </div>
 
@@ -215,8 +224,8 @@
                     </label>
                     <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
                         <option value="" disabled selected hidden>Pilih status vaksin</option>
-                        <option value="sudahVaksin" {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah divaksin</option>
-                        <option value="belumVaksin" {{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum divaksin</option>
+                        <option value="sudah_vaksin" {{old('statusVaksinHewan') === 'sudah_vaksin' ? 'selected' : ''}}>Sudah divaksin</option>
+                        <option value="belum_vaksin" {{old('statusVaksinHewan') === 'belum_vaksin' ? 'selected' : ''}}>Belum divaksin</option>
                     </select>
                     @error('statusVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
@@ -250,8 +259,8 @@
             </div>
 
             <div class="form-footer">
-                <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-light border">Kembali</a>
-                <button type="submit" class="btn btn-primary primary-color" style="color: white">
+                <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-kembali">Kembali</a>
+                <button type="submit" class="btn btn-primary-color" style="color: white">
                     Simpan
                 </button>
             </div>

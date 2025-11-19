@@ -17,18 +17,18 @@ body {
 }
 
 .btn-primary-color {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;;
     padding: 5px 20px 5px 20px;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--primary-color)!important;;
     transition: all 0.3s ease;
     font-weight: bold;
     border-radius: 10px;
 }
 
 .btn-primary-color:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
+    background-color: var(--primary-color)!important;;
+    border-color: var(--primary-color)!important;;
+    color: white!important;;
     transform: translateY(-2px);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -75,6 +75,11 @@ body {
 .swal-question-primary:where(.swal2-icon).swal2-question {
     border-color: var(--primary-color) !important;
     color: var(--primary-color) !important;
+}
+
+.swal-warning-primary:where(.swal2-icon).swal2-warning {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
 }
 
 .swal-success-primary:where(.swal2-icon).swal2-success {

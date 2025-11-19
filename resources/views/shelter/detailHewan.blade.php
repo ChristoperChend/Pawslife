@@ -21,8 +21,13 @@
         border-radius: 12px;
     }
 
+    .form-control{
+        border-left: 5px solid var(--primary-color) !important;
+    }
+
     .form-control, .form-select {
         border-radius: 8px;
+        border-left: 5px solid var(--primary-color) !important;
     }
 
     .btn {
@@ -31,18 +36,6 @@
         padding: 0.6rem 1.4rem;
     }
 
-    .btn-kembali{
-        background: var(--primary-color);
-        color: #fff;
-        border: 1px solid rgba(131, 131, 131, 0.223)!important;
-        min-width: 100px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .btn-kembali:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(116, 116, 116, 0.25);
-    }
 
     .btn-primary{
         background: var(--primary-color);
@@ -117,9 +110,12 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Jenis Hewan <span class="text-danger">*</span></label>
-                        <input type="text" name="jenis_hewan" class="form-control" 
-                            value="{{ old('jenis_hewan', $hewan->jenis_hewan) }}" required>
+                        <label class="form-label fw-semibold">Jenis  Hewan <span class="text-danger">*</span></label>
+                        <select name="jenis_hewan" class="form-select" required>
+                            <option value="" disabled muted>Pilih Jenis Hewan</option>
+                            <option value="anjing" {{ $hewan->jenis_hewan == 'anjing' ? 'selected' : '' }}>Anjing</option>
+                            <option value="kucing" {{ $hewan->jenis_hewan == 'kucing' ? 'selected' : '' }}>Kucing</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">
@@ -146,18 +142,18 @@
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Status Steril <span class="text-danger">*</span></label>
                         <select name="status_steril" class="form-select" required>
-                            <option value="">Pilih Status</option>
-                            <option value="sudahSteril" {{ $hewan->status_steril == 'sudahSteril' ? 'selected' : '' }}>Sudah Steril</option>
-                            <option value="belumSteril" {{ $hewan->status_steril == 'belumSteril' ? 'selected' : '' }}>Belum Steril</option>
+                            <option value="" disabled muted>Pilih Status</option>
+                            <option value="sudah_steril" {{ $hewan->status_steril == 'sudah_steril' ? 'selected' : '' }}>Sudah Steril</option>
+                            <option value="belum_steril" {{ $hewan->status_steril == 'belum_steril' ? 'selected' : '' }}>Belum Steril</option>
                         </select>
                     </div>
 
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Status Vaksin <span class="text-danger">*</span></label>
                         <select name="status_vaksin" class="form-select" required>
-                            <option value="">Pilih Status</option>
-                            <option value="sudahVaksin" {{ $hewan->status_vaksin == 'sudahVaksin' ? 'selected' : '' }}>Sudah Vaksin</option>
-                            <option value="belumVaksin" {{ $hewan->status_vaksin == 'belumVaksin' ? 'selected' : '' }}>Belum Vaksin</option>
+                            <option value="" disabled muted>Pilih Status</option>
+                            <option value="sudah_vaksin" {{ $hewan->status_vaksin == 'sudah_vaksin' ? 'selected' : '' }}>Sudah Vaksin</option>
+                            <option value="belum_vaksin" {{ $hewan->status_vaksin == 'belum_vaksin' ? 'selected' : '' }}>Belum Vaksin</option>
                         </select>
                     </div>
 
@@ -179,8 +175,8 @@
                     </div>
 
                     <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="button" id="btnDelete" class="btn btn-hapus">Hapus</button>
+                        <button type="submit" class="btn btn-primary-color">Simpan</button>
+                        <button type="button" id="btnDelete" class="btn btn-merah-color">Hapus</button>
                     </div>
                 </div>
             </form>
@@ -198,13 +194,19 @@
 
 @if (session('success'))
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    Swal.fire({
-      icon: 'success',
-      title: 'Berhasil',
-      text: @json(session('success')),
+    document.addEventListener('DOMContentLoaded', () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: @json(session('success')),
+            customClass: {
+                actions: 'swal-actions-gap',
+                icon: 'swal-success-primary',
+                confirmButton: 'btn btn-primary-color',
+            },
+            buttonsStyling: false
+        })
     });
-  });
 </script>
 @endif
 
@@ -236,10 +238,13 @@
                 confirmButtonText: 'Yakin',
                 cancelButtonText: 'Kembali',
                 reverseButtons: true,
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
+                buttonsStyling: false, 
                 customClass: {
-                    popup: 'rounded-3 shadow-sm'
+                    popup: 'rounded-3 shadow-sm',
+                    icon: 'swal-warning-primary',
+                    actions: 'd-flex gap-3 justify-content-center',
+                    confirmButton: 'btn btn-primary-color me-4',
+                    cancelButton: 'btn btn-kembali'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -262,13 +267,16 @@
                 text: 'Data hewan ini akan dihapus secara permanen.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, hapus',
+                confirmButtonText: 'Hapus',
                 cancelButtonText: 'Batal',
                 reverseButtons: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
+                buttonsStyling: false, 
                 customClass: {
-                    popup: 'rounded-3 shadow-sm'
+                    popup: 'rounded-3 shadow-sm',
+                    icon: 'swal-warning-primary',
+                    actions: 'd-flex gap-3 justify-content-center',
+                    confirmButton: 'btn btn-merah-color me-4',
+                    cancelButton: 'btn btn-kembali'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -12,7 +12,7 @@
 
     <div class="container py-4">
         <div class="text-center my-4">
-            <h2 class="fw-bold fs-3 mb-2">Daftar Pengambilan Hewan Adopter</h2>
+            <h2 class="fw-bold fs-3 mb-2">Daftar Riwayat Pengambilan Hewan Adopter</h2>
             <hr class="w-100 mx-auto text-secondary opacity-25">
         </div>
 
@@ -22,20 +22,33 @@
 
                     <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                         style="width:140px; min-height:130px;">
-                        <img src="{{ asset('storage/' . $item->foto_hewan) }}"
+                        <img src="{{ asset($item->foto_hewan) }}"
                             alt="Foto Hewan"
                             class="rounded"
                             style="width:100px; height:100px; object-fit:cover; background:#e5e7eb;">
                     </div>
 
-                    <div class="flex-fill d-flex flex-column justify-content-between border-end bg-white p-3">
-                        <div>
-                            <h5 class="fw-bold mb-1">{{ $item->nama_hewan ?? 'Nama tidak tersedia' }}</h5>
-                            <p class="mb-2 text-muted">Jenis hewan: {{ Str::ucfirst($item->jenis_hewan ?? '-') }}</p>
-                        </div>
+                    <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
+                        <p class="mb-1">
+                            <span class="text-muted small" style="letter-spacing:.03em;">
+                                Nama hewan:
+                            </span>
+                            <span class="fw-semibold ms-1">
+                                {{  Str::ucfirst($item->nama_hewan ?? 'Nama tidak tersedia') }}
+                            </span>
+                        </p>
+
+                        <p class="mb-0">
+                            <span class="text-muted small" style="letter-spacing:.03em;">
+                                Jenis hewan:
+                            </span>
+                            <span class="fw-semibold ms-1">
+                                {{ Str::ucfirst($item->jenis_hewan ?? '-') }}
+                            </span>
+                        </p>
 
                         <a href="{{ route('shelter.data.penyerahan.hewan', $item->id) }}" 
-                            class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1">
+                            class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1 mt-4">
                             <i class="bi bi-info-circle fs-5" style="color: var(--primary-color);"></i>
                             <span style="color: var(--primary-color);">Informasi Lengkap Hewan</span>
                         </a>

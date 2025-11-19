@@ -120,7 +120,7 @@
 
     <form class="search-wrap" role="search" method="GET" action="{{ route('shelter.data.hewan')}}">
         <i class="fa-solid fa-search"></i>
-        <input name="q" class="form-control" type="search" placeholder="Cari hewan berdasarkan nama..." aria-label="Search" value="{{ $q ?? request('q') }}">
+        <input name="q" class="form-control" type="search" placeholder="Cari hewan berdasarkan nama, jenis hewan, jenis kelamin..." aria-label="Search" value="{{ $q ?? request('q') }}">
     </form>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
@@ -149,5 +149,38 @@
             </div>
         @endforeach
     </div>
+
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        {{$dataHewan->links()}}
+    </div>
 </div>
+
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: @json(session('success')),
+            customClass: {
+                icon: 'swal-success-primary',
+                confirmButton: 'btn btn-primary-color',
+            },
+            buttonsStyling: false
+        })
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal',
+      text: @json(session('error')),
+    });
+  });
+</script>
+@endif
 @endsection
