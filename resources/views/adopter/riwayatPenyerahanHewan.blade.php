@@ -72,11 +72,23 @@
                     </div>
 
                     <div class="flex-fill p-3 border-end d-flex flex-column justify-content-center bg-white">
-                        <p class="mb-0 text-muted small">Nama Hewan</p>
-                        <h5 class="fw-bold mb-1 riwayat-hewan-nama">{{ $items->nama_hewan }}</h5>
-                        
-                        <p class="mb-0 text-muted small">Jenis Hewan</p>
-                        <h6 class="fw-bold riwayat-hewan-jenis">{{ $items->jenis_hewan }}</h6>
+                        <p class="mb-1">
+                            <span class="text-muted small" style="letter-spacing:.03em;">
+                                Nama hewan:
+                            </span>
+                            <span class="fw-semibold ms-1">
+                                {{  Str::ucfirst($items->nama_hewan ?? 'Nama tidak tersedia') }}
+                            </span>
+                        </p>
+
+                        <p class="mb-0">
+                            <span class="text-muted small" style="letter-spacing:.03em;">
+                                Jenis hewan:
+                            </span>
+                            <span class="fw-semibold ms-1">
+                                {{ Str::ucfirst($items->jenis_hewan ?? '-') }}
+                            </span>
+                        </p>
                     </div>
 
                     <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">

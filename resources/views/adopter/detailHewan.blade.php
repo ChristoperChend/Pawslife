@@ -65,7 +65,25 @@
 
                 <div class="row mb-4">
                     <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-paw me-1"></i> Jenis hewan</h5>
+                        <h5 class="detail-label"><i class="fa-solid fa-paw me-1"></i> Nama hewan</h5>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->nama_hewan ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="detail-label">
+                            @if (strtolower($detailHewan->jenis_hewan) === 'anjing')
+                                <i class="fa-solid fa-dog me-1"></i>
+                            @elseif (strtolower($detailHewan->jenis_hewan) === 'kucing')
+                                <i class="fa-solid fa-cat me-1"></i>
+                            @else
+                                <i class="fa-solid fa-paw me-1"></i>
+                            @endif 
+                            Jenis hewan
+                        </h5>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailHewan->jenis_hewan ?? 'data tidak ada' }}</span>
                         </div>

@@ -124,6 +124,7 @@
                             <option value="anjing" {{old('jenisHewan') === 'anjing' ? 'selected' : ''}}>Anjing</option>
                             <option value="kucing" {{old('jenisHewan') === 'kucing' ? 'selected' : ''}}>Kucing</option>
                         </select>
+                        @error('jenisHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
@@ -135,15 +136,17 @@
                             <option value="jantan"  {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
                             <option value="betina"  {{old('jenisKelaminHewan') === 'betina' ? 'selected' : ''}}>Betina</option>
                         </select>
+                        @error('jeniskelaminHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="col-md-6 ">
                         <label for="statusVaksinHewan" class="form-label">Status Vaksin Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                            <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah di Vaksin</option>
-                            <option value="belumVaksin"{{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum di Vaksin</option>
+                            <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah Vaksin</option>
+                            <option value="belumVaksin"{{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum Vaksin</option>
                         </select>
+                        @error('statusVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
@@ -152,9 +155,10 @@
                         <label for="statusSterilHewan" class="form-label">Status Steril Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                            <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah di Steril</option>
-                            <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum di Steril</option>
+                            <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah Steril</option>
+                            <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum Steril</option>
                         </select>
+                        @error('statusSterilHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="col-md-6 ">
@@ -168,18 +172,21 @@
                     <div class="col-md-6 ">
                         <label for="rasHewan" class="form-label">Ras Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan Ras Hewan">
+                        @error('rasHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="catatanMedisHewan" class="form-label">Catatan Medis</label>
+                        <label for="catatanMedisHewan" class="form-label">Catatan Medis <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan" placeholder="Masukkan Catatan Medis Hewan">
+                        @error('catatanMedisHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label for="alasanPenyerahanHewan" class="form-label">Alasan Menyerahkan Hewan</label>
+                        <label for="alasanPenyerahanHewan" class="form-label">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
                         <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
+                        @error('alasanPenyerahanHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
                 
@@ -203,7 +210,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
+                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" style="margin-right: 8px" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
                 </div>
             </form>
         </div>
@@ -275,6 +282,7 @@
                     .then(res => res.json())
                     .then(res => {
                         document.getElementById('fullscreen-loading').classList.add('d-none')
+                        console.log(res)
                         if (res.errors) {
                             for (const key in res.errors) {
                                 const input = document.getElementById(key)

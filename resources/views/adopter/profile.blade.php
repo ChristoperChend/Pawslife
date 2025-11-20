@@ -122,6 +122,10 @@
         font-size: 1.1rem;
         border-radius: 5px;
     }
+
+    .row>* {
+        padding: 0px !important;
+    }
 </style>
 
 @extends('layout.master')
@@ -245,8 +249,8 @@
                 customClass: {
                     actions: 'swal-actions-gap',
                     icon: 'swal-question-primary',
-                    confirmButton: 'btn btn-primary-color',
-                    cancelButton: 'btn btn-merah-color'
+                    cancelButton: 'btn btn-primary-color',
+                    confirmButton: 'btn btn-merah-color'
                 },
                 buttonsStyling: false
             }).then((result) => {

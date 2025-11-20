@@ -62,6 +62,7 @@
 
     .detail-field-wrapper {
         display: flex;
+        background-color: #fff;
         align-items: center;
         justify-content: space-between;
         border: 1px solid #cacaca;
@@ -84,10 +85,11 @@
     }
 
     .detail-text {
-        flex-grow: 1;
-        color: #212529; 
-        font-size: 1rem;
-        font-weight: 600;
+        flex-grow: 1 !important;
+        color: #212529 !important; 
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        border: none !important;
     }
 
     .card-title-hewan {
@@ -119,6 +121,10 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
+
+    .row>* {
+        padding-right: 0px !important;
+    }
 </style>
 
 @extends('layout.master')
@@ -126,7 +132,7 @@
 @section('content')
     <div class="container py-5">
         <div class="row detail-shelter-container g-5 mb-5">
-            <div class="col-12 col-md-5 text-center">
+            <div class="col-12 col-md-5 text-center" style="padding-left: 0px">
                 <img src="{{ asset($detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
             </div>
 
@@ -161,8 +167,8 @@
                 <div class="row mb-4">
                     <div class="col-12">
                         <h5 class="detail-label"><i class="fa-solid fa-address-card me-1"></i> Deskripsi Shelter</h5>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</textarea>
                         </div>
                     </div>
                 </div>

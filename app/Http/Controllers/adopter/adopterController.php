@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class adopterController extends Controller
 {
@@ -254,7 +255,7 @@ class adopterController extends Controller
     }
 
     public function updateProfile(Request $request, $id) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'nama_adopter' => 'required|string|max:255',
             'alamat_adopter' => 'required|string',
             'usia_adopter' => 'required|integer|min:1|max:120',
@@ -263,6 +264,10 @@ class adopterController extends Controller
             'pekerjaan_adopter' => 'required|string|max:255',
             'foto_adopter' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
 
         $user = Auth::user();
         $adopter = $user->adopter;
@@ -380,7 +385,7 @@ class adopterController extends Controller
 
     public function lepasAdopsi(Request $request) {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'namaHewan'=> 'required',
                 'jenisHewan' =>'required|in:anjing,kucing',
                 'jenisKelaminHewan' =>'required|in:jantan,betina',
@@ -389,6 +394,8 @@ class adopterController extends Controller
                 'beratHewan' =>'required|numeric',
                 'rasHewan' =>'required',
                 'fotoHewan' =>'required|image|mimes:jpeg,png,jpg|max:2048',
+                'catatanMedisHewan'=> 'required',
+                'alasanPenyerahanHewan'=> 'required',
             ],[
                 'namaHewan.required' => '*Nama Hewan Harus di Isi',
                 'jenisHewan.required' => '*Jenis Hewan Harus di Pilih',
@@ -401,8 +408,14 @@ class adopterController extends Controller
                 'fotoHewan.required' => '*Foto harus diisi.',
                 'fotoHewan.image' => '*Foto harus berformat JPG, JPEG, atau PNG.',
                 'fotoHewan.mimes' => '*Foto harus berformat JPG, JPEG, atau PNG.',
-                'fotoHewan.max' => '*Ukuran foto maksimal 2MB.'
+                'fotoHewan.max' => '*Ukuran foto maksimal 2MB.',
+                'catatanMedisHewan.required' => '*Catatan Medis Hewan Harus di Isi',
+                'alasanPenyerahanHewan.required' => '*Alasan Penyerahan Hewan Harus di Isi'
             ]);
+
+            if($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()]);
+            }
 
             $data = $request->except('fotoHewan');
 
@@ -440,10 +453,10 @@ class adopterController extends Controller
                     'berat' => $request->beratHewan,
                     'status_steril' => $statusSteril,
                     'status_vaksin' => $statusVaksin,
-                    'catatan_medis' => $request->catatanMedisHewan ?: '-',
+                    'catatan_medis' => $request->catatanMedisHewan,
                     'foto_hewan' => $data['fotoHewan'],
                     'jenis_hewan' => $request->jenisHewan,
-                    'alasan_penyerahan' => $request->alasanPenyerahanHewan ?: '-',
+                    'alasan_penyerahan' => $request->alasanPenyerahanHewan,
                     'jenis_kelamin' => $request->jenisKelaminHewan,
                     'status_penyerahan' => 'diajukan',
                 ]);

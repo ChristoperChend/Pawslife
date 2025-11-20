@@ -101,8 +101,8 @@
                 customClass: {
                     actions: 'swal-actions-gap',
                     icon: 'swal-question-primary',
-                    confirmButton: 'btn btn-primary-color',
-                    cancelButton: 'btn btn-merah-color'
+                    cancelButton: 'btn btn-primary-color',
+                    confirmButton: 'btn btn-merah-color'
                 },
                 buttonsStyling: false
             }).then((result) => {
