@@ -31,51 +31,6 @@
         padding: 0.6rem 1.4rem;
     }
 
-    .btn-kembali{
-        background: var(--primary-color);
-        color: #fff;
-        border: 1px solid rgba(131, 131, 131, 0.223)!important;
-        min-width: 100px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .btn-kembali:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(116, 116, 116, 0.25);
-    }
-
-    .btn-primary{
-        background: var(--primary-color);
-        color: #fff;
-        border: none !important;
-        border-width: 0 !important;
-        min-width: 100px;
-    }
-
-    .btn-primary:hover{
-        transform: translateY(-1px);
-        filter: saturate(1.05);
-        color: var(--primary-color);
-        box-shadow:
-            0 10px 22px rgba(96,165,250,.30);
-    }
-
-    .btn-logout{
-        background-color:#dc3545!important;
-        color:#fff!important;
-        border:none!important;
-        min-width:100px;
-        border-radius:8px;
-        padding:0.6rem 1.4rem;
-        font-weight:500;
-        transition:.2s ease;
-    }
-
-    .btn-logout:hover{
-        transform: translateY(-1px);
-        box-shadow:0 6px 18px rgba(255,0,0,.25);
-    }
-
     .preview-wrap{
         display:flex; gap:16px; align-items:center; flex-wrap:wrap;
     }
@@ -148,6 +103,61 @@
                             value="{{ old('no_telepon_shelter', $data->no_telepon_shelter) }}" required>
                     </div>
 
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nama Bank <span class="text-danger">*</span></label>
+                        <select name="nama_bank" class="form-select" required>
+                            <option value="" disabled {{ old('nama_bank', $data->nama_bank) ? '' : 'selected' }}>Pilih Bank</option>
+                            
+                            @php
+                                // Daftar Bank Populer (Ditaruh paling atas)
+                                $bankPopuler = ['BCA', 'Bank Mandiri', 'BRI', 'BNI', 'BSI (Syariah)', 'CIMB Niaga'];
+
+                                // Daftar Bank Lainnya (Akan diurutkan alfabetis)
+                                $bankLainnya = [
+                                    'Allo Bank', 'Bank Aceh Syariah', 'Bank Aladin Syariah', 'Bank Artha Graha', 
+                                    'Bank BJB', 'Bank BJB Syariah', 'Bank BTPN / Jenius', 'Bank Banten', 
+                                    'Bank Bengkulu', 'Bank Bohai', 'Bank Bukopin', 'Bank Bumi Arta', 
+                                    'Bank Capital', 'Bank Chinatrust', 'Bank DBS Indonesia', 'Bank Danamon', 
+                                    'Bank DKI', 'Bank Ganesha', 'Bank HSBC Indonesia', 'Bank ICBC Indonesia', 
+                                    'Bank Ina Perdana', 'Bank Index Selindo', 'Bank Jago', 'Bank Jasa Jakarta', 
+                                    'Bank Jateng', 'Bank Jatim', 'Bank Jambi', 'Bank Kalbar', 'Bank Kalsel', 
+                                    'Bank Kalteng', 'Bank Kaltimtara', 'Bank Keb Hana', 'Bank Lampung', 
+                                    'Bank Maluku Malut', 'Bank Maspion', 'Bank Mayapada', 'Bank Maybank Indonesia', 
+                                    'Bank Mayora', 'Bank Mega', 'Bank Mega Syariah', 'Bank Mestika', 
+                                    'Bank Muamalat', 'Bank Multiarta Sentosa', 'Bank NTB Syariah', 'Bank NTT', 
+                                    'Bank Nagari', 'Bank Nationalnobu', 'Bank Neo Commerce', 'Bank OCBC NISP', 
+                                    'Bank Of India Indonesia', 'Bank Papua', 'Bank Panin', 'Bank Panin Dubai Syariah', 
+                                    'Bank Permata', 'Bank QNB Indonesia', 'Bank Resona Perdania', 
+                                    'Bank Riau Kepri', 'Bank SBI Indonesia', 'Bank Shinhan Indonesia', 
+                                    'Bank Sinarmas', 'Bank Sulselbar', 'Bank Sulteng', 'Bank Sultra', 
+                                    'Bank Sumsel Babel', 'Bank Sumut', 'Bank UOB Indonesia', 'Bank Victoria', 
+                                    'Bank Victoria Syariah', 'Bank Woori Saudara', 'Bank Yudha Bhakti', 
+                                    'Citibank', 'Digibank', 'JTrust Bank', 'SeaBank', 'Standard Chartered'
+                                ];
+                                
+                                sort($bankLainnya);
+                                
+                                $semuaBank = array_merge($bankPopuler, $bankLainnya);
+                            @endphp
+
+                            @foreach($semuaBank as $bank)
+                                <option value="{{ $bank }}" {{ old('nama_bank', $data->nama_bank) == $bank ? 'selected' : '' }}>
+                                    {{ $bank }}
+                                </option>
+                            @endforeach
+
+                            {{-- Opsi Lainnya --}}
+                            <option value="Lainnya" {{ old('nama_bank', $data->nama_bank) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nomor Rekening <span class="text-danger">*</span></label>
+                        <input type="text" name="nomor_rekening" class="form-control" 
+                            placeholder="Masukkan nomor rekening bank anda..."
+                            value="{{ old('nomor_rekening', $data->nomor_rekening) }}" required>
+                    </div>
+
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Deskripsi Shelter <span class="text-danger">*</span></label>
                         <textarea name="deskripsi_shelter" class="form-control" rows="4" placeholder="Masukkan deskripsi shelter anda..." required>{{ old('deskripsi_shelter', $data->deskripsi_shelter) }}</textarea>
@@ -198,13 +208,13 @@
                 <div class="row mt-4 align-items-center">
                     <div class="col-md-6 d-flex justify-content-start gap-3 flex-wrap">
                         <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-kembali">Kembali</a>
-                        <button type="button" id="btnLogout" class="btn btn-logout">
+                        <button type="button" id="btnLogout" class="btn btn-merah-color">
                             Logout
                         </button>
                     </div>
 
                     <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary-color">Simpan</button>
                         
                     </div>
                 </div>
@@ -229,9 +239,15 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     Swal.fire({
-      icon: 'success',
-      title: 'Berhasil',
-      text: @json(session('success')),
+        icon: 'success',
+        title: 'Berhasil',
+        customClass: {
+                actions: 'swal-actions-gap',
+                icon: 'swal-success-primary',
+                confirmButton: 'btn btn-primary-color',
+            },
+        buttonsStyling: false,
+        text: @json(session('success')),
     });
   });
 </script>
@@ -260,15 +276,18 @@
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: 'Apakah Anda yakin ingin mengubah data shelter?',
-                icon: 'warning',
+                icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yakin',
                 cancelButtonText: 'Kembali',
                 reverseButtons: true,
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
+                buttonsStyling: false, 
                 customClass: {
-                    popup: 'rounded-3 shadow-sm'
+                    popup: 'rounded-3 shadow-sm',
+                    icon: 'swal-question-primary',
+                    actions: 'd-flex gap-3 justify-content-center',
+                    confirmButton: 'btn btn-primary-color me-4',
+                    cancelButton: 'btn btn-kembali'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -313,9 +332,14 @@
                 confirmButtonText: 'Logout',
                 cancelButtonText: 'Batal',
                 reverseButtons: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                customClass: { popup: 'rounded-3 shadow-sm' }
+                buttonsStyling: false, 
+                customClass: {
+                    popup: 'rounded-3 shadow-sm',
+                    icon: 'swal-warning-primary',
+                    actions: 'd-flex gap-3 justify-content-center',
+                    confirmButton: 'btn btn-merah-color me-4',
+                    cancelButton: 'btn btn-kembali'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                 logoutForm.submit();

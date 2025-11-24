@@ -425,6 +425,8 @@ class shelterController
             'dokumen_legal'        => $shelter->dokumen_legal
                                         ? 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:5120' // 5MB
                                         : 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:5120',
+            'nama_bank'            => 'required|string|max:255',
+            'nomor_rekening'       => 'required|numeric'
         ];
 
         $validated = $request->validate($rules);

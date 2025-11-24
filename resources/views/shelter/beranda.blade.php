@@ -173,16 +173,20 @@
 
 @if (session('success'))
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title: @json(session('success')),
-      showConfirmButton: false,
-      timer: 2200,
-      timerProgressBar: true
+    document.addEventListener('DOMContentLoaded', () => {
+        Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: @json(session('success')),
+        showConfirmButton: false,
+        buttonsStyling: false, 
+        customClass: {
+            icon: 'swal-success-primary',
+        },
+        timer: 2200,
+        timerProgressBar: true
+        });
     });
-  });
 </script>
 @endif

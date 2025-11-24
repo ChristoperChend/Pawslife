@@ -133,8 +133,8 @@
                                 Riwayat
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="riwayatShelterDropdown">
-                                <li><a class="dropdown-item" href="{{ route('shelter.riwayat.pengambilan.hewan') }}">Riwayat pengambilan hewan adopter</a></li>
-                                <li><a class="dropdown-item" href="{{ route('shelter.riwayat.pengajuan.adopsi') }}">Riwayat pengajuan adopsi hewan</a></li>
+                                <li><a class="dropdown-item {{request()->routeIs('shelter.riwayat.pengambilan.hewan') ? 'active' : ''}}" href="{{ route('shelter.riwayat.pengambilan.hewan') }}">Riwayat pengambilan hewan adopter</a></li>
+                                <li><a class="dropdown-item {{request()->routeIs('shelter.riwayat.pengajuan.adopsi') ? 'active' : ''}}" href="{{ route('shelter.riwayat.pengajuan.adopsi') }}">Riwayat pengajuan adopsi hewan</a></li>
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
