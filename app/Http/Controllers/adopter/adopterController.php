@@ -36,6 +36,7 @@ class adopterController extends Controller
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('nama_hewan', 'LIKE', "%{$searchTerm}%")
                 ->orWhere('jenis_hewan', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('ras', 'LIKE', "%{$searchTerm}%")
                 ->orWhere('jenis_kelamin', 'LIKE', "%{$searchTerm}%");
             });
         }

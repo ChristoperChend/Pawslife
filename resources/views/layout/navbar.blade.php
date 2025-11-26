@@ -162,7 +162,7 @@
                                 </a>
                             @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
                                 <a href="{{ route('shelter.profil') }}">
-                                    <img src="{{ asset('storage/' . Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
+                                    <img src="{{ asset(Auth::user()->shelter->foto_shelter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Shelter">
                                 </a>
                             @elseif(Auth::user()->tipe_pengguna === 'admin')
                                 <a href="{{ route('admin.profile') }}">

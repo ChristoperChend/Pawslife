@@ -170,7 +170,7 @@
                             <div class="mb-4">
                                 <label for="foto" class="form-label mb-0">Foto</label>
                                 <input type="file" name="foto" class="form-control" id="foto"
-                                    placeholder="Masukkan foto anda">
+                                    placeholder="Masukkan foto anda" accept="image/*">
                             </div>
                             <button type="button" class="btn btn-primary w-100 fw-bold"
                                 onclick="validasiAdopterTahap2()">
@@ -214,12 +214,12 @@
                         <div id="tahap_2_shelter" class="d-none">
                             <div class="mb-4">
                                 <label for="foto_shelter" class="form-label mb-0">Foto shelter</label>
-                                <input type="file" name="foto_shelter" class="form-control" id="foto_shelter">
+                                <input type="file" name="foto_shelter" class="form-control" id="foto_shelter" accept="image/*">
                             </div>
                             <div class="mb-4">
                                 <label for="dokumen_legal" class="form-label mb-0">Dokumen legalitas pendirian
                                     shelter</label>
-                                <input type="file" name="dokumen_legal" class="form-control" id="dokumen_legal">
+                                <input type="file" name="dokumen_legal" class="form-control" id="dokumen_legal" accept="image/*">
                             </div>
                             <div class="mb-4">
                                 <label for="deskripsi_shelter" class="form-label mb-0">Deskripsi singkat
@@ -272,6 +272,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        window.onload = function () {
+            gantiKeAdopter();
+        };
+
         var dataAdopterTahap1 = {}
         var dataShelterTahap1 = {}
 
