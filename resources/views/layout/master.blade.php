@@ -14,18 +14,16 @@
 </head>
 
 <body>
-    {{-- <div class="position-relative min-vh-100"> --}}
     <div class="d-flex flex-column min-vh-100">
         @include('layout.navbar')
 
-        {{-- EFEEF1 --}}
         <div class="position-relative" style="background-color: rgb(250, 250, 250); margin-top: 80px;">
             @yield('content')
         </div>
+
         <div class="mt-auto">
             @include('layout.footer')
         </div>
-        
     </div>
 </body>
 
