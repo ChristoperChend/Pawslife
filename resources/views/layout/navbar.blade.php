@@ -56,6 +56,30 @@
         margin-top: 0;
     }
 
+    .btn-favorite {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #333; /* Dark grey default to match text */
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+    }
+
+    .btn-favorite i {
+        font-size: 1.4rem; /* More balanced size than fa-2xl */
+        transition: transform 0.2s ease;
+    }
+
+    .btn-favorite:hover {
+        color: #ff4757; /* A more elegant, modern red */
+        transform: translateY(-2px);
+    }
+
+    .btn-favorite:hover i {
+        font-weight: 900; /* Switches to solid version on hover if using FA Pro, or just stays bold */
+        transform: scale(1.15); /* Heartbeat effect */
+    }
+
     @media (max-width: 991.98px) {
         .container {
             --bs-gutter-x: 0 !important;
@@ -152,7 +176,9 @@
                     @auth
                         <button class="btn p-0 me-2">
                             @if (Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
-                                <a href="{{ route('adopter.daftarFavorit') }}"><i class="fa-solid fa-heart fa-2xl" style="color: #ff0000;"></i></a>
+                                <a href="{{ route('adopter.daftarFavorit') }}" class="btn-favorite" title="Favorit Saya">
+                                    <i class="fa-regular fa-heart"></i> 
+                                </a>
                             @endif
                         </button>
                         <button class="btn ps-3"> 
