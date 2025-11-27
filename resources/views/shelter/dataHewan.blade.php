@@ -106,6 +106,104 @@
         transform: translateY(1px);
     }
 
+    /* 1. The Wrapper */
+    .search-container {
+        display: flex;
+        align-items: stretch; /* Keeps them same height */
+        justify-content: center;
+        max-width: 750px; 
+        margin: 0 auto 2rem;
+        gap: 10px;
+    }
+
+    /* 2. The Slimmer Search Bar */
+    .search-wrap {
+        flex-grow: 1;
+        margin: 0;
+        max-width: none;
+    }
+    
+    .search-wrap .form-control {
+        height: 100%;
+        background: #fff;
+        /* Reduced padding for a smaller height */
+        padding: 0.5rem 1rem 0.5rem 2.5rem; 
+        font-size: 0.95rem;
+    }
+
+    .search-wrap .fa-search {
+        /* Icon positioning remains centered */
+        font-size: 0.9rem;
+        left: 1rem;
+    }
+
+    /* 3. The Slimmer Stat Ticket */
+    .stat-ticket {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        background: #fff;
+        border: 2px dashed #e0e7ff; 
+        border-radius: 1rem; /* Slightly reduced radius */
+        
+        min-width: 100px; /* More compact width */
+        padding: 0.25rem 0.75rem; /* Drastically reduced padding */
+        
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        cursor: default;
+    }
+
+    .stat-ticket:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px) rotate(-1deg);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .stat-ticket .stat-number {
+        font-size: 1.4rem; /* Smaller number */
+        font-weight: 800;
+        color: var(--primary-color);
+        line-height: 1.1; /* Tighter line height */
+        z-index: 2;
+    }
+
+    .stat-ticket .stat-label {
+        font-size: 0.6rem; /* Smaller label */
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+        z-index: 2;
+    }
+
+    /* Smaller Watermark Icon */
+    .stat-ticket .watermark-icon {
+        position: absolute;
+        right: -5px;
+        bottom: -8px;
+        font-size: 2.5rem; /* Reduced icon size */
+        color: var(--primary-color);
+        opacity: 0.08;
+        transform: rotate(-15deg);
+        z-index: 1;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 576px) {
+        .search-container { flex-direction: column; }
+        .stat-ticket {
+            flex-direction: row; 
+            padding: 0.75rem;
+            gap: 10px;
+        }
+        .stat-ticket .stat-number { line-height: 1; margin-bottom: 0; }
+    }
+
     @media (max-width: 576px){
         .pet-card { max-width: 100%; }
     }
@@ -118,10 +216,20 @@
         <p class="page-subtitle">Kelola dan lihat semua hewan peliharaan Anda di sini</p>
     </div>
 
-    <form class="search-wrap" role="search" method="GET" action="{{ route('shelter.data.hewan')}}">
-        <i class="fa-solid fa-search"></i>
-        <input name="q" class="form-control" type="search" placeholder="Cari hewan berdasarkan nama, jenis hewan, jenis kelamin..." aria-label="Search" value="{{ $q ?? request('q') }}">
-    </form>
+    <div class="search-container">
+        
+        <form class="search-wrap" role="search" method="GET" action="{{ route('shelter.data.hewan')}}">
+            <i class="fa-solid fa-search"></i>
+            <input name="q" class="form-control" type="search" placeholder="Cari hewan..." aria-label="Search" value="{{ $q ?? request('q') }}">
+        </form>
+
+        <div class="stat-ticket" title="Total Hewan Anda">
+            <i class="fa-solid fa-paw watermark-icon"></i>
+            <span class="stat-number">{{ $dataHewan->total() }}</span>
+            <span class="stat-label">Total Hewan</span>
+        </div>
+
+    </div>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         @foreach ($dataHewan as $data)
