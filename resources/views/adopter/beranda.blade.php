@@ -381,14 +381,14 @@
         <div class="container button-container">
             <div class="row justify-content-center g-4"> <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'kucing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
                     <div class="animal-card dog-card">
-                        <img src="{{ asset('storage/icon/unnamed.jpg') }}" alt="Kucing">
+                        <img src="{{ asset('image/icon/unnamed.jpg') }}" alt="Kucing">
                         <span class="animal-label">Anjing</span>
                     </div>
                 </a>
 
                 <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'anjing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
                     <div class="animal-card cat-card">
-                        <img src="{{ asset('storage/icon/unnamed (1).jpg') }}" alt="Anjing">
+                        <img src="{{ asset('image/icon/unnamed (1).jpg') }}" alt="Anjing">
                         <span class="animal-label">Kucing</span>
                     </div>
                 </a>
