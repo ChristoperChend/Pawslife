@@ -219,9 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             icon: 'question',
                             title: '<h4 style="font-weight:700; font-size:18px; margin-bottom:8px;">Apakah anda yakin menerima pengajuan adopsi?</h4>',
                             html: `
-                                <p style="font-size:14px; color:#444; margin-bottom:0; line-height:1.4;">
-                                    Anda harus mengantarkan hewan peliharaan pada alamat adopter.
-                                </p>
                                 <div class="swal-buttons mt-3" 
                                     style="display:flex; justify-content:center; gap:10px; width:100%; margin-top:18px;">
                                     <button type="button" id="btnKembaliKonfirmasi" 
@@ -263,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             title: 'Berhasil!',
                                             text: 'Hewan memasuki tahap percobaan adopsi',
                                             confirmButtonText: 'OK',
-                                            customClass: { confirmButton: 'btn btn-primary text-white px-4 fw-semibold' },
+                                            customClass: { confirmButton: 'btn btn-primary text-white px-4 fw-semibold', icon: 'swal-success-primary' },
                                             buttonsStyling: false
                                         }).then(() => location.reload());
                                     })

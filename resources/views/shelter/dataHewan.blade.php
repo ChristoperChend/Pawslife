@@ -202,9 +202,6 @@
             gap: 10px;
         }
         .stat-ticket .stat-number { line-height: 1; margin-bottom: 0; }
-    }
-
-    @media (max-width: 576px){
         .pet-card { max-width: 100%; }
     }
 </style>

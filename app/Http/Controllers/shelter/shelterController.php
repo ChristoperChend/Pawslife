@@ -231,7 +231,9 @@ class shelterController
         }
         
         $tanggalMulai = Carbon::now('Asia/Jakarta');
-        $tanggalAkhir = $tanggalMulai->copy()->addWeek();
+        $shelterDatas = Auth::user()->shelter;
+        $masaPercobaan = $shelterDatas->masa_percobaan;
+        $tanggalAkhir = $tanggalMulai->copy()->addDays($masaPercobaan);
 
         $pengajuan->status_pengajuan = 'setuju';
         $pengajuan->alasan_persetujuan_pengajuan_adopsi = $request->alasan;
@@ -462,6 +464,54 @@ class shelterController
         $shelter->update($validated);
 
         return redirect()->back()->with('success', 'Data shelter berhasil diperbarui!');
+    }
+
+    public function getPersyaratanAdopsi(){
+        $data = Auth::user();
+        $shelterDatas = $data->shelter;
+        return view('shelter.persyaratanAdopsi', compact('shelterDatas'));
+    }
+
+    public function insertPersyaratanAdopsi(Request $request){
+        $request->validate([
+            'requirements' => 'required|array|max:25',
+            'requirements.*' => 'required|string|max:500',
+            'has_trial' => 'required|in:0,1',
+            'trial_duration' => 'nullable|required_if:has_trial,1|integer|min:14'
+        ],[
+            'requirements.required' => 'Persyaratan tidak boleh kosong.',
+            'requirements.min' => 'Minimal harus ada 1 persyaratan.',
+            'requirements.max' => 'Maksimal 25 persyaratan.',
+            'requirements.*.required' => 'Isi persyaratan tidak boleh kosong.',
+            'trial_duration.min'          => 'Durasi masa percobaan minimal 14 hari.',
+            'trial_duration.integer'      => 'Durasi harus berupa angka.',
+        ]);
+
+        try {
+            $data = Auth::user();
+            $shelterDatas = $data->shelter;
+
+            $cleanRequirements = array_values(array_filter($request->requirements));
+
+            // Uppercase the first letter of each requirement
+            $cleanRequirements = array_map('ucfirst', $cleanRequirements);
+
+            $shelterDatas->persyaratan_adopsi = $cleanRequirements;
+
+            if($request->has_trial == 1){
+                $shelterDatas->masa_percobaan = $request->trial_duration;
+            }else {
+                $shelterDatas->masa_percobaan = null;
+            }
+
+            $shelterDatas->save();
+
+            return back()->with('success', 'Persyaratan adopsi berhasil diperbarui');
+
+        } catch (\Throwable $th) {
+            log::error('Error ketika memperbarui persyaratan adopsi: ' .$th->getMessage());
+            return back()->with('error', 'Persyaratan adopsi gagal diperbarui');
+        }
     }
 }
 

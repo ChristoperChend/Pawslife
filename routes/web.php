@@ -87,6 +87,9 @@ Route::prefix('shelter')->group(function () {
 
     Route::get('profil-shelter', [shelterController::class, 'getProfilShelter'])->name('shelter.profil');
     Route::put('perbarui-data-shelter/{id}', [shelterController::class, 'updateDataShelter'])->name('shelter.perbarui.data.shelter');
+
+    Route::get('persyaratan-adopsi', [shelterController::class, 'getPersyaratanAdopsi'])->name('shelter.persyaratan.adopsi');
+    Route::post('tambah-persyaratan-adopsi', [shelterController::class, 'insertPersyaratanAdopsi'])->name('shelter.tambah.persyaratan.adopsi');
 });
 
 Route::prefix('admin')->group(function () {

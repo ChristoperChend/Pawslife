@@ -10,7 +10,10 @@ class shelter extends Model
     // use Notifiable;
     protected $table = 'shelter';
 
-    protected $fillable = ['pengguna_id', 'nama_shelter', 'email_shelter', 'alamat_shelter', 'no_telepon_shelter', 'foto_shelter', 'dokumen_legal', 'deskripsi_shelter', 'status', 'nama_bank', 'nomor_rekening'];
+    protected $casts = [
+        'persyaratan_adopsi' => 'array'
+    ];
+    protected $fillable = ['pengguna_id', 'nama_shelter', 'email_shelter', 'alamat_shelter', 'no_telepon_shelter', 'foto_shelter', 'dokumen_legal', 'masa_percobaan', 'persyaratan_adopsi', 'deskripsi_shelter', 'status', 'nama_bank', 'nomor_rekening'];
 
     public function pengguna() {
         return $this->belongsTo(pengguna::class);
@@ -18,5 +21,5 @@ class shelter extends Model
 
     public function hewan() {
         return $this->hasMany(hewan::class);
-    }
+    }    
 }
