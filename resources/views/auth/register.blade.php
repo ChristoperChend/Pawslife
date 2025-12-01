@@ -107,7 +107,7 @@
             <a class="choice-btn pointer" id="btn_adopter" onclick="gantiKeAdopter()">Adopter</a>
             <a class="choice-btn pointer" id="btn_shelter" onclick="gantiKeShelter()">Shelter</a>
         </div>
-        <div class="col-7 form-section justify-content-center position-absolute py-5">
+        <div class="col-12 col-md-7 form-section justify-content-center position-absolute py-5">
             <div>
                 <div id="form_adopter">
                     <h1 class="fw-bold mb-1">Mulai Sekarang</h1>
@@ -260,8 +260,8 @@
             </div>
         </div>
 
-        <div class="col-5 img-container p-0 position-fixed">
-            <img src="{{ asset('image/register2.jpg') }}" alt="Login Image">
+        <div class="col-5 img-container p-0 position-fixed d-none d-md-block">
+            <img src="{{ asset('image/register2.jpg') }}" alt="Register Image">
         </div>
     </div>
 

@@ -59,7 +59,7 @@
 
 <body>
     <div class="container-fluid login-container d-flex position-relative">
-        <div class="col-7 d-flex min-vh-100 justify-content-center align-items-center position-absolute">
+        <div class="col-12 col-md-7 d-flex min-vh-100 justify-content-center align-items-center position-absolute p-3">
             <div>
                 <h1 id="title-masukkan-email" class="fw-bold mb-1">Lupa Kata Sandi?</h1>
                 <h6 id="masukkan-email" class="fw-bold">Masukkan email anda untuk mengatur ulang kata sandi</h6>
@@ -115,7 +115,7 @@
             </div>
         </div>
         <!-- Image -->
-        <div class="col-5 img-container p-0 position-fixed">
+        <div class="col-5 img-container p-0 position-fixed d-none d-md-block">
             <img src="{{ asset('image/login.jpg') }}" alt="Login Image">
         </div>
     </div>

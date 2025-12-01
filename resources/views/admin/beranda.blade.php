@@ -35,6 +35,56 @@
         font-size: 0.9rem;
         color: #6c757d;
     }
+
+    @media (max-width: 576px) {
+        .shelter-card-item {
+            padding: 15px 0;
+        }
+
+        .shelter-card-item > .d-flex {
+            flex-direction: column !important;
+            align-items: center;
+        }
+
+        .shelter-card-item > .d-flex > div:first-child {
+            width: 100%;
+            padding: 10px 0 !important;
+        }
+        
+        .shelter-card-item img {
+            width: 100px; 
+            height: 100px;
+            margin: 0 auto;
+            display: block;
+            border-radius: 12px !important;
+        }
+
+        .shelter-card-item .flex-fill {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0 15px 0 !important;
+            border-right: none !important;
+        }
+        
+        /* Kontainer Info Lengkap */
+        .shelter-card-item > .d-flex > div:last-child {
+            width: 100%;
+            padding: 0 15px 15px !important;
+            text-align: center;
+        }
+        
+        .shelter-card-item > .d-flex > div:last-child a {
+            justify-content: center !important;
+            display: flex !important;
+            margin-top: 12px;
+        }
+        
+        .shelter-card-item .flex-fill p, 
+        .shelter-card-item .flex-fill h5,
+        .shelter-card-item .flex-fill h6 {
+            text-align: center !important;
+        }
+    }
 </style>
 
 @extends('layout.master')
@@ -48,8 +98,9 @@
 
         @if (!$listShelter->isEmpty())
             @foreach ($listShelter as $items)
-                <div class="card shelter-card-item shadow-sm overflow-hidden bg-white">
-                    <div class="d-flex flex-wrap align-items-stretch">
+                <div class="card shelter-card-item shadow-sm overflow-hidden bg-white mb-3">
+                    <div class="d-flex flex-wrap">
+                        
                         <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                             style="width: 140px; min-height: 130px;"
                         >
@@ -68,8 +119,10 @@
                         </div>
                         
                         <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
-                            <div></div>
-                            <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
+                            
+                            <hr class="d-block d-sm-none w-100 my-2" style="border-top: 3px solid #b3b3b3;">
+                            
+                            <div></div> <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
                                 class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
                             >
                                 <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>

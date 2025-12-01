@@ -123,8 +123,15 @@
         border-radius: 5px;
     }
 
-    .row>* {
-        padding: 0px !important;
+    @media (max-width: 767.98px) {
+        .col-12.col-md-6.d-flex.justify-content-start {
+            justify-content: center !important;
+        }
+        
+        .col-12.col-md-6.d-flex.justify-content-end {
+            justify-content: center !important;
+            margin-bottom: 10px !important;
+        }
     }
 </style>
 
@@ -137,13 +144,13 @@
             <h2>Profil Adopter</h2>
         </div>
         <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
-            <div class="card-body p-5">
+            <div class="card-body p-md-5">
                 <form action="{{ route('adopter.updateProfile', $adopter->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
     
                     <div class="text-center mb-4">
-                        <img src="{{ asset($adopter->foto_adopter) }}" 
+                        <img src="{{ asset('storage/' . $adopter->foto_adopter) }}" 
                             alt="Foto Adopter" class="adopter-image mb-3">
                         <div class="mb-3" style="max-width: 320px; margin: 0 auto;">
                             <label class="form-label fw-semibold">Ganti Foto Adopter</label>
@@ -152,73 +159,74 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap <span class="text-danger">*</span></label>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
                             <div class="detail-field-wrapper">
                                 <input type="text" name="nama_adopter" class="form-control detail-text" 
                                 value="{{ old('nama_adopter', $adopter->nama_lengkap) }}" required>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-envelope me-1"></i> Email</label>
-                            <div class="detail-field-wrapper">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper" style="background-color: #f3f3f3 !important;">
                                 <span class="detail-text">{{ $adopter->pengguna->email ?? 'data tidak ada' }}</span>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-map-location-dot me-1"></i> Alamat <span class="text-danger">*</span></label>
-                            <div class="detail-field-wrapper">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Alamat <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper" style="padding: 0px">
                                 <textarea 
                                     name="alamat_adopter" 
                                     class="form-control detail-text" 
                                     rows="3" 
+                                    style="padding: 10px 15px;"
                                     required
                                 >{{ old('alamat_adopter', $adopter->alamat) }}</textarea>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-calendar-day me-1"></i> Usia <span class="text-danger">*</span></label>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Usia <span class="text-danger">*</span></label>
                             <div class="detail-field-wrapper">
                                 <input type="text" name="usia_adopter" class="form-control detail-text" 
                                 value="{{ old('usia_adopter', $adopter->usia) }}" required>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-mobile-screen-button me-1"></i> No Handphone <span class="text-danger">*</span></label>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Pekerjaan <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper">
+                                <input type="text" name="pekerjaan_adopter" class="form-control detail-text" 
+                                value="{{ old('pekerjaan_adopter', $adopter->pekerjaan) }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">No Handphone <span class="text-danger">*</span></label>
                             <div class="detail-field-wrapper">
                                 <input type="text" name="nomor_telepon_adopter" class="form-control detail-text" 
                                 value="{{ old('nomor_telepon_adopter', $adopter->no_handphone) }}" required>
                             </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-brands fa-whatsapp me-1"></i> No Whatsapp <span class="text-danger">*</span></label>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">No Whatsapp <span class="text-danger">*</span></label>
                             <div class="detail-field-wrapper">
                                 <input type="text" name="nomor_wa_adopter" class="form-control detail-text" 
                                 value="{{ old('nomor_wa_adopter', $adopter->no_whatsapp) }}" required>
                             </div>
                         </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="fa-solid fa-briefcase me-1"></i> Pekerjaan <span class="text-danger">*</span></label>
-                            <div class="detail-field-wrapper">
-                                <input type="text" name="pekerjaan_adopter" class="form-control detail-text" 
-                                value="{{ old('pekerjaan_adopter', $adopter->pekerjaan) }}" required>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row mt-4 align-items-center">
-                        <div class="col-md-6 d-flex justify-content-start gap-3 flex-wrap">
+                        <div class="col-12 col-md-6 d-flex justify-content-start gap-3 flex-wrap order-md-1 order-2">
                             <a href="{{ url()->previous() }}" class="btn btn-kembali">Kembali</a>
                             <a href="#" onclick="confirmLogout(event)" class="btn btn-merah-color">Logout</a>
                         </div>
 
-                        <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
+                        <div class="col-12 col-md-6 d-flex justify-content-end gap-2 flex-wrap mt-2 mt-md-0 order-md-2 order-1">
                             <button type="submit" class="btn btn-primary-color">Simpan</button>
                         </div>
                     </div>
@@ -350,6 +358,6 @@
                 });
             }
         });
-</script>
+    </script>
 
 @endsection

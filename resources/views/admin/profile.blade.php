@@ -36,6 +36,21 @@
         border-radius: 10px;
         padding: 50px;
     }
+
+    .page-header {
+        max-width: 1060px;
+        margin: 24px auto 0;
+    }
+    .page-header h2 {
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+
+    @media (max-width: 576px) {
+        .profile-icon {
+            font-size: 200px;
+        }
+    }
 </style>
 
 @extends('layout.master')
@@ -48,7 +63,7 @@
         </div>
 
         <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
-            <div class="card-body p-5">
+            <div class="card-body p-md-5">
                 <div class="col-md-12 text-center">
                     <i 
                         class="fa-solid fa-circle-user profile-icon" 
@@ -59,14 +74,14 @@
 
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-user me-1"></i> Nama Lengkap</h5>
+                        <label class="form-label fw-semibold">Nama Lengkap</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">Administrator</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-envelope me-1"></i> Email</h5>
+                        <label class="form-label fw-semibold">Email</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $admin->email ?? 'data tidak ada' }}</span>
                         </div>
@@ -76,7 +91,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        <a href="#" onclick="confirmLogout(event)" class="btn btn-warning fw-bold btn-logout-custom">Logout</a>
+                        <a href="#" onclick="confirmLogout(event)" class="btn btn-merah-color fw-bold btn-logout-custom">Logout</a>
                     </div>
                 </div>
             </div>

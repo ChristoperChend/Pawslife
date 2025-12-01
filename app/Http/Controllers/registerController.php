@@ -132,18 +132,9 @@ class registerController
                 ]);
             }
 
-            $data = $request->except('foto');
+            $fotoPath = $request->file('foto')->store('fotoAdopter', 'public');
 
             if($request->hasFile('foto')) {
-                $file = $request->file('foto');
-                $destinationPath = public_path('image/fotoAdopter');
-                if(!File::exists($destinationPath)){
-                    File::makeDirectory($destinationPath, 0775, true);
-                }
-                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-                $file->move($destinationPath, $fileName);
-                $data['foto'] = 'image/fotoAdopter/'.$fileName;
-
                 DB::beginTransaction();
             
                 $pengguna = pengguna::create([
@@ -160,7 +151,7 @@ class registerController
                     'pekerjaan' => $request->pekerjaan,
                     'no_handphone' => $request->no_handphone,
                     'no_whatsapp' => $request->no_whatsapp,
-                    'foto_adopter' => $data['foto'],
+                    'foto_adopter' => $fotoPath,
                     'status' => ''
                 ]);
                 if (!$adopter) {
@@ -170,6 +161,12 @@ class registerController
                         'message' => 'Terjadi kesalahan ketika melakukan registrasi'
                     ]);
                 }
+            } else {
+                return response()->json([
+                        'error' => true,
+                        'title' => 'Gagal membuat akun',
+                        'message' => 'Tidak menemukan file foto'
+                    ]);
             }
 
             DB::commit();
@@ -300,28 +297,10 @@ class registerController
                 ]);
             }
 
-            $data = $request->except('foto_shelter');
-            $data = $request->except('dokumen_legal');
+            $fotoShelterPath = $request->file('foto_shelter')->store('fotoShelter', 'public');
+            $fotoDokumenLegalPath = $request->file('dokumen_legal')->store('fotoDokumenLegal', 'public');
 
             if($request->hasFile('foto_shelter') && $request->hasFile('dokumen_legal')) {
-                $file = $request->file('foto_shelter');
-                $destinationPath = public_path('image/fotoShelter');
-                if(!File::exists($destinationPath)){
-                    File::makeDirectory($destinationPath, 0775, true);
-                }
-                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-                $file->move($destinationPath, $fileName);
-                $data['foto_shelter'] = 'image/fotoShelter/'.$fileName;
-
-                $file = $request->file('dokumen_legal');
-                $destinationPath = public_path('image/dokumenLegalShelter');
-                if(!File::exists($destinationPath)){
-                    File::makeDirectory($destinationPath, 0775, true);
-                }
-                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-                $file->move($destinationPath, $fileName);
-                $data['dokumen_legal'] = 'image/dokumenLegalShelter/'.$fileName;
-
                 DB::beginTransaction();
     
                 $pengguna = pengguna::create([
@@ -335,8 +314,8 @@ class registerController
                     'nama_shelter' => $request->nama_shelter,
                     'alamat_shelter' => $request->alamat_shelter,
                     'no_telepon_shelter' => $request->no_telepon_shelter,
-                    'foto_shelter' => $data['foto_shelter'],
-                    'dokumen_legal' => $data['dokumen_legal'],
+                    'foto_shelter' => $fotoShelterPath,
+                    'dokumen_legal' => $fotoDokumenLegalPath,
                     'deskripsi_shelter' => $request->deskripsi_shelter,
                     'status' => 'diajukan'
                 ]);
@@ -348,6 +327,12 @@ class registerController
                         'message' => 'Terjadi kesalahan ketika melakukan registrasi'
                     ]);
                 }
+            } else {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Gagal membuat akun',
+                    'message' => 'Tidak menemukan file foto atau dokumen legal'
+                ]);
             }
 
             DB::commit();

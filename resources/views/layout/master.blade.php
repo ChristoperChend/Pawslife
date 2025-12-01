@@ -17,7 +17,7 @@
     <div class="d-flex flex-column min-vh-100">
         @include('layout.navbar')
 
-        <div class="position-relative" style="background-color: rgb(250, 250, 250); margin-top: 80px;">
+        <div class="flex-grow-1 position-relative" style="background-color: rgb(250, 250, 250); margin-top: 80px;">
             @yield('content')
         </div>
 

@@ -79,6 +79,20 @@
         height:100%;
         object-fit:cover;
     }
+
+    @media (max-width: 576px) {
+    .preview-wrap {
+        justify-content: center;
+    }
+    
+    .preview-box {
+        margin: 0 auto; 
+    }
+    
+    .preview-wrap > div:last-child {
+        min-width: 90% !important;
+    }
+}
 </style>
 
 @extends('layout.master')
@@ -112,13 +126,13 @@
 
                 <div class="row g-4">
                     <div class="col-md-6 ">
-                        <label for="namaHewan" class="form-label">Nama Hewan <span class="text-danger">*</span></label>
+                        <label for="namaHewan" class="form-label fw-semibold">Nama Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="namaHewan" name="namaHewan" placeholder="Masukkan nama hewan" value="{{ old('namaHewan') }}">
                         @error('namaHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="jenisHewan" class="form-label">Jenis Hewan <span class="text-danger">*</span></label>
+                        <label for="jenisHewan" class="form-label fw-semibold">Jenis Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="jenisHewan" id="jenisHewan">
                             <option value="" disabled selected hidden>Pilih Jenis Hewan</option>
                             <option value="anjing" {{old('jenisHewan') === 'anjing' ? 'selected' : ''}}>Anjing</option>
@@ -130,7 +144,7 @@
 
                 <div class="row g-4">
                     <div class="col-md-6 ">
-                        <label for="jeniskelaminHewan" class="form-label">Jenis Kelamin Hewan <span class="text-danger">*</span></label>
+                        <label for="jeniskelaminHewan" class="form-label fw-semibold">Jenis Kelamin Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
                             <option value="" disabled selected hidden>Masukkan Jenis Kelamin Hewan</option>
                             <option value="jantan"  {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
@@ -140,7 +154,7 @@
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="statusVaksinHewan" class="form-label">Status Vaksin Hewan <span class="text-danger">*</span></label>
+                        <label for="statusVaksinHewan" class="form-label fw-semibold">Status Vaksin Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
                             <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah Vaksin</option>
@@ -152,7 +166,7 @@
 
                 <div class="row g-4">
                     <div class="col-md-6 ">
-                        <label for="statusSterilHewan" class="form-label">Status Steril Hewan <span class="text-danger">*</span></label>
+                        <label for="statusSterilHewan" class="form-label fw-semibold">Status Steril Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
                             <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
                             <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah Steril</option>
@@ -162,7 +176,7 @@
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="beratHewan" class="form-label">Berat Hewan <span class="text-danger">*</span></label>
+                        <label for="beratHewan" class="form-label fw-semibold">Berat Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
                         @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
@@ -170,13 +184,13 @@
 
                 <div class="row g-4">
                     <div class="col-md-6 ">
-                        <label for="rasHewan" class="form-label">Ras Hewan <span class="text-danger">*</span></label>
+                        <label for="rasHewan" class="form-label fw-semibold">Ras Hewan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan Ras Hewan">
                         @error('rasHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="catatanMedisHewan" class="form-label">Catatan Medis <span class="text-danger">*</span></label>
+                        <label for="catatanMedisHewan" class="form-label fw-semibold">Catatan Medis <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan" placeholder="Masukkan Catatan Medis Hewan">
                         @error('catatanMedisHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
@@ -184,7 +198,7 @@
 
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label for="alasanPenyerahanHewan" class="form-label">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
+                        <label for="alasanPenyerahanHewan" class="form-label fw-semibold">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
                         <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
                         @error('alasanPenyerahanHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
@@ -210,7 +224,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-outline-primary w-30 fw-bold" style="margin-right: 8px" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
+                    <button type="button" class="btn btn-primary-color" style="margin-right: 10px" onclick="kirimPenyerahan()">Kirim Penyerahan</button>
                 </div>
             </form>
         </div>

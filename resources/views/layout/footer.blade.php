@@ -9,6 +9,7 @@
 
     div h5 {
         font-weight: bold;
+        font-size: 1.3rem !important;
     }
 
     @media (max-width: 767.98px) {
@@ -26,7 +27,9 @@
     <div class="container py-4 text-white">
         <div class="row d-flex justify-content-center justify-content-start footer-content">
             <div class="col-12 col-md-3">
-                <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image-footer">
+                <a href="{{ Auth::check() ? route('beranda.' . Auth::user()->tipe_pengguna . 'Beranda') : route('beranda.adopterBeranda') }}">
+                    <img src="{{ asset('image/logo.png') }}" alt="Logo Image" class="logo-image-footer">
+                </a>
             </div>
 
             <div class="col-12 col-md-2">
@@ -44,25 +47,53 @@
             <div class="col-12 col-md-2">
                 <h5>Tentang Kami</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2">Tentang Kami</li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('tentangKami') }}" style="text-decoration: none; color: white;">
+                            Tentang Kami
+                        </a>
+                    </li>
                 </ul>
             </div>
 
             <div class="col-12 col-md-2">
                 <h5>Layanan Kami</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2">Pengajuan Adopsi</li>
-                    <li class="nav-item mb-2">Penyerahan Adopsi</li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('adopter.daftarHewan') }}" style="text-decoration: none; color: white;">
+                            Pengajuan Adopsi
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('adopter.showLepasAdopsi') }}" style="text-decoration: none; color: white;">
+                            Penyerahan Adopsi
+                        </a>
+                    </li>
                 </ul>
             </div>
 
             <div class="col-12 col-md-2">
                 <h5>Lainnya</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2">Youtube - Pawslife</li>
-                    <li class="nav-item mb-2">Instagram - Pawslife</li>
-                    <li class="nav-item mb-2">X - Pawslife</li>
-                    <li class="nav-item mb-2">Tiktok - Pawslife</li>
+                    <li class="nav-item mb-2">
+                        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                            Youtube - Pawslife
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                            Instagram - Pawslife
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                            X - Pawslife
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                            TikTok - Pawslife
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

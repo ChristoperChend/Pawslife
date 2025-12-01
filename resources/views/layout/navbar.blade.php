@@ -175,13 +175,13 @@
 
                 <div class="auth-section d-flex align-items-center">
                     @auth
-                        <button class="btn p-0 me-2">
-                            @if (Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
+                        @if (Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
+                            <button class="btn p-0 me-2">
                                 <a href="{{ route('adopter.daftarFavorit') }}" class="btn-favorite" title="Favorit Saya">
                                     <i class="fa-regular fa-heart"></i> 
                                 </a>
-                            @endif
-                        </button>
+                            </button>
+                        @endif
                         <button class="btn ps-3"> 
                             @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
                                 <a href="{{ route('adopter.profile') }}">

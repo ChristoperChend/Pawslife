@@ -11,7 +11,6 @@
         }
     }
 
-    /* Animation for the Bones and Paws */
     @keyframes floatUpGlow {
         0% {
             opacity: 0;
@@ -39,45 +38,6 @@
         margin-top: -80px;
     }
 
-    .banner-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        background: 
-            url('/image/bone-icon.svg') 5% 10%,
-            url('/image/paw-icon.svg') 15% 25%,
-            url('/image/bone-icon.svg') 25% 5%,
-            url('/image/paw-icon.svg') 35% 40%,
-            url('/image/bone-icon.svg') 45% 15%,
-            url('/image/paw-icon.svg') 55% 60%,
-            url('/image/bone-icon.svg') 65% 25%,
-            url('/image/paw-icon.svg') 75% 80%,
-            url('/image/bone-icon.svg') 85% 35%,
-            url('/image/paw-icon.svg') 95% 50%,
-
-            url('/image/bone-icon.svg') 10% 65%,
-            url('/image/paw-icon.svg') 20% 85%,
-            url('/image/bone-icon.svg') 30% 70%,
-            url('/image/paw-icon.svg') 40% 20%,
-            url('/image/bone-icon.svg') 50% 90%,
-            url('/image/paw-icon.svg') 60% 35%,
-            url('/image/bone-icon.svg') 70% 10%,
-            url('/image/paw-icon.svg') 80% 55%,
-            url('/image/bone-icon.svg') 90% 75%,
-            url('/image/paw-icon.svg') 5% 45%;
-
-        background-size: 
-            40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px,
-            40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px, 40px, 35px;
-        background-repeat: no-repeat;
-        opacity: 0.3;
-        pointer-events: none;
-    }
-
     .glowing-paws-container {
         position: absolute;
         top: 0;
@@ -93,15 +53,11 @@
         position: absolute;
         bottom: 0px;
         color: rgba(255, 255, 255, 0.5);
-
-        /* Effect */
-        /* text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(113, 223, 247, 0.7); */
         text-shadow: none;
         opacity: 0;
         animation: floatUpGlow linear infinite;
     }
 
-    /* Paw Customization*/
     .paw-1 { left: 10%; font-size: 24px; animation-duration: 7s; animation-delay: 0s; }
     .paw-2 { left: 25%; font-size: 40px; animation-duration: 10s; animation-delay: 2s; }
     .paw-3 { left: 45%; font-size: 28px; animation-duration: 6s; animation-delay: 4s; }
@@ -243,7 +199,7 @@
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        z-index: 10;
+        z-index: 30;
         color: black;
         font-size: 15px;
         cursor: pointer;
@@ -307,7 +263,6 @@
         transition: all 0.3s ease;
     }
 
-    /* cat card */
     .cat-card:hover {
         transform: translateY(-10px) scale(1.02);
         border-color: #4FC3F7;
@@ -319,7 +274,6 @@
         opacity: 1;
     }
 
-    /* dog card */
     .dog-card:hover {
         transform: translateY(-10px) scale(1.02);
         border-color: #4FC3F7;
@@ -335,6 +289,15 @@
         transform: scale(1.1) rotate(5deg);
     }
 
+    @media (max-width: 576px) {
+        .animal-card {
+            height: auto;
+        }
+
+        .banner-content h1 {
+            font-size: 30px;
+        }
+    }
 </style>
 
 @extends('layout.master')
@@ -379,16 +342,16 @@
     <div class="container py-5">
         <div class="container py-5">
         <div class="container button-container">
-            <div class="row justify-content-center g-4"> <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'kucing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
+            <div class="row justify-content-center g-4"> <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'anjing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
                     <div class="animal-card dog-card">
-                        <img src="{{ asset('image/icon/unnamed.jpg') }}" alt="Kucing">
+                        <img src="{{ asset('image/icon/unnamed.jpg') }}" alt="Anjing">
                         <span class="animal-label">Anjing</span>
                     </div>
                 </a>
 
-                <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'anjing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
+                <a href="{{ route('adopter.daftarHewan', ['jenis_hewan' => 'kucing']) }}" class="col-12 col-sm-5 col-md-4 d-flex justify-content-center text-decoration-none">
                     <div class="animal-card cat-card">
-                        <img src="{{ asset('image/icon/unnamed (1).jpg') }}" alt="Anjing">
+                        <img src="{{ asset('image/icon/unnamed (1).jpg') }}" alt="Kucing">
                         <span class="animal-label">Kucing</span>
                     </div>
                 </a>
@@ -396,7 +359,7 @@
             </div>
         </div>
 
-        <div class="text-end" style="margin-right: 35px">
+        <div class="text-end me-md-4">
             <a href="{{ route('adopter.daftarHewan') }}" class="btn btn-primary-color fw-bold text-decoration-none">
                 Lihat semua
             </a>
@@ -408,15 +371,15 @@
                     @if ($hewan->status_hewan == "siap_di_adopsi")
                         <div class="col d-flex justify-content-center">
                             <div class="card hewan-container border-0 shadow-sm">
-                                <div class="ratio">
-                                    <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
-                                </div>
                                 <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
                                     <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                                 </span>
-                                
-                                <div class="p-3"> 
-                                    <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                    <div class="ratio">
+                                        <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
+                                    </div>
+                                    
+                                    <div class="p-3"> 
                                         <h5 class="card-title-hewan fw-bold mb-0 text-truncate">
                                             {{ $hewan->nama_hewan ?? 'Nama Hewan' }}
                                             @if (strtolower($hewan->jenis_hewan ?? '') === 'anjing')
@@ -427,8 +390,8 @@
                                         </h5>
                                         <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
                                         <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     @endif

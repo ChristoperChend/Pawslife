@@ -2,6 +2,7 @@
     .shelter-image {
         width: 600px;
         height: 450px !important;
+        border: 1px solid #d8d8d8;
         border-radius: 10px;
         object-fit: cover;
     }
@@ -80,15 +81,13 @@
 
     .detail-label {
         font-size: 0.95rem;
-        font-weight: 500 !important;
-        color: #495057 !important;
+        font-weight: bold;
     }
 
     .detail-text {
         flex-grow: 1 !important;
         color: #212529 !important; 
         font-size: 1rem !important;
-        font-weight: 600 !important;
         border: none !important;
     }
 
@@ -122,8 +121,70 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .row>* {
-        padding-right: 0px !important;
+    .form-control:disabled {
+        background-color: #fff !important;
+    }
+
+    .stat-ticket {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 2px dashed #e0e7ff; 
+        border-radius: 1rem;
+        min-width: 100px;
+        padding: 0.25rem 0.75rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        cursor: default;
+    }
+
+    .stat-ticket:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px) rotate(-1deg);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .stat-ticket .stat-number {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        line-height: 1.1;
+        z-index: 2;
+    }
+
+    .stat-ticket .stat-label {
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #9ca3af;
+        z-index: 2;
+    }
+
+    .stat-ticket .watermark-icon {
+        position: absolute;
+        right: -5px;
+        bottom: -8px;
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        opacity: 0.08;
+        transform: rotate(-15deg);
+        z-index: 1;
+    }
+
+    @media (max-width: 576px) {
+        .row>* {
+            padding-right: 3px !important;
+            padding-left: 3px !important;
+        }
+
+        .shelter-image {
+            height: 350px !important;
+        }
     }
 </style>
 
@@ -132,23 +193,21 @@
 @section('content')
     <div class="container py-5">
         <div class="row detail-shelter-container g-5 mb-5">
-            <div class="col-12 col-md-5 text-center" style="padding-left: 0px">
-                <img src="{{ asset($detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
+            <div class="col-12 col-md-6 text-center">
+                <img src="{{ asset('storage/' . $detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
             </div>
 
-            <div class="col-12 col-md-7">
+            <div class="col-12 col-md-6">
                 <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-house me-1"></i> Nama Shelter</h5>
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Nama Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->nama_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-phone me-1"></i> No Telepon</h5>
+                    
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Nomor Telepon</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->no_telepon_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
@@ -156,8 +215,24 @@
                 </div>
 
                 <div class="row mb-4">
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Nama Bank</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->nama_bank ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Nomor Rekening</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->nomor_rekening ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
                     <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-location-dot me-1"></i> Alamat</h5>
+                        <label class="form-label fw-semibold">Alamat</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->alamat_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
@@ -166,9 +241,9 @@
 
                 <div class="row mb-4">
                     <div class="col-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-address-card me-1"></i> Deskripsi Shelter</h5>
+                        <label class="form-label fw-semibold">Deskripsi Shelter</label>
                         <div class="detail-field-wrapper" style="padding: 0px">
-                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</textarea>
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -178,7 +253,15 @@
         <hr>
 
         <div>
-            <h2 class="fw-bold text-center">List Hewan - {{ $detailShelter->nama_shelter }}</h2>
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-sm-3 mb-3">
+                <h2 class="fw-bold text-center">List Hewan {{ $detailShelter->nama_shelter }}</h2>
+
+                <div class="stat-ticket" title="Total Hewan Anda">
+                    <i class="fa-solid fa-paw watermark-icon"></i>
+                    <span class="stat-number">{{ $listHewan->total() }}</span>
+                    <span class="stat-label">Total Hewan</span>
+                </div>
+            </div>
 
             @if (!$listHewan->isEmpty())
                 <div class="text-end">
@@ -194,15 +277,15 @@
                         @if ($hewan->status_hewan == "siap_di_adopsi")
                             <div class="col d-flex justify-content-center">
                                 <div class="card hewan-container border-0 shadow-sm">
-                                    <div class="ratio">
-                                        <img src="{{ asset($hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
-                                    </div>
                                     <span class="heart-icon {{ in_array($hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $hewan->id }})">
                                         <i class="{{ in_array($hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                                     </span>
-                                    
-                                    <div class="p-3"> 
-                                        <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                    <a href="{{ route('adopter.detailHewan', ['id' => $hewan->id]) }}" class="text-decoration-none">
+                                        <div class="ratio">
+                                            <img src="{{ asset('storage/' . $hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $hewan->nama_hewan ?? 'Hewan' }}">
+                                        </div>
+                                        
+                                        <div class="p-3"> 
                                             <h5 class="card-title-hewan fw-bold mb-0 text-truncate">
                                                 {{ $hewan->nama_hewan ?? 'Nama Hewan' }}
                                                 @if (strtolower($hewan->jenis_hewan ?? '') === 'anjing')
@@ -213,8 +296,8 @@
                                             </h5>
                                             <p class="card-subtitle-hewan mb-2 text-muted small">{{ $hewan->ras ?? 'Jenis Ras' }}</p>
                                             <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         @endif

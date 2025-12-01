@@ -42,7 +42,7 @@
         <div class="card-body p-5">
 
             <div class="text-center mb-4">
-                <img src="{{ asset($data->foto_hewan) }}" 
+                <img src="{{ asset('storage/' . $data->foto_hewan) }}" 
                     alt="{{$data->nama_hewan }}"
                     class="img-fluid rounded shadow-sm"
                     style="width: 230px; height: 230px; object-fit: cover;">

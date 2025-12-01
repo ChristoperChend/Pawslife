@@ -126,7 +126,7 @@
                         <div class="col d-flex justify-content-center">
                             <div class="card hewan-container border-0 shadow-sm">
                                 <div class="ratio">
-                                    <img src="{{ asset($favorit->hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
+                                    <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
                                 </div>
                                 <span class="heart-icon {{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $favorit->hewan->id }})">
                                     <i class="{{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
@@ -154,7 +154,7 @@
                 <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar favorit</h4>
             @endif
         </div>
-        <div class="d-flex justify-content-center mt-4"> {{ $listFavorit->links() }}
+        <div class="d-flex justify-content-center mt-4"> {{ $listFavorit->links() }} </div>
     </div>
 
     @include('layout.loading')

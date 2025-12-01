@@ -67,12 +67,88 @@
         color: #6c757d;
     }
 
-    @media (max-width: 768px) {
-        .foto-hewan {
-            width: auto;
-            height: 150px;
-        }
+    @media (max-width: 576px) {
+    .riwayat-card-item {
+        padding: 10px 8px;
     }
+
+    .riwayat-card-item > .d-flex {
+        flex-direction: column !important;
+        align-items: center;
+    }
+
+    .riwayat-card-item > .d-flex > div:first-child {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .riwayat-card-item img {
+        width: 130px !important;
+        height: 130px !important;
+        border-radius: 12px;
+        margin: 0 auto !important;
+        display: block;
+    }
+
+    .riwayat-card-item .flex-fill {
+        border: none !important;
+        text-align: center;
+        padding: 14px 0 10px 0 !important;
+        width: 100%;
+    }
+
+    .riwayat-hewan-nama,
+    .riwayat-hewan-jenis {
+        font-size: 1rem;
+        margin-bottom: 2px !important;
+    }
+    
+    .riwayat-card-item .flex-fill p span {
+        display: block;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .riwayat-card-item .flex-fill p span.fw-semibold {
+        font-size: 1.1rem;
+    }
+
+    .riwayat-card-item > .d-flex > div:last-child {
+        width: 100%;
+        text-align: center;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .status-badge,
+    .riwayat-card-item span {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    .riwayat-btn-aksi {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .riwayat-card-item a {
+        justify-content: center;
+        margin-top: 12px;
+    }
+
+    .border-end {
+        border: none !important;
+    }
+
+    .text-primary {
+        justify-content: center;
+    }
+
+    .d-flex.gap-2.justify-content-end {
+        justify-content: center !important;
+    }
+}
+
 </style>
 
 @extends('layout.master')
@@ -86,13 +162,12 @@
 
         @forelse ($riwayat as $items)
             <div class="card riwayat-card-item mb-3 shadow-sm overflow-hidden bg-white">
-                <div class="d-flex flex-wrap align-items-stretch">
-                    <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
-                        style="width: 140px; min-height: 130px;"
-                    >
-                        <img src="{{ asset($items->hewan->foto_hewan) }}" 
+                <div class="d-flex flex-wrap">
+                    <div class="p-3 d-flex align-items-center justify-content-center bg-white text-center" 
+                        style="width: 140px; min-height: 130px;">
+                        <img src="{{ asset('storage/' . $items->hewan->foto_hewan) }}" 
                             alt="Foto Hewan"
-                            class="rounded"
+                            class="rounded mx-auto d-block"
                             style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
                     </div>
     
@@ -116,6 +191,8 @@
                         </p>
                     </div>
                     
+                    <hr class="d-block d-sm-none w-100 my-2" style="border-top: 3px solid #b3b3b3;">
+
                     <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
@@ -161,13 +238,6 @@
                                         >
                                             Kembalikan
                                         </button>
-                                        <button 
-                                            type="button" 
-                                            class="btn btn-primary-color btn-sm riwayat-btn-aksi" 
-                                            onclick="adopsiHewan({{ $items->hewan->id }})"
-                                        >
-                                            Adopsi
-                                        </button>
                                     </div>
                                 @endif
                             @elseif($items->status_pengajuan == 'diajukan' || $items->status_pengajuan == 'diadopsi')
@@ -201,18 +271,19 @@
                             @endif
                         </div>
                         <a href="{{ route('adopter.detailHewan', ['id' => $items->hewan_id]) }}" 
-                            class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
+                            class="text-primary fw-semibold small text-decoration-none align-items-center gap-0"
                         >
-                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
+                            <i class="bi bi-info-circle fs-5 me-1"
+                            style="cursor:pointer; color:#0d6efd;"
+                            title="View Status"></i>
+
                             <span>Informasi Hewan</span>
                         </a>
                     </div>
                 </div>
             </div>
         @empty
-            <div class="text-center text-muted mt-5">
-                <p>Belum ada riwayat pengajuan adopsi.</p>
-            </div>
+            <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada riwayat pengajuan adopsi</h4>
         @endforelse
         <div class="d-flex justify-content-center mt-4">{{ $riwayat->links() }}</div>
     </div>
@@ -220,109 +291,6 @@
     @include('layout.loading')
 
     <script>
-        function adopsiHewan(hewanId) {
-            Swal.fire({
-                icon: "question",
-                title: "Alasan Melakukan Adopsi",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Selanjutnya",
-                cancelButtonText: "Kembali",
-                reverseButtons: true,
-                width: '800px',
-                html: '<div><hr> <h6 class="text-start">Apa alasan anda ingin melakukan adopsi pada hewan ini?</h6> <textarea class="form-control" rows="4" id="alasan_adopsi"></textarea> <hr></div>',
-                preConfirm: () => {
-                    const alasan = document.getElementById('alasan_adopsi').value;
-                    if (!alasan) {
-                        Swal.showValidationMessage('Alasan wajib diisi!');
-                    }
-                    return alasan;
-                },
-                customClass: {
-                    actions: 'swal-actions-gap',
-                    icon: 'swal-question-primary',
-                    confirmButton: 'btn btn-primary-color',
-                    cancelButton: 'btn btn-merah-color'
-                },
-                buttonsStyling: false
-            })
-            .then((result) => {
-                const alasanAdopsi = result.value;
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: "question",
-                        title: "Apakah anda yakin melakukan adopsi?",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yakin",
-                        cancelButtonText: "Kembali",
-                        reverseButtons: true,
-                        customClass: {
-                            actions: 'swal-actions-gap',
-                            icon: 'swal-question-primary',
-                            confirmButton: 'btn btn-primary-color',
-                            cancelButton: 'btn btn-merah-color'
-                        },
-                        buttonsStyling: false
-                    })
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('fullscreen-loading').classList.remove('d-none')
-                            fetch('{{ route('adopter.adopsiHewan') }}', {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                                },
-                                body: JSON.stringify({
-                                    hewan_id: hewanId,
-                                    alasan_adopsi: alasanAdopsi
-                                })
-                            })
-                            .then(res => res.json())
-                            .then(res => {
-                                document.getElementById('fullscreen-loading').classList.add('d-none')
-                                if (res.errors) {
-                                    
-                                } else if (res.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: res.title,
-                                        text: res.message,
-                                        customClass: {
-                                            actions: 'swal-actions-gap',
-                                            icon: 'swal-success-primary',
-                                            confirmButton: 'btn btn-primary-color',
-                                        },
-                                        buttonsStyling: false
-                                    })
-                                    .then(() => {
-                                        location.reload();
-                                    })
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: res.title,
-                                        text: res.message,
-                                        customClass: {
-                                            actions: 'swal-actions-gap',
-                                            confirmButton: 'btn btn-primary-color',
-                                        },
-                                        buttonsStyling: false
-                                    })
-                                    .then(() => {
-                                        location.reload();
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }
-            })
-        }
-
         function kembalikanHewan(hewanId) {
             Swal.fire({
                 icon: "question",

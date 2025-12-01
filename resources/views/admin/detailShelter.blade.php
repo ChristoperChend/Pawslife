@@ -15,50 +15,6 @@
         border-radius: 10px;
     }
 
-    .hewan-container {
-        border-radius: 10px;
-        position: relative;
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        transform: translateY(0) scale(1);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-        
-    .hewan-container:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-    }
-
-    .daftar-hewan {
-        width: 275px;
-        height: 225px;
-        border-radius: 10px 10px 0px 0px;
-    }
-
-    .heart-icon {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 10;
-        color: black;
-        font-size: 20px;
-        cursor: pointer;
-        transition: all 0.25s ease;
-
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 23px 12px 23px 12px;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .heart-icon:hover {
-        transform: scale(1.1);
-        color: #ff4d4d;
-    }
-
-    .heart-icon.liked {
-        color: #ff0000;
-    }
-
     .detail-field-wrapper {
         display: flex;
         align-items: center;
@@ -86,23 +42,25 @@
         flex-grow: 1;
         color: #212529; 
         font-size: 1rem;
-        font-weight: 600;
     }
 
-    .card-title-hewan {
-        font-size: 1.25rem;
-        color: #212529;
+    .page-header {
+        max-width: 1060px;
+        margin: 24px auto 0;
+    }
+    .page-header h2 {
+        font-weight: 800;
+        letter-spacing: .3px;
     }
 
-    .card-subtitle-hewan {
-        font-size: 0.9rem;
-        color: #6c757d !important;
-    }
+    @media (max-width: 576px) {
+        .shelter-image {
+            height: 350px !important;
+        }
 
-    .shelter-btn-aksi {
-        font-size: 1rem !important;
-        padding: 5px 25px !important;
-        font-weight: 600 !important;
+        .dokumen-image {
+            height: 300px !important;
+        }
     }
 </style>
 
@@ -115,7 +73,7 @@
         </div>
 
         <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
-            <div class="card-body p-5">
+            <div class="card-body p-md-5">
                 <div class="text-center mb-4">
                     <img src="{{ asset($detailShelter->foto_shelter) }}" 
                         alt="{{ $detailShelter->nama_shelter }}"  
@@ -124,52 +82,54 @@
 
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-house me-1"></i> Nama Shelter</h5>
+                        <label class="form-label fw-semibold">Nama Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->nama_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-envelope me-1"></i> Email Shelter</h5>
+                        <label class="form-label fw-semibold">Email Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->pengguna->email ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-phone me-1"></i> No Telepon</h5>
+                        <label class="form-label fw-semibold">No Telepon</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->no_telepon_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-location-dot me-1"></i> Alamat</h5>
+                        <label class="form-label fw-semibold">Alamat</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->alamat_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-file-image me-1"></i> Dokumen Legalitas Pendirian</h5>
+                        <label class="form-label fw-semibold">Dokumen Legalitas Pendirian</label>
                         <div class="detail-field-wrapper">
                             <img src="{{ asset($detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <h5 class="detail-label"><i class="fa-solid fa-address-card me-1"></i> Deskripsi Shelter</h5>
+                        <label class="form-label fw-semibold">Deskripsi Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end mt-5 gap-3">
-                    <button type="button" class="btn btn-merah-color" onclick="tolakShelter('{{ $detailShelter->id }}')">Tolak</button>
-                    <button type="button" class="btn btn-primary-color" style="margin-right: 8px" onclick="setujuShelter('{{ $detailShelter->id }}')">Setuju</button>
-                </div>
+                @if ($detailShelter->status == "diajukan")
+                    <div class="d-flex justify-content-end mt-5 gap-3">
+                        <button type="button" class="btn btn-merah-color" onclick="tolakShelter('{{ $detailShelter->id }}')">Tolak</button>
+                        <button type="button" class="btn btn-primary-color" style="margin-right: 8px" onclick="setujuShelter('{{ $detailShelter->id }}')">Setuju</button>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

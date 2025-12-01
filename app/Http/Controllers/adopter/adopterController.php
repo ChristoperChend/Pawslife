@@ -73,6 +73,18 @@ class adopterController extends Controller
             $query->where('id', $request->id);
         }
         $detailHewan = $query->first();
+
+        if ($detailHewan && $detailHewan->status_steril === 'belum_steril') {
+            $detailHewan->status_steril = 'Belum steril';
+        } elseif ($detailHewan && $detailHewan->status_steril === 'sudah_steril') {
+            $detailHewan->status_steril = 'Sudah steril';
+        } 
+        
+        if ($detailHewan && $detailHewan->status_vaksin === 'belum_vaksin') {
+            $detailHewan->status_vaksin = 'Belum vaksin';
+        } elseif ($detailHewan && $detailHewan->status_vaksin === 'sudah_vaksin') {
+            $detailHewan->status_vaksin = 'Sudah vaksin';
+        }
         return view('adopter.detailHewan', compact('detailHewan', 'adopter_id'));
     }
 
@@ -288,23 +300,17 @@ class adopterController extends Controller
         $adopter->no_whatsapp = $request->nomor_wa_adopter;
         $adopter->pekerjaan = $request->pekerjaan_adopter;
 
+        $fotoAdopterPath = $request->file('foto')->store('fotoAdopter', 'public');
+
         if ($request->hasFile('foto_adopter')) {
-            $file = $request->file('foto_adopter');
-            $folder = 'image/fotoAdopter';
-            $destinationPath = public_path($folder);
-            
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true, true);
-            }
-
-            if ($adopter->foto_adopter && File::exists(public_path($adopter->foto_adopter))) {
-                File::delete(public_path($adopter->foto_adopter));
-            }
-
-            $fileName = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-            $file->move($destinationPath, $fileName);
-
-            $adopter->foto_adopter = $folder . '/' . $fileName;
+            File::delete($adopter->foto_adopter);
+            $adopter->foto_adopter = $fotoAdopterPath;
+        } else {
+            return response()->json([
+                'error' => true,
+                'title' => 'Gagal mengedit profile!',
+                'message' => 'Tidak menemukan file foto.'
+            ]);
         }
         $adopter->save();
 
@@ -418,18 +424,9 @@ class adopterController extends Controller
                 return response()->json(['errors' => $validator->errors()]);
             }
 
-            $data = $request->except('fotoHewan');
+            $fotoHewanPath = $request->file('fotoHewan')->store('fotoHewanAdopter', 'public');
 
             if($request->hasFile('fotoHewan')) {
-                $file = $request->file('fotoHewan');
-                $destinationPath = public_path('image/daftarLepasHewan');
-                if(!File::exists($destinationPath)){
-                    File::makeDirectory($destinationPath, 0775, true);
-                }
-                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-                $file->move($destinationPath, $fileName);
-                $data['fotoHewan'] = 'image/daftarLepasHewan/'.$fileName;
-
                 if(!Auth::check()) {
                     return response()->json([
                         'error' => true,
@@ -455,7 +452,7 @@ class adopterController extends Controller
                     'status_steril' => $statusSteril,
                     'status_vaksin' => $statusVaksin,
                     'catatan_medis' => $request->catatanMedisHewan,
-                    'foto_hewan' => $data['fotoHewan'],
+                    'foto_hewan' => $fotoHewanPath,
                     'jenis_hewan' => $request->jenisHewan,
                     'alasan_penyerahan' => $request->alasanPenyerahanHewan,
                     'jenis_kelamin' => $request->jenisKelaminHewan,
@@ -593,5 +590,31 @@ class adopterController extends Controller
                 'message' => 'Terjadi kesalahan saat mengembalikan hewan, silahkan coba lagi.'
             ]);
         }
+    }
+
+    public function persyaratanAdopsi(Request $request) {
+        $detailHewan = hewan::with('shelter')
+            ->where('id', $request->hewan_id)
+            ->first();
+
+        session()->flash('alasan_adopsi', $request->alasan);
+
+        return response()->json([
+            'success' => true,
+            'redirect_url' => route('adopter.persyaratanAdopsiPage', $detailHewan->id)
+        ]);
+    }
+
+    public function persyaratanAdopsiPage($id) {
+        $detailShelter = hewan::with('shelter')->findOrFail($id);
+        $alasan = session('alasan_adopsi');
+        if(!Auth::check()) {
+            $adopter_id = 0;
+        } else {
+            $adopter = adopter::where('pengguna_id', Auth::user()->id)->first();
+            $adopter_id = $adopter ? $adopter->id : 0;
+        }
+
+        return view('adopter.persyaratanAdopsi', compact('detailShelter', 'alasan', 'adopter_id'));
     }
 }
