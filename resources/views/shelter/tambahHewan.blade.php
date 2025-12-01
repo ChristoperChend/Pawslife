@@ -24,10 +24,10 @@
     }
 
     
-    .card-accent{
+    /* .card-accent{
         height: 6px;
         background: var(--primary-color);
-    }
+    } */
 
     .form-control{
         border-left: 5px solid var(--primary-color) !important;
@@ -149,7 +149,7 @@
     </div>
 
     <div class="form-card">
-        <div class="card-accent"></div>
+        {{-- <div class="card-accent"></div> --}}
 
         <form class="form-shell" action="{{ route('shelter.tambahHewanPost') }}" method="POST" enctype="multipart/form-data">
             @csrf

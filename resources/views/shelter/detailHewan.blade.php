@@ -67,13 +67,37 @@
     }
 
 
-    /* Responsive fix agar tombol tidak terlalu rapat di layar kecil */
     @media (max-width: 768px) {
+        .button-group-left,
+        .button-group-right {
+            width: 100%;
+        }
+
+        .button-group-left {
+            justify-content: flex-start !important;
+            margin-bottom: 0.75rem;
+        }
+
+        .button-group-left .btn-kembali {
+            flex: 1 0 100%;
+            display: block;
+            text-align: center;
+        }
+
         .button-group-right {
             justify-content: flex-start !important;
-            margin-top: 0.75rem;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
+
+        .button-group-right .btn {
+            flex: 1 0 100%;
+        }
+
+        .button-group-right .btn + .btn {
+            margin-top: 0.4rem;
+        }
+
     }
 </style>
 
@@ -88,7 +112,7 @@
 
             {{-- Gambar Hewan --}}
             <div class="text-center mb-4">
-                <img src="{{ asset($hewan->foto_hewan) }}" 
+                <img src="{{ asset('storage/'.$hewan->foto_hewan) }}" 
                      alt="{{ $hewan->nama_hewan }}"  
                      class="pet-photo mb-3">
                 {{-- <div class="mb-3" style="max-width: 320px; margin: 0 auto;">
@@ -171,10 +195,10 @@
 
                 <div class="row mt-4 align-items-center">
                     <div class="col-md-6 d-flex justify-content-start">
-                        <a href="{{ route('shelter.data.hewan') }}" class="btn btn-kembali">Kembali</a>
+                        <a href="{{ route('shelter.data.hewan') }}" class="btn btn-kembali button-group-left" >Kembali</a>
                     </div>
 
-                    <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
+                    <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap button-group-right">
                         <button type="submit" class="btn btn-primary-color">Simpan</button>
                         <button type="button" id="btnDelete" class="btn btn-merah-color">Hapus</button>
                     </div>

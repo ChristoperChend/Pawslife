@@ -145,7 +145,7 @@
         </div>
 
         <div class="card requirements-card shadow-sm mx-auto" style="max-width: 850px;">
-            <i class="fa-solid fa-paw watermark-icon"></i>
+            {{-- <i class="fa-solid fa-paw watermark-icon"></i> --}}
 
             <div class="card-body p-4 p-md-5 position-relative">
                 <form action="{{ route('shelter.tambah.persyaratan.adopsi') }}" method="POST" id="requirementsForm">

@@ -22,7 +22,7 @@
 
                     <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                         style="width:140px; min-height:130px;">
-                        <img src="{{ asset($item->foto_hewan) }}"
+                        <img src="{{ asset('storage/'.$item->foto_hewan) }}"
                             alt="Foto Hewan"
                             class="rounded"
                             style="width:100px; height:100px; object-fit:cover; background:#e5e7eb;">
@@ -56,17 +56,12 @@
 
                     
 
-                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:200px;">
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:220px;">
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
                             @if($item->status_penyerahan == 'diajukan')
                                 <div class="d-flex justify-content-start gap-2 mb-2">
-                                    {{-- <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn"
-                                    data-id="{{ $item->id }}">
-                                        Tolak
-                                    </button> --}}
-
-                                    <button class="btn btn-primary-color terima-btn" 
+                                    <button class="btn btn-primary-color terima-btn w-100" 
                                         data-id="{{ $item->id }}">
                                         Terima
                                     </button>

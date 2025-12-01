@@ -168,7 +168,7 @@
             <div class="col d-flex justify-content-center">
                 <div class="card h-100 bg-white shadow-sm">
 
-                    <img src="{{ asset($hewan->foto_hewan) }}" class="card-img-top" alt="{{ $hewan->nama_hewan }}" style="height:200px;">
+                    <img src="{{ asset('storage/'.$hewan->foto_hewan) }}" class="card-img-top" alt="{{ $hewan->nama_hewan }}" style="height:200px;">
 
                     <div class="card-body d-flex flex-column text-center">
                         <h5 class="card-title mb-3" style="display: flex; justify-content: center; align-items: center; gap: 0.4rem;">

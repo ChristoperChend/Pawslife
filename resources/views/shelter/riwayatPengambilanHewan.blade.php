@@ -22,7 +22,7 @@
 
                     <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                         style="width:140px; min-height:130px;">
-                        <img src="{{ asset($item->foto_hewan) }}"
+                        <img src="{{ asset('storage/'.$item->foto_hewan) }}"
                             alt="Foto Hewan"
                             class="rounded"
                             style="width:100px; height:100px; object-fit:cover; background:#e5e7eb;">
@@ -56,23 +56,14 @@
 
                     
 
-                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:200px;">
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:220px;">
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
                             @if($item->status_penyerahan == 'setuju')
-                                <span 
-                                    class="d-inline-flex align-items-center fw-semibold"
-                                    style="
-                                        background-color: #e8f0fe;
-                                        color: #1967d2;
-                                        border-radius: 6px;
-                                        font-size: 0.87rem;
-                                        padding: 4px 10px;
-                                        min-width: 150px;
-                                        justify-content: center;
-                                    ">
-                                    Berhasil Diadopsi
-                                </span>
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                    Berhasil diadopsi
+                                </div>
                             @elseif($item->status_penyerahan == 'tolak')
                                 <span 
                                     class="d-inline-flex align-items-center fw-semibold"

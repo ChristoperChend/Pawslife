@@ -78,13 +78,12 @@ class shelterController
 
             
             $file = $request->file('fotoHewan');
-            $destinationPath = public_path('image/daftarHewan');
-            if(!File::exists($destinationPath)){
-                File::makeDirectory($destinationPath, 0775, true);
-            }
+
             $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-            $file->move($destinationPath, $fileName);
-            $data['fotoHewan'] = 'image/daftarHewan/'.$fileName;
+            
+            $path = $file->storeAs('foto_hewan_shelter', $fileName, 'public');
+
+            $data['fotoHewan'] = 'foto_hewan_shelter/'.$fileName;
             try{
                 hewan::create([
                 'shelter_id' => $shelter_id,
@@ -283,6 +282,39 @@ class shelterController
       
     }
 
+    public function batalkanMasaPercobaan(Request $request, $id){
+        try {
+            $request->validate([
+                'alasan' => 'required|string|max:500'
+            ]);
+            $pengajuan = formPengajuanAdopsi::findOrFail($id);
+
+            if(!$pengajuan){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data pengajuan tidak ditemukan.'
+                ], 404);
+            }
+
+            $pengajuan->status_pengajuan = 'tolak';
+            $pengajuan->alasan_penolakan_pengajuan_adopsi = $request->alasan;
+            $pengajuan->updated_at = now();
+            $pengajuan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan adopsi berhasil ditolak'
+            ]);
+        } catch (\Throwable $th) {
+            log::error('Error ketika membatalkan masa percobaan: '.$th->getMessage());
+             return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses data.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
     public function getAdopterProfile($id){
         $data = adopter::with('pengguna')->findOrFail($id);
 
@@ -398,6 +430,7 @@ class shelterController
             $query->where('status_pengajuan', 'setuju')
                 ->orWhere('status_pengajuan', 'tolak')
                 ->orWhere('status_pengajuan', 'dikembalikan')
+                ->orWhere('status_pengajuan', 'dibatalkan')
                 ->orWhere('status_pengajuan', 'diadopsi');
         })
         ->latest('id')

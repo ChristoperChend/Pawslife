@@ -237,7 +237,7 @@
             <div class="col d-flex justify-content-center">
                 <div class="card pet-card">
                     <div class="ratio ratio-4x3">
-                        <img src="{{ asset($data->foto_hewan) }}" class="card-img-top" alt="{{ $data->nama_hewan }}" loading="lazy">
+                        <img src="{{ asset('storage/'.$data->foto_hewan) }}" class="card-img-top" alt="{{ $data->nama_hewan }}" loading="lazy">
                     </div>
                     <div class="card-body text-center">
                         <h5 class="card-title">

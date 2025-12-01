@@ -1,6 +1,16 @@
 @extends('layout.master')
 
 <style>
+    .hewan-image {
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
     .readonly-field {
         background: #fff !important;
         border: 1px solid #d1d5db !important;
@@ -25,11 +35,8 @@
     <div class="card border-0 mx-auto" style="max-width: 860px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);">
         <div class="card-body p-5">
 
-            <div class="text-center mb-4">
-                <img src="{{ asset($data->foto_hewan) }}" 
-                     alt="{{ $data->nama_hewan }}"
-                     class="img-fluid rounded shadow-sm"
-                     style="width: 230px; height: 230px; object-fit: cover;">
+            <div class="row-12 row-md-6 text-center mb-4">
+                <img src="{{ asset('storage/' . $data->foto_hewan) }}" class="hewan-image" alt="{{ $data->nama_hewan }}">
             </div>
 
             <div class="row g-4">

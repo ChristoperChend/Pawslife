@@ -46,13 +46,41 @@
     
     .preview-box img{ width:100%; height:100%; object-fit:cover; }
 
+    .form-control, .form-select {
+        border-radius: 8px;
+        border-left: 5px solid var(--primary-color) !important;
+    }
 
-    /* Responsive fix agar tombol tidak terlalu rapat di layar kecil */
+
     @media (max-width: 768px) {
+        .button-group-left,
+        .button-group-right {
+            width: 100%;
+        }
+
+        .button-group-left {
+            justify-content: flex-start !important;
+            margin-bottom: 0.75rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
         .button-group-right {
             justify-content: flex-start !important;
             margin-top: 0.75rem;
             gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .button-group-left .btn,
+        .button-group-right .btn {
+            flex: 1 0 100%;
+            text-align: center;
+        }
+
+        .button-group-left .btn + .btn,
+        .button-group-right .btn + .btn {
+            margin-top: 0.4rem;
         }
     }
 </style>
@@ -206,14 +234,14 @@
                 </div>
 
                 <div class="row mt-4 align-items-center">
-                    <div class="col-md-6 d-flex justify-content-start gap-3 flex-wrap">
+                    <div class="col-md-6 d-flex justify-content-start gap-3 flex-wrap button-group-left">
                         <a href="{{ route('beranda.shelterBeranda') }}" class="btn btn-kembali">Kembali</a>
                         <button type="button" id="btnLogout" class="btn btn-merah-color">
                             Logout
                         </button>
                     </div>
 
-                    <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap">
+                    <div class="col-md-6 d-flex justify-content-end gap-2 flex-wrap button-group-right">
                         <button type="submit" class="btn btn-primary-color">Simpan</button>
                         
                     </div>

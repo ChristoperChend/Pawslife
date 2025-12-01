@@ -81,6 +81,7 @@ Route::prefix('shelter')->group(function () {
     Route::get('daftar-pengajuan-adopsi-hewan', [shelterController::class, 'getDaftarPengajuanAdopsiHewan'])->name('shelter.daftar.pengajuan.adopsi.hewan');
     Route::post('terima-pengajuan-adopsi/{id}', [shelterController::class, 'terimaPengajuanAdopsi'])->name('shelter.terima.pengajuan.adopsi');
     Route::post('tolak-pengajuan-adopsi/{id}', [shelterController::class, 'tolakPengajuanAdopsi'])->name('shelter.tolak.pengajuan.adopsi');
+    Route::post('batalkan-masa-percobaan/{id}', [shelterController::class, 'batalkanMasaPercobaan'])->name('shelter.batalkan.masa.percobaan');
 
     Route::get('profile-adopter/{id}', [shelterController::class, 'getAdopterProfile'])->name('shelter.adopter.profile');
 
@@ -92,6 +93,8 @@ Route::prefix('shelter')->group(function () {
 
     Route::get('persyaratan-adopsi', [shelterController::class, 'getPersyaratanAdopsi'])->name('shelter.persyaratan.adopsi');
     Route::post('tambah-persyaratan-adopsi', [shelterController::class, 'insertPersyaratanAdopsi'])->name('shelter.tambah.persyaratan.adopsi');
+
+
 });
 
 Route::prefix('admin')->group(function () {

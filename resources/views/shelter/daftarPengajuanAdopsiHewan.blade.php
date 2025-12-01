@@ -26,7 +26,7 @@
                 
                 <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                      style="width:140px; min-height:130px;">
-                    <img src="{{ asset($item->hewan->foto_hewan) }}" 
+                    <img src="{{ asset('storage/'.$item->hewan->foto_hewan) }}" 
                          alt="Foto Hewan"
                          class="rounded"
                          style="width:100px; height:100px; object-fit:cover; background:#e5e7eb;">
@@ -54,86 +54,11 @@
 
 
                 
-                <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:200px;">
+                <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:220px;">
                     <div>
-                        <h6 class="fw-bold mb-2">Status</h6>
-                        {{-- @if($item->status_pengajuan == 'setuju')
-                            <div 
-                                class="d-inline-flex flex-column align-items-center justify-content-center fw-semibold text-center"
-                                style="
-                                    background-color: #e8f0fe;
-                                    color: #1967d2;
-                                    border-radius: 6px;
-                                    font-size: 0.9rem;
-                                    padding: 6px 12px;
-                                    min-width: 160px;
-                                ">
-                                <span>Masa Percobaan</span>
-                                @if($item->tanggal_mulai_percobaan && $item->tanggal_akhir_percobaan)
-                                    <small class="fw-normal mt-1" style="font-size: 0.78rem; color:#3c4043;">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_mulai_percobaan)->format('d M Y') }}
-                                        –
-                                        {{ \Carbon\Carbon::parse($item->tanggal_akhir_percobaan)->format('d M Y') }}
-                                    </small>
-                                @endif
-                            </div>
-                        @elseif($item->status_pengajuan == 'ditolak')
-                            <span 
-                                class="d-inline-flex align-items-center fw-semibold"
-                                style="
-                                    background-color: #e8f0fe;
-                                    color: #1967d2;
-                                    border-radius: 6px;
-                                    font-size: 0.9rem;
-                                    padding: 4px 10px;
-                                    min-width: 150px;
-                                    justify-content: center;
-                                ">
-                                Pengajuan Ditolak
-                            </span>
-                        @elseif($item->status_pengajuan == 'diadopsi')
-                            <span 
-                                class="d-inline-flex align-items-center fw-semibold"
-                                style="
-                                    background-color: #e8f0fe;
-                                    color: #1967d2;
-                                    border-radius: 6px;
-                                    font-size: 0.9rem;
-                                    padding: 4px 10px;
-                                    min-width: 150px;
-                                    justify-content: center;
-                                ">
-                                Diadopsi
-                            </span>
-                        @elseif($item->status_pengajuan == 'dikembalikan')
-                            <span 
-                                class="d-inline-flex align-items-center fw-semibold"
-                                style="
-                                    background-color: #e8f0fe;
-                                    color: #1967d2;
-                                    border-radius: 6px;
-                                    font-size: 0.87rem;
-                                    padding: 4px 10px;
-                                    min-width: 150px;
-                                    justify-content: center;
-                                ">
-                                Hewan Dikembalikan
-                            </span>
-                        @else
-                            <div class="d-flex justify-content-start gap-2 mb-2">
-                                <button class="btn btn-sm fw-semibold px-3 border bg-white text-dark tolak-btn"
-                                data-id="{{ $item->id }}">
-                                    Tolak
-                                </button>
-
-                                <button class="btn btn-sm btn-primary fw-semibold px-3 text-white terima-btn" 
-                                    data-id="{{ $item->id }}">
-                                    Terima
-                                </button>
-                            </div>
-                        @endif --}}
+                        {{-- <h6 class="fw-bold mb-2">Status</h6> --}}
                         @if ($item->status_pengajuan === 'diajukan' )
-                              <div class="d-flex justify-content-start gap-2 mb-2">
+                            <div class="d-flex justify-content-start gap-2 mb-2 mt-4">
                                 <button class="btn btn-merah-color tolak-btn"
                                 data-id="{{ $item->id }}">
                                     Tolak
