@@ -50,7 +50,6 @@
         border-radius: 0.5rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         min-height: 300px;
-        /* Responsive width fixes */
         width: 100%; 
         max-width: 300px;
         margin: 0 auto;
@@ -65,7 +64,6 @@
         object-fit: cover;   
     }
 
-    /* Hero Buttons */
     .hero-card .btn-outline-light {
         background: rgba(255,255,255,0.15);
         border-color: white !important;
@@ -92,7 +90,6 @@
         box-shadow: 0 8px 20px rgba(44, 106, 222, 0.4);
     }
 
-    /* --- MOBILE RESPONSIVE STYLES --- */
     @media (max-width: 991.98px) {
         .hero-card {
             flex-direction: column;
@@ -102,7 +99,7 @@
         }
 
         .hero-content {
-            align-items: center !important; /* Override bootstrap align-items-start */
+            align-items: center !important;
             width: 100%;
         }
 
@@ -112,7 +109,7 @@
         }
 
         .hero-actions {
-            margin-left: 0 !important; /* Override ms-auto */
+            margin-left: 0 !important;
             width: 100%;
             justify-content: center;
             flex-direction: column;
@@ -120,7 +117,7 @@
         }
 
         .hero-actions .btn {
-            width: 100%; /* Full width buttons on mobile */
+            width: 100%;
         }
     }
 </style>
@@ -130,8 +127,6 @@
     <div class="container py-5">
         <div class="hero-wrap col-12">
             <div class="hero-card position-relative overflow-hidden rounded-4 shadow-sm">
-
-                <!-- Gradient Overlay for Text Readability -->
                 <div class="position-absolute top-0 start-0 w-100 h-100 opacity-80" 
                     style="background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);"></div>
 
@@ -148,7 +143,6 @@
                     <a href="{{ route('shelter.data.hewan') }}" class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill fw-semibold" style="transition: all 0.3s ease; border-width: 2px;">
                         Lihat Semua Hewan
                     </a>
-                    {{-- Fixed spacing in onclick Blade syntax --}}
                     <a href="{{ route('shelter.tambahHewan') }}" class="btn btn-primary btn-lg px-4 py-2 rounded-pill fw-semibold" 
                         style="transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(44, 106, 222, 0.3);"
                         onclick="validateRequirement(event, {{ empty($shelterDatas->persyaratan_adopsi) ? 'true' : 'false' }})">
@@ -158,7 +152,6 @@
             </div>
         </div>
 
-        {{-- Responsive Grid: 1 col on mobile, 2 on small, 3 on md, 4 on lg, 5 on xl --}}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
             @foreach ($dataHewan as $hewan)
             @php
@@ -226,7 +219,6 @@
                 buttonsStyling: false
             }).then((result) => {
                 if(result.isConfirmed){
-                    // Added semicolon for cleaner JS
                     window.location.href = "{{ route('shelter.persyaratan.adopsi') }}";
                 }
             });

@@ -138,7 +138,7 @@
                                         'Accept': 'application/json',
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({}) // kosong, tapi tetap valid JSON
+                                    body: JSON.stringify({}) 
                                 })
                                 .then(async (response) => {
                                     let data = null;
@@ -146,7 +146,6 @@
                                         data = await response.json();
                                     } catch (e) {}
 
-                                    // Jika HTTP status bukan 2xx atau success == false → lempar ke catch
                                     if (!response.ok || !data || data.success === false) {
                                         const msg = data && data.message 
                                             ? data.message 

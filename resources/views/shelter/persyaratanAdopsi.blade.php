@@ -151,11 +151,9 @@
                 <form action="{{ route('shelter.tambah.persyaratan.adopsi') }}" method="POST" id="requirementsForm">
                     @csrf
                     
-                    {{-- SECTION MASA PERCOBAAN --}}
                     <div class="mb-5 pb-4 border-bottom">
                         <label class="label-text fs-5 mb-3"><i class="fa-solid fa-clock-rotate-left me-2"></i>Pengaturan Masa Percobaan</label>
                         
-                        {{-- Information Box --}}
                         <div class="alert p-3 mb-4 rounded-3 d-flex gap-3 align-items-start" style="background-color: #f0f9ff; border: 1px solid #bae6fd; ">
                             <i class="fa-solid fa-circle-info mt-1 fs-5" style="color: var(--primary-color);"></i>
                             <div>
@@ -181,7 +179,6 @@
                             </div>
                         </div>
 
-                        {{-- Hidden Input for Days --}}
                         <div id="trial-duration-wrapper" class="hidden-wrapper">
                             <label class="label-text">Durasi Masa Percobaan (Minimal 14 Hari)</label>
                             <input type="number" 
@@ -192,18 +189,14 @@
                                 min="14">
                         </div>
                     </div>
-
-                    {{-- SECTION LIST PERSYARATAN --}}
                     <label class="label-text fs-5 mb-3">Daftar Persyaratan</label>
                     <div id="requirements-container" class="d-flex flex-column gap-4 mb-5"></div>
 
-                    {{-- Add Button --}}
                     <button type="button" id="btnAdd" class="btn-add mb-4">
                         <i class="fa-solid fa-plus-circle fs-5"></i> 
                         <span>Tambah Persyaratan Baru</span>
                     </button>
 
-                    {{-- Footer --}}
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center border-top pt-4 gap-3">
                         <div class="text-muted fw-bold small bg-light px-3 py-2 rounded-pill">
                             Total: <span id="count-display" class="text-primary">0</span>/25 Syarat
@@ -254,14 +247,11 @@
             const form = document.getElementById('requirementsForm');
             const maxFields = 25;
 
-            // Trial Section Elements
+            // Trial Section
             const trialRadios = document.getElementsByName('has_trial');
             const trialWrapper = document.getElementById('trial-duration-wrapper');
             const trialInput = document.getElementById('trial_duration');
             
-            // TRIAL SECTION LOGIC
-
-            // Function to toggle visibility
             function toggleTrialInput() {
                 let isTrial = document.getElementById('trial_yes').checked;
                 if (isTrial) {
@@ -272,22 +262,17 @@
                     trialWrapper.classList.remove('visible-wrapper');
                     trialWrapper.classList.add('hidden-wrapper');
                     trialInput.removeAttribute('required');
-                    // trialInput.value = ''; // Reset value if hidden
                 }
             }
 
-            // Add Event Listeners to Radios
             trialRadios.forEach(radio => {
                 radio.addEventListener('change', toggleTrialInput);
             });
 
             // INITIAL DATA LOADING
-
-            // Load Requirements List
             const existingData = @json($shelterDatas->persyaratan_adopsi ?? []); 
             (existingData.length ? existingData : ['', '', '']).forEach(text => addField(text));
 
-            // Load Trial Duration State from DB
             const savedDuration = @json($shelterDatas->masa_percobaan ?? null);
             if (savedDuration && savedDuration > 0) {
                 document.getElementById('trial_yes').checked = true;
@@ -295,20 +280,16 @@
             } else {
                 document.getElementById('trial_no').checked = true;
             }
-            // Run toggle once on load to set correct visibility
             toggleTrialInput();
 
 
             // DYNAMIC REQUIREMENTS LOGIC
-
-            // Logic for Delete Button
             container.addEventListener('click', function(e) {
                 const deleteBtn = e.target.closest('.btn-delete');
                 if (!deleteBtn) return;
 
                 const item = deleteBtn.closest('.requirement-item');
                 
-                // Prevent deleting if only 1 item remains
                 if (container.children.length <= 1) {
                     return Swal.fire({
                         toast: true, position: 'top-end', icon: 'error',
@@ -316,15 +297,13 @@
                     });
                 }
 
-                // Animation & Remove
                 item.style.transform = 'scale(0.9) translateY(10px)';
                 item.style.opacity = '0';
                 setTimeout(() => {
                     item.remove();
-                    updateUI(); // Re-calculate numbers
+                    updateUI();
                 }, 200);
             });
-
 
             // Logic for Add Button
             btnAdd.addEventListener('click', () => {
@@ -345,7 +324,6 @@
             form.addEventListener('submit', function(e){
                 e.preventDefault(); 
 
-                // Additional Validation for Trial Duration
                 const isTrial = document.getElementById('trial_yes').checked;
                 const durationVal = parseInt(trialInput.value);
 

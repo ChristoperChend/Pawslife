@@ -106,17 +106,15 @@
         transform: translateY(1px);
     }
 
-    /* 1. The Wrapper */
     .search-container {
         display: flex;
-        align-items: stretch; /* Keeps them same height */
+        align-items: stretch;
         justify-content: center;
         max-width: 750px; 
         margin: 0 auto 2rem;
         gap: 10px;
     }
 
-    /* 2. The Slimmer Search Bar */
     .search-wrap {
         flex-grow: 1;
         margin: 0;
@@ -126,18 +124,15 @@
     .search-wrap .form-control {
         height: 100%;
         background: #fff;
-        /* Reduced padding for a smaller height */
         padding: 0.5rem 1rem 0.5rem 2.5rem; 
         font-size: 0.95rem;
     }
 
     .search-wrap .fa-search {
-        /* Icon positioning remains centered */
         font-size: 0.9rem;
         left: 1rem;
     }
 
-    /* 3. The Slimmer Stat Ticket */
     .stat-ticket {
         position: relative;
         display: inline-flex;
@@ -147,10 +142,10 @@
         
         background: #fff;
         border: 2px dashed #e0e7ff; 
-        border-radius: 1rem; /* Slightly reduced radius */
+        border-radius: 1rem;
         
-        min-width: 100px; /* More compact width */
-        padding: 0.25rem 0.75rem; /* Drastically reduced padding */
+        min-width: 100px;
+        padding: 0.25rem 0.75rem;
         
         overflow: hidden;
         transition: all 0.3s ease;
@@ -165,15 +160,15 @@
     }
 
     .stat-ticket .stat-number {
-        font-size: 1.4rem; /* Smaller number */
+        font-size: 1.4rem;
         font-weight: 800;
         color: var(--primary-color);
-        line-height: 1.1; /* Tighter line height */
+        line-height: 1.1;
         z-index: 2;
     }
 
     .stat-ticket .stat-label {
-        font-size: 0.6rem; /* Smaller label */
+        font-size: 0.6rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -181,19 +176,17 @@
         z-index: 2;
     }
 
-    /* Smaller Watermark Icon */
     .stat-ticket .watermark-icon {
         position: absolute;
         right: -5px;
         bottom: -8px;
-        font-size: 2.5rem; /* Reduced icon size */
+        font-size: 2.5rem;
         color: var(--primary-color);
         opacity: 0.08;
         transform: rotate(-15deg);
         z-index: 1;
     }
 
-    /* Mobile Responsive */
     @media (max-width: 576px) {
         .search-container { flex-direction: column; }
         .stat-ticket {

@@ -10,7 +10,6 @@
 </style>
 
 <div class="container py-4">
-    {{-- Header --}}
     <div class="text-center my-4">
         <h2 class="fw-bold fs-3 mb-2">Daftar Pengajuan Adopsi</h2>
         <hr class="w-100 mx-auto text-secondary opacity-25">
@@ -56,7 +55,6 @@
                 
                 <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:220px;">
                     <div>
-                        {{-- <h6 class="fw-bold mb-2">Status</h6> --}}
                         @if ($item->status_pengajuan === 'diajukan' )
                             <div class="d-flex justify-content-start gap-2 mb-2 mt-4">
                                 <button class="btn btn-merah-color tolak-btn"

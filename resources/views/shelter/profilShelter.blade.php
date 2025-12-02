@@ -93,15 +93,10 @@
 
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
         <div class="card-body p-5">
-
-            
-
-            {{-- Form --}}
             <form action="{{ route('shelter.perbarui.data.shelter', $data->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
-                {{-- Gambar Hewan --}}
                 <div class="text-center mb-4">
                     <img src="{{ asset('storage/' . $data->foto_shelter) }}" 
                         alt="{{ $data->nama_shelter }}"  
@@ -137,10 +132,8 @@
                             <option value="" disabled {{ old('nama_bank', $data->nama_bank) ? '' : 'selected' }}>Pilih Bank</option>
                             
                             @php
-                                // Daftar Bank Populer (Ditaruh paling atas)
                                 $bankPopuler = ['BCA', 'Bank Mandiri', 'BRI', 'BNI', 'BSI (Syariah)', 'CIMB Niaga'];
 
-                                // Daftar Bank Lainnya (Akan diurutkan alfabetis)
                                 $bankLainnya = [
                                     'Allo Bank', 'Bank Aceh Syariah', 'Bank Aladin Syariah', 'Bank Artha Graha', 
                                     'Bank BJB', 'Bank BJB Syariah', 'Bank BTPN / Jenius', 'Bank Banten', 
@@ -198,7 +191,7 @@
                         <div class="preview-wrap">
                             @php
                                 use Illuminate\Support\Str;
-                                $docRelPath = $data->dokumen_legal ?? null; // e.g. 'uploads/legal/abc.pdf'
+                                $docRelPath = $data->dokumen_legal ?? null;
                                 $docUrl = $docRelPath ? asset('storage/'.$docRelPath) : null;
                             @endphp
 
@@ -298,7 +291,6 @@
         const form = document.querySelector('form[method="POST"][enctype="multipart/form-data"]');
 
         form.addEventListener('submit', function(e) {
-            //Hentikan submit form otomatis
             e.preventDefault();
 
             Swal.fire({

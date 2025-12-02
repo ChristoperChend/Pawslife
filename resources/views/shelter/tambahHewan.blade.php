@@ -23,12 +23,6 @@
         font-size: .95rem;
     }
 
-    
-    /* .card-accent{
-        height: 6px;
-        background: var(--primary-color);
-    } */
-
     .form-control{
         border-left: 5px solid var(--primary-color) !important;
     }
@@ -139,6 +133,37 @@
             0 10px 22px rgba(100,116,139,.18),
             0 3px 10px rgba(148,163,184,.16);
     }
+
+   .date-input-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, opacity 0.3s ease, margin-top 0.3s ease;
+        opacity: 0;
+        margin-top: 0;
+    }
+
+    .date-input-wrapper.show {
+        max-height: 100px;
+        opacity: 1;
+        margin-top: 0.75rem;
+    }
+
+    @media (max-width: 576px) {
+        .form-footer {
+            flex-direction: column-reverse;
+            gap: 12px;
+            padding: 0 20px 24px;
+        }
+        
+        .form-footer .btn-primary-color,
+        .form-footer .btn-kembali {
+            width: 100%;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 </style>
 
 @section('content')
@@ -149,7 +174,6 @@
     </div>
 
     <div class="form-card">
-        {{-- <div class="card-accent"></div> --}}
 
         <form class="form-shell" action="{{ route('shelter.tambahHewanPost') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -168,14 +192,10 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="statusSterilHewan" class="form-label label-row">
-                        Status Steril Hewan <span class="req"> *</span>
+                    <label for="rasHewan" class="form-label label-row">
+                        Ras Hewan <span class="req"> *</span>
                     </label>
-                    <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
-                        <option value="" disabled selected hidden>Pilih status steril</option>
-                        <option value="sudah_steril" {{old('statusSterilHewan') === 'sudah_steril' ? 'selected' : ''}}>Sudah Steril</option>
-                        <option value="belum_steril" {{old('statusSterilHewan') === 'belum_steril' ? 'selected' : ''}}>Belum Steril</option>
-                    </select>
+                    <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan ras hewan">
                 </div>
 
                 <div class="col-md-6">
@@ -192,30 +212,11 @@
 
                 <div class="col-md-6">
                     <label for="beratHewan" class="form-label label-row">
-                        Berat Hewan <span class="req"> *</span>
+                        Berat Hewan (Kg)<span class="req"> *</span>
                     </label>
                     <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan berat hewan">
          
                     @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="col-md-6">
-                    <label for="jenisKelaminHewan" class="form-label label-row">
-                        Jenis Kelamin Hewan <span class="req"> *</span>
-                    </label>
-                    <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
-                        <option value="" disabled selected hidden>Pilih jenis kelamin</option>
-                        <option value="jantan" {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
-                        <option value="betina" {{old('jenisKelaminHewan') === 'betina' ? 'selected' : ''}}>Betina</option>
-                    </select>
-                    @error('jenisKelaminHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="col-md-6">
-                    <label for="rasHewan" class="form-label label-row">
-                        Ras Hewan <span class="req"> *</span>
-                    </label>
-                    <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan ras hewan">
                 </div>
 
                 <div class="col-md-6">
@@ -228,6 +229,44 @@
                         <option value="belum_vaksin" {{old('statusVaksinHewan') === 'belum_vaksin' ? 'selected' : ''}}>Belum divaksin</option>
                     </select>
                     @error('statusVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+
+                    <div id="wrapper_tanggal_vaksin" class="date-input-wrapper">
+                        <label class="form-label hint mb-1" for="tanggalVaksinHewan">Tanggal Vaksinasi</label>
+                        <input type="date" class="form-control" id="tanggalVaksinHewan" name="tanggalVaksinHewan" 
+                               value="{{ old('tanggalVaksinHewan') }}">
+                        @error('tanggalVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="statusSterilHewan" class="form-label label-row">
+                        Status Steril Hewan <span class="req"> *</span>
+                    </label>
+                    <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
+                        <option value="" disabled selected hidden>Pilih status steril</option>
+                        <option value="sudah_steril" {{old('statusSterilHewan') === 'sudah_steril' ? 'selected' : ''}}>Sudah Steril</option>
+                        <option value="belum_steril" {{old('statusSterilHewan') === 'belum_steril' ? 'selected' : ''}}>Belum Steril</option>
+                    </select>
+                    @error('statusSterilHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+
+                    <div id="wrapper_tanggal_steril" class="date-input-wrapper">
+                         <label class="form-label hint mb-1" for="tanggalSterilHewan">Tanggal Sterilisasi</label>
+                        <input type="date" class="form-control" id="tanggalSterilHewan" name="tanggalSterilHewan"
+                               value="{{ old('tanggalSterilHewan') }}">
+                        @error('tanggalSterilHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="jenisKelaminHewan" class="form-label label-row">
+                        Jenis Kelamin Hewan <span class="req"> *</span>
+                    </label>
+                    <select class="form-select" name="jenisKelaminHewan" id="jenisKelaminHewan">
+                        <option value="" disabled selected hidden>Pilih jenis kelamin</option>
+                        <option value="jantan" {{old('jenisKelaminHewan') === 'jantan' ? 'selected' : ''}}>Jantan</option>
+                        <option value="betina" {{old('jenisKelaminHewan') === 'betina' ? 'selected' : ''}}>Betina</option>
+                    </select>
+                    @error('jenisKelaminHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
 
                 <div class="col-md-6">
@@ -281,22 +320,56 @@
 @endif
 
 <script>
-    // Animal photo preview
-    const fileInput = document.getElementById('fotoHewan');
-    const preview = document.getElementById('preview');
+    document.addEventListener('DOMContentLoaded', function(){
+        // Date Toggle Logic
+        const vaksinSelect = document.getElementById('statusVaksinHewan');
+        const vaksinWrapper = document.getElementById('wrapper_tanggal_vaksin');
+        
+        const sterilSelect = document.getElementById('statusSterilHewan');
+        const sterilWrapper = document.getElementById('wrapper_tanggal_steril');
 
-    fileInput?.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (!file) { preview.innerHTML = 'Pratinjau'; return; }
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            preview.innerHTML = '';
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            img.alt = 'Foto hewan';
-            preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
+        function toggleVerticalDate(selectElement, wrapperElement, triggerValue) {
+            if(selectElement.value === triggerValue) {
+                wrapperElement.classList.add('show');
+                wrapperElement.querySelector('input').required = true;
+            } else {
+                wrapperElement.classList.remove('show');
+                const input = wrapperElement.querySelector('input');
+                input.required = false;
+            }
+        }
+
+        if(vaksinSelect && vaksinWrapper) {
+            toggleVerticalDate(vaksinSelect, vaksinWrapper, 'sudah_vaksin');
+            vaksinSelect.addEventListener('change', function() {
+                toggleVerticalDate(this, vaksinWrapper, 'sudah_vaksin');
+            });
+        }
+
+        if(sterilSelect && sterilWrapper) {
+            toggleVerticalDate(sterilSelect, sterilWrapper, 'sudah_steril');
+            sterilSelect.addEventListener('change', function() {
+                toggleVerticalDate(this, sterilWrapper, 'sudah_steril');
+            });
+        }
+
+        // Animal photo preview
+        const fileInput = document.getElementById('fotoHewan');
+        const preview = document.getElementById('preview');
+
+        fileInput?.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (!file) { preview.innerHTML = 'Pratinjau'; return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                preview.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = ev.target.result;
+                img.alt = 'Foto hewan';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
     });
 </script>
 @endsection

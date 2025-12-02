@@ -185,7 +185,7 @@
                         <button class="btn ps-3"> 
                             @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
                                 <a href="{{ route('adopter.profile') }}">
-                                    <img src="{{ asset(Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
+                                    <img src="{{ asset('storage/'.Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
                                 </a>
                             @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
                                 <a href="{{ route('shelter.profil') }}">

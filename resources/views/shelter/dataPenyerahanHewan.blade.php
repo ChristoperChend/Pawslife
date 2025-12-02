@@ -55,10 +55,28 @@
                     <div class="form-control readonly-field">{{ $data->status_vaksin ?? '-' }}</div>
                 </div>
 
+                @if($data->status_vaksin == 'sudah_vaksin')
+                    <div class="col-md-6">
+                        <label class="fw-semibold">Tanggal Vaksinasi</label>
+                        <div class="form-control readonly-field">
+                            {{ $data->tanggal_vaksin ? \Carbon\Carbon::parse($data->tanggal_vaksin)->format('d F Y') : '-' }}
+                        </div>
+                    </div>
+                @endif
+
                 <div class="col-md-6">
                     <label class="fw-semibold">Status Steril</label>
                     <div class="form-control readonly-field">{{ $data->status_steril }}</div>
                 </div>
+
+                @if($data->status_steril == 'sudah_steril')
+                    <div class="col-md-6">
+                        <label class="fw-semibold">Tanggal Vaksinasi</label>
+                        <div class="form-control readonly-field">
+                            {{ $data->tanggal_steril ? \Carbon\Carbon::parse($data->tanggal_steril)->format('d F Y') : '-' }}
+                        </div>
+                    </div>
+                @endif
 
                 <div class="col-md-6">
                     <label class="fw-semibold">Jenis Hewan</label>
@@ -76,7 +94,7 @@
                 </div>
                 
                 <div class="col-md-6">
-                    <label class="fw-semibold">Berat</label>
+                    <label class="fw-semibold">Berat Hewan (Kg)</label>
                     <div class="form-control readonly-field">{{ $data->berat }}</div>
                 </div>
                 

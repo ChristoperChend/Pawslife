@@ -24,18 +24,33 @@ class shelterController
         $user = Auth::user();
 
         $hewanIds = Hewan::where('shelter_id', $user->shelter->id)->pluck('id');
+        
         if ($hewanIds->isNotEmpty()) {
-            formPengajuanAdopsi::whereIn('hewan_id', $hewanIds)
+            $expiredAdoptionsQuery = formPengajuanAdopsi::whereIn('hewan_id', $hewanIds)
                 ->where('status_pengajuan', 'setuju')
                 ->whereNotNull('tanggal_akhir_percobaan')
-                ->whereDate('tanggal_akhir_percobaan', '<', now('Asia/Jakarta'))
-                ->update([
+                ->whereDate('tanggal_akhir_percobaan', '<', now('Asia/Jakarta'));
+
+            $affectedHewanIds = $expiredAdoptionsQuery->pluck('hewan_id');
+
+            if ($affectedHewanIds->isNotEmpty()) {
+                $expiredAdoptionsQuery->update([
                     'status_pengajuan' => 'diadopsi',
                     'updated_at' => now('Asia/Jakarta')
                 ]);
+
+                Hewan::whereIn('id', $affectedHewanIds)->update([
+                    'status_hewan' => 'di_adopsi',
+                    'updated_at' => now('Asia/Jakarta')
+                ]);
+            }
         }
 
-        $dataHewan = hewan::where('shelter_id', $user->shelter->id)->orderBy('id', 'desc')->take(10)->get();
+        $dataHewan = Hewan::where('shelter_id', $user->shelter->id)
+        ->where('status_hewan', '!=', 'di_adopsi')
+        ->orderBy('id', 'desc')
+        ->take(10)
+        ->get();
 
         $shelterDatas   = Shelter::where( 'pengguna_id',$user->id)->first();
 
@@ -57,6 +72,8 @@ class shelterController
             'jenisKelaminHewan' =>'required|in:jantan,betina',
             'statusVaksinHewan' =>'required|in:sudah_vaksin, belum_vaksin',
             'statusSterilHewan' =>'required|in:sudah_steril, belum_steril',
+            'tanggalVaksinHewan' => 'required_if:statusVaksinHewan,sudah_vaksin|nullable|date',
+            'tanggalSterilHewan' => 'required_if:statusSterilHewan,sudah_steril|nullable|date',
             'beratHewan' =>'required|numeric',
             'fotoHewan' =>'required|image',
         ],[
@@ -65,17 +82,24 @@ class shelterController
             'jenisKelaminHewan.required' => '*Jenis Kelamin Hewan Harus di Isi',
             'statusVaksinHewan.required' => '*Status Vaksin Hewan Harus di Isi',
             'statusSterilHewan.required' => '*Status Steril Hewan Harus di Isi',
+            'tanggalSterilHewan.required_if'=> '*Tanggal Steril Harus di Isi jika sudah steril',
+            'tanggalVaksinHewan.required_if'=> '*Tanggal Vaksin Harus di Isi jika sudah vaksin',
             'beratHewan.required' => '*Berat Hewan Harus di Isi',
             'beratHewan.numeric' => '*Berat Hewan Hanya Boleh Berupa Angka',
             'fotoHewan.required' => '*Foto Hewan Harus di Isi',
         ]);
-
+        
         $data = $request->except('fotoHewan');
         
         if($request->hasFile('fotoHewan')){
             $user = Auth::user();
             $shelter_id = $user->shelter->id;
-
+            if($request->statusSterilHewan !== 'sudah_steril'){
+                $data['tanggalVaksinHewan'] = null;
+            }
+            if($request->statusVaksinHewan !== 'sudah_vaksin'){
+                $data['tanggalSterilHewan'] = null;
+            }
             
             $file = $request->file('fotoHewan');
 
@@ -92,6 +116,8 @@ class shelterController
                 'berat' => $data['beratHewan'],
                 'status_steril' => $data['statusSterilHewan'],
                 'status_vaksin' => $data['statusVaksinHewan'],
+                'tanggal_vaksin' => $data['tanggalVaksinHewan'],
+                'tanggal_steril' => $data['tanggalSterilHewan'],
                 'catatan_medis' => $data['catatanMedisHewan'],
                 'foto_hewan' => $data['fotoHewan'],
                 'jenis_hewan' => $data['jenisHewan'],
@@ -114,19 +140,20 @@ class shelterController
 
         $user = Auth::user();
 
-        // Raw query from request (for showing back in the input)
         $qRaw = trim($request->query('q', ''));
 
         $q = mb_strtolower($qRaw, 'UTF-8');
 
         $dataHewan = Hewan::query()
             ->where('shelter_id', $user->shelter->id)
+            ->where('status_hewan', '!=', 'di_adopsi')
             ->when($q !== '', function ($query) use ($q) {
                 $safe = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $q);
 
                 $query->where(function ($sub) use ($safe) {
                     $sub->whereRaw('LOWER(nama_hewan) LIKE ?', ["%{$safe}%"])
                         ->orWhereRaw('LOWER(jenis_hewan) LIKE ?', ["%{$safe}%"])
+                        ->orWhereRaw('LOWER(ras) LIKE ?', ["%{$safe}%"])
                         ->orWhereRaw('LOWER(jenis_kelamin) LIKE ?', ["%{$safe}%"]);
                 });
             })
@@ -155,7 +182,9 @@ class shelterController
             'berat'          => 'required|numeric|min:0.1',
             'ras'            => 'required|string|max:255',
             'status_steril'  => 'required|in:sudah_steril,belum_steril',
+            'tanggal_steril' => 'required_if:status_steril, sudah_steril|nullable|date',
             'status_vaksin'  => 'required|in:sudah_vaksin,belum_vaksin',
+            'tanggal_vaksin' => 'required_if:status_vaksin, sudah_vaksin|nullable|date',
             'catatan_medis'  => 'required|string|max:500',
             'foto_hewan'     => $hewan->foto_hewan 
                                 ? 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -163,6 +192,14 @@ class shelterController
         ];
 
         $validate = $request->validate($rules);
+
+        if($request->status_vaksin == 'belum_vaksin'){
+            $validate['tanggal_vaksin'] = null;
+        }
+
+        if($request->status_steril == 'belum_steril'){
+            $validate['tanggal_steril'] = null;
+        }
 
         //Handle photo
         if($request->has('foto_hewan')){
@@ -200,7 +237,6 @@ class shelterController
     public function getDaftarPengajuanPenyerahanHewan(){
         Paginator::useBootstrap();
         $id = auth::user();
-        // dd($id);
         $data = formPenyerahanHewan::where('shelter_id', '=', NULL)
         ->where('status_penyerahan', '=', 'diajukan')
         ->latest('id')->paginate(5);
@@ -382,26 +418,6 @@ class shelterController
         }
     }
 
-    // public function tolakPenyerahanAdopsi($id)
-    // {
-    //     $hewan = formPenyerahanHewan::find($id);
-
-    //     if (!$hewan) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Gagal memproses data hewan!'
-    //         ], 404);
-    //     }
-
-    //     $hewan->status_penyerahan = 'tolak';
-    //     $hewan->save();
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Pengajuan penyerahan hewan berhasil ditolak!'
-    //     ]);
-    // }
-
     public function getDataPenyerahanHewan($id){
         $data = formPenyerahanHewan::find($id);
         return view('shelter.dataPenyerahanHewan', compact('data'));
@@ -468,7 +484,6 @@ class shelterController
 
         // Handle foto_shelter
         if ($request->hasFile('foto_shelter')) {
-            // Delete old photo if exists
             if ($shelter->foto_shelter) {
                 Storage::disk('public')->delete($shelter->foto_shelter);
             }
@@ -482,7 +497,6 @@ class shelterController
 
         // Handle dokumen_legal
         if ($request->hasFile('dokumen_legal')) {
-            // Delete old document if exists
             if ($shelter->dokumen_legal) {
                 Storage::disk('public')->delete($shelter->dokumen_legal);
             }
@@ -526,7 +540,6 @@ class shelterController
 
             $cleanRequirements = array_values(array_filter($request->requirements));
 
-            // Uppercase the first letter of each requirement
             $cleanRequirements = array_map('ucfirst', $cleanRequirements);
 
             $shelterDatas->persyaratan_adopsi = $cleanRequirements;

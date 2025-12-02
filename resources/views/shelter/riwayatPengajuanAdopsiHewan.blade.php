@@ -10,7 +10,6 @@
 </style>
 
 <div class="container py-4">
-    {{-- Header --}}
     <div class="text-center my-4">
         <h2 class="fw-bold fs-3 mb-2">Riwayat Pengajuan Adopsi Hewan</h2>
         <hr class="w-100 mx-auto text-secondary opacity-25">
