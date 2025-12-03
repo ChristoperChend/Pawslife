@@ -75,7 +75,7 @@
         <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
             <div class="card-body p-md-5">
                 <div class="text-center mb-4">
-                    <img src="{{ asset($detailShelter->foto_shelter) }}" 
+                    <img src="{{ asset('storage/'.$detailShelter->foto_shelter) }}" 
                         alt="{{ $detailShelter->nama_shelter }}"  
                         class="shelter-image mb-3">
                 </div>
@@ -110,16 +110,16 @@
                     </div>
 
                     <div class="col-md-12">
-                        <label class="form-label fw-semibold">Dokumen Legalitas Pendirian</label>
+                        <label class="form-label fw-semibold">Deskripsi Shelter</label>
                         <div class="detail-field-wrapper">
-                            <img src="{{ asset($detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
+                            <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-12">
-                        <label class="form-label fw-semibold">Deskripsi Shelter</label>
+                        <label class="form-label fw-semibold">Dokumen Legalitas Pendirian</label>
                         <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
+                            <img src="{{ asset('storage/'.$detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
                         </div>
                     </div>
                 </div>

@@ -3,10 +3,12 @@
         border-radius: 12px;
         transition: box-shadow 0.3s ease;
         border: 1px solid #dee2e6;
+        display: block; 
     }
 
     .shelter-card-item:hover {
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-2px); 
     }
 
     .foto-shelter {
@@ -66,17 +68,10 @@
             border-right: none !important;
         }
         
-        /* Kontainer Info Lengkap */
         .shelter-card-item > .d-flex > div:last-child {
             width: 100%;
             padding: 0 15px 15px !important;
             text-align: center;
-        }
-        
-        .shelter-card-item > .d-flex > div:last-child a {
-            justify-content: center !important;
-            display: flex !important;
-            margin-top: 12px;
         }
         
         .shelter-card-item .flex-fill p, 
@@ -98,13 +93,15 @@
 
         @if (!$listShelter->isEmpty())
             @foreach ($listShelter as $items)
-                <div class="card shelter-card-item shadow-sm overflow-hidden bg-white mb-3">
+                <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
+                   class="card shelter-card-item shadow-sm overflow-hidden bg-white mb-3 text-decoration-none">
+                   
                     <div class="d-flex flex-wrap">
                         
                         <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                             style="width: 140px; min-height: 130px;"
                         >
-                            <img src="{{ asset($items->foto_shelter) }}" 
+                            <img src="{{ asset('storage/'.$items->foto_shelter) }}" 
                                 alt="Foto Shelter"
                                 class="rounded"
                                 style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
@@ -118,19 +115,8 @@
                             <h6 class="fw-bold shelter-jenis">{{ $items->pengguna->email }}</h6>
                         </div>
                         
-                        <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
-                            
-                            <hr class="d-block d-sm-none w-100 my-2" style="border-top: 3px solid #b3b3b3;">
-                            
-                            <div></div> <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
-                                class="text-primary fw-semibold small text-decoration-none d-inline-flex align-items-center gap-1"
-                            >
-                                <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
-                                <span>Informasi Lengkap</span>
-                            </a>
-                        </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         @else
             <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar shelter</h4>

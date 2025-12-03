@@ -52,7 +52,7 @@
 
                 <div class="col-md-6">
                     <label class="fw-semibold">Status Vaksin</label>
-                    <div class="form-control readonly-field">{{ $data->status_vaksin ?? '-' }}</div>
+                    <div class="form-control readonly-field">{{ $data->status_vaksin ? ucwords(str_replace('_', ' ', $data->status_vaksin)) : '-' }}</div>
                 </div>
 
                 @if($data->status_vaksin == 'sudah_vaksin')
@@ -66,7 +66,7 @@
 
                 <div class="col-md-6">
                     <label class="fw-semibold">Status Steril</label>
-                    <div class="form-control readonly-field">{{ $data->status_steril }}</div>
+                    <div class="form-control readonly-field">{{ $data->status_steril ? ucwords(str_replace('_', ' ', $data->status_steril)) : '-' }}</div>
                 </div>
 
                 @if($data->status_steril == 'sudah_steril')
@@ -101,6 +101,11 @@
                 <div class="col-md-12">
                     <label class="fw-semibold">Alasan Penyerahan</label>
                     <div class="form-control readonly-field">{{ $data->alasan_penyerahan ?? '-' }}</div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="fw-semibold">Deskripsi Hewan</label>
+                    <div class="form-control readonly-field">{{ $data->deskripsi_hewan ?? '-' }}</div>
                 </div>
             </div>
 

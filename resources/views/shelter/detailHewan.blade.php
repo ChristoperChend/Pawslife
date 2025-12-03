@@ -173,6 +173,11 @@
                     </div>
 
                     <div class="col-12">
+                        <label class="form-label fw-semibold">Deskripsi Hewan <span class="text-danger">*</span></label>
+                        <textarea name="deskripsi_hewan" class="form-control" rows="3" required>{{ old('deskripsi_hewan', $hewan->deskripsi_hewan) }}</textarea>
+                    </div>
+
+                    <div class="col-12">
                         <label class="form-label fw-semibold">Foto Hewan <span class="text-danger">*</span></label>
                         <input type="file" name="foto_hewan" class="form-control" 
                             accept=".jpg,.jpeg,.png" {{ $hewan->foto_hewan ? '' : 'required' }}>

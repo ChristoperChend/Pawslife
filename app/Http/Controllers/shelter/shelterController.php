@@ -67,70 +67,81 @@ class shelterController
 
     public function halamanTambahHewanPost(Request $request){
         $request->validate([
-            'namaHewan'=> 'required',
-            'jenisHewan' =>'required|in:anjing,kucing',
-            'jenisKelaminHewan' =>'required|in:jantan,betina',
-            'statusVaksinHewan' =>'required|in:sudah_vaksin, belum_vaksin',
-            'statusSterilHewan' =>'required|in:sudah_steril, belum_steril',
-            'tanggalVaksinHewan' => 'required_if:statusVaksinHewan,sudah_vaksin|nullable|date',
-            'tanggalSterilHewan' => 'required_if:statusSterilHewan,sudah_steril|nullable|date',
-            'beratHewan' =>'required|numeric',
-            'fotoHewan' =>'required|image',
+            'namaHewan'           => 'required',
+            'jenisHewan'          => 'required|in:anjing,kucing',
+            'jenisKelaminHewan'   => 'required|in:jantan,betina',
+            'statusVaksinHewan'   => 'required|in:sudah_vaksin,belum_vaksin', 
+            'statusSterilHewan'   => 'required|in:sudah_steril,belum_steril',
+            
+            'tanggalVaksinHewan'  => 'required_if:statusVaksinHewan,sudah_vaksin|nullable|date',
+            'tanggalSterilHewan'  => 'required_if:statusSterilHewan,sudah_steril|nullable|date',
+            
+            'beratHewan'          => 'required|numeric',
+            'deskripsiHewan'      => 'required|string|max:500',
+            'catatanMedisHewan'   => 'required|string|max:500',
+            'fotoHewan'           => 'required|image|max:3072', 
+            'rasHewan'            => 'required'
         ],[
-            'namaHewan.required' => '*Nama Hewan Harus di Isi',
-            'jenisHewan.required' => '*Jenis Hewan Harus di Pilih',
-            'jenisKelaminHewan.required' => '*Jenis Kelamin Hewan Harus di Isi',
-            'statusVaksinHewan.required' => '*Status Vaksin Hewan Harus di Isi',
-            'statusSterilHewan.required' => '*Status Steril Hewan Harus di Isi',
-            'tanggalSterilHewan.required_if'=> '*Tanggal Steril Harus di Isi jika sudah steril',
-            'tanggalVaksinHewan.required_if'=> '*Tanggal Vaksin Harus di Isi jika sudah vaksin',
-            'beratHewan.required' => '*Berat Hewan Harus di Isi',
-            'beratHewan.numeric' => '*Berat Hewan Hanya Boleh Berupa Angka',
-            'fotoHewan.required' => '*Foto Hewan Harus di Isi',
+            'namaHewan.required'             => '*Nama Hewan Harus di Isi',
+            'jenisHewan.required'            => '*Jenis Hewan Harus di Pilih',
+            'jenisKelaminHewan.required'     => '*Jenis Kelamin Hewan Harus di Isi',
+            'statusVaksinHewan.required'     => '*Status Vaksin Hewan Harus di Isi',
+            'statusSterilHewan.required'     => '*Status Steril Hewan Harus di Isi',
+            'tanggalSterilHewan.required_if' => '*Tanggal Steril Harus di Isi jika sudah steril',
+            'tanggalVaksinHewan.required_if' => '*Tanggal Vaksin Harus di Isi jika sudah vaksin',
+            'beratHewan.required'            => '*Berat Hewan Harus di Isi',
+            'beratHewan.numeric'             => '*Berat Hewan Hanya Boleh Berupa Angka',
+            'deskripsiHewan.required'        => '*Deskripsi Hewan Harus di Isi',
+            'catatanMedisHewan.required'     => '*Catatan Medis Hewan Harus di Isi',
+            'fotoHewan.required'             => '*Foto Hewan Harus di Isi',
+            'rasHewan.required'              => '*Ras Hewan Harus di Isi'
         ]);
+
+        $tanggalVaksin = ($request->statusVaksinHewan === 'sudah_vaksin') ? $request->tanggalVaksinHewan : null;
+        $tanggalSteril = ($request->statusSterilHewan === 'sudah_steril') ? $request->tanggalSterilHewan : null;
         
-        $data = $request->except('fotoHewan');
-        
+
         if($request->hasFile('fotoHewan')){
-            $user = Auth::user();
-            $shelter_id = $user->shelter->id;
-            if($request->statusSterilHewan !== 'sudah_steril'){
-                $data['tanggalVaksinHewan'] = null;
-            }
-            if($request->statusVaksinHewan !== 'sudah_vaksin'){
-                $data['tanggalSterilHewan'] = null;
-            }
-            
-            $file = $request->file('fotoHewan');
-
-            $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-            
-            $path = $file->storeAs('foto_hewan_shelter', $fileName, 'public');
-
-            $data['fotoHewan'] = 'foto_hewan_shelter/'.$fileName;
             try{
+                $user = Auth::user();
+
+                if(!$user->shelter) {
+                    return back()->withErrors(['general' => 'Akun tidak terhubung ke shelter.'])->withInput();
+                }
+                $shelter_id = $user->shelter->id;
+
+                $file = $request->file('fotoHewan');
+                $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
+                $path = $file->storeAs('foto_hewan_shelter', $fileName, 'public');
+                $fotoPath = 'foto_hewan_shelter/'.$fileName;
+
                 hewan::create([
-                'shelter_id' => $shelter_id,
-                'nama_hewan' => $data['namaHewan'],
-                'ras' => $data['rasHewan'],
-                'berat' => $data['beratHewan'],
-                'status_steril' => $data['statusSterilHewan'],
-                'status_vaksin' => $data['statusVaksinHewan'],
-                'tanggal_vaksin' => $data['tanggalVaksinHewan'],
-                'tanggal_steril' => $data['tanggalSterilHewan'],
-                'catatan_medis' => $data['catatanMedisHewan'],
-                'foto_hewan' => $data['fotoHewan'],
-                'jenis_hewan' => $data['jenisHewan'],
-                'jenis_kelamin' => $data['jenisKelaminHewan'],
-                'status_hewan' => 'siap_di_adopsi'
+                    'shelter_id'      => $shelter_id,
+                    'nama_hewan'      => $request->namaHewan,
+                    'ras'             => $request->rasHewan,
+                    'berat'           => $request->beratHewan,
+                    'status_steril'   => $request->statusSterilHewan,
+                    'status_vaksin'   => $request->statusVaksinHewan,
+                    'tanggal_vaksin'  => $tanggalVaksin, 
+                    'tanggal_steril'  => $tanggalSteril,
+                    'catatan_medis'   => $request->catatanMedisHewan,
+                    'deskripsi_hewan' => $request->deskripsiHewan, 
+                    'foto_hewan'      => $fotoPath,
+                    'jenis_hewan'     => $request->jenisHewan,
+                    'jenis_kelamin'   => $request->jenisKelaminHewan,
+                    'status_hewan'    => 'siap_di_adopsi'
                 ]);
                 
-                return redirect()->route('beranda.shelterBeranda')->with('success', 'Hewan berhasil ditambahan!');
-            }catch (Exception $e) {
-            Log::error('Gagal menambahkan hewan: '.$e->getMessage());
-            return back()->withErrors(['general' => 'Terjadi kesalahan. Coba lagi.'])->withInput();
+                return redirect()->route('beranda.shelterBeranda')->with('success', 'Hewan berhasil ditambahkan!');
+
+            } catch (Exception $e) {
+                Log::error('Gagal menambahkan hewan: '.$e->getMessage());
+                if(isset($path)) Storage::disk('public')->delete($path);
+                
+                return back()->withErrors(['general' => 'Terjadi kesalahan sistem. Coba lagi.'])->withInput();
             }
         }
+        
         return back()->withErrors(['fotoHewan' => 'Foto hewan wajib diunggah.'])->withInput();
     }
 
@@ -185,6 +196,7 @@ class shelterController
             'tanggal_steril' => 'required_if:status_steril, sudah_steril|nullable|date',
             'status_vaksin'  => 'required|in:sudah_vaksin,belum_vaksin',
             'tanggal_vaksin' => 'required_if:status_vaksin, sudah_vaksin|nullable|date',
+            'deskripsi_hewan' => 'required|string|max:500',
             'catatan_medis'  => 'required|string|max:500',
             'foto_hewan'     => $hewan->foto_hewan 
                                 ? 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -203,19 +215,17 @@ class shelterController
 
         //Handle photo
         if($request->has('foto_hewan')){
-            $destinationPath = public_path('image/daftarHewan');
 
-            if(!empty($request->old_foto_hewan) && File::exists(public_path($request->old_foto_hewan))){
-                File::delete(public_path($request->old_foto_hewan));
+            if(!empty($request->old_foto_hewan) && Storage::disk('public')->exists($request->old_foto_hewan)){
+                Storage::disk('public')->delete($request->old_foto_hewan);
             }
 
             $file = $request->file('foto_hewan');
             $fileName = time().'_'.preg_replace('/\s+/','_',$file->getClientOriginalName());
-            $file->move($destinationPath, $fileName);
+            $path = $file->storeAs('foto_hewan_shelter', $fileName, 'public');
 
-            $validate['foto_hewan'] = 'image/daftarHewan/' . $fileName;
+            $validate['foto_hewan'] = $path;
         }else {
-            // Simpan foto lama jika tidak ada foto baru
             $validate['foto_hewan'] = $request->old_foto_hewan;
         }
 
@@ -471,10 +481,10 @@ class shelterController
             'no_telepon_shelter'   => 'required|numeric',
             'deskripsi_shelter'    => 'required|string|max:1000', 
             'foto_shelter'         => $shelter->foto_shelter
-                                        ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072' // 3MB
+                                        ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072'
                                         : 'required|image|mimes:jpeg,png,jpg,gif|max:3072',
             'dokumen_legal'        => $shelter->dokumen_legal
-                                        ? 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:5120' // 5MB
+                                        ? 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:5120'
                                         : 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx|max:5120',
             'nama_bank'            => 'required|string|max:255',
             'nomor_rekening'       => 'required|numeric'
