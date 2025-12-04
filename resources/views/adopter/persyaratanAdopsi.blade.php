@@ -211,6 +211,10 @@
                                 confirmButton: 'btn btn-primary-color',
                             },
                             buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ route('beranda.adopterBeranda') }}";
+                            }
                         })
                     } else {
                         Swal.fire({
@@ -222,6 +226,10 @@
                                 confirmButton: 'btn btn-primary-color',
                             },
                             buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ route('beranda.adopterBeranda') }}";
+                            }
                         })
                     }
                 })

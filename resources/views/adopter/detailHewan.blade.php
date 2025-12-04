@@ -9,6 +9,15 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
+    .page-header {
+        max-width: 1060px;
+        margin: 24px auto 0;
+    }
+    .page-header h2 {
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+
     .detail-field-wrapper {
         display: flex;
         align-items: center;
@@ -64,7 +73,7 @@
 @section('content')
 
     <div class="container py-5">
-        <div class="text-center">
+        <div class="page-header text-center" style="max-width: 860px; margin: 2rem auto;">
             <h2>Detail Hewan</h2>
         </div>
 
@@ -114,7 +123,7 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <label class="form-label fw-semibold">Berat hewan</label>
+                        <label class="form-label fw-semibold">Berat hewan (Kg)</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailHewan->berat ?? 'data tidak ada' }}</span>
                         </div>
@@ -129,9 +138,24 @@
                         </div>
                     </div>
                     <div class="col-6">
+                        <label class="form-label fw-semibold">Tanggal Sterilisasi</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->tanggal_steril ? \Carbon\Carbon::parse($detailHewan->tanggal_steril)->format('d F Y') : '-' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-6">
                         <label class="form-label fw-semibold">Apakah hewan sudah divaksin</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailHewan->status_vaksin ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Tanggal Vaksinasi</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailHewan->tanggal_vaksin ? \Carbon\Carbon::parse($detailHewan->tanggal_vaksin)->format('d F Y') : '-' }}</span>
                         </div>
                     </div>
                 </div>
@@ -141,6 +165,15 @@
                         <label class="form-label fw-semibold">Catatan medis hewan</label>
                         <div class="detail-field-wrapper" style="padding: 0px">
                             <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $detailHewan->catatan_medis ?? 'data tidak ada' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Deskripsi hewan</label>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $detailHewan->deskripsi_hewan ?? 'data tidak ada' }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -157,6 +190,31 @@
 
     <script>
         function ajukanAdopsi() {
+            const adopterId = '{{ $adopter_id }}';
+
+            if (!adopterId || adopterId == 0 || adopterId == "0") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Harus Login",
+                    text: "Silahlan lakukan login sebagai adopter untuk melanjutkan proses pengajuan adopsi.",
+                    showCancelButton: true,
+                    cancelButtonText: "Kembali",
+                    confirmButtonText: "Login",
+                    reverseButtons: true,
+                    customClass: {
+                        actions: 'swal-actions-gap',
+                        confirmButton: 'btn btn-primary-color',
+                        cancelButton: 'btn btn-kembali'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('login') }}";
+                    }
+                });
+                return;
+            }
+            
             Swal.fire({
                 icon: "question",
                 title: "Alasan Pengajuan Adopsi",

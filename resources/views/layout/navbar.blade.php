@@ -60,24 +60,24 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: #333; /* Dark grey default to match text */
+        color: #333;
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         text-decoration: none;
     }
 
     .btn-favorite i {
-        font-size: 1.4rem; /* More balanced size than fa-2xl */
+        font-size: 1.4rem;
         transition: transform 0.2s ease;
     }
 
     .btn-favorite:hover {
-        color: #ff4757; /* A more elegant, modern red */
+        color: #ff4757;
         transform: translateY(-2px);
     }
 
     .btn-favorite:hover i {
-        font-weight: 900; /* Switches to solid version on hover if using FA Pro, or just stays bold */
-        transform: scale(1.15); /* Heartbeat effect */
+        font-weight: 900;
+        transform: scale(1.15);
     }
 
     @media (max-width: 991.98px) {
@@ -167,8 +167,8 @@
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('admin.riwayatPendaftaran') ? 'active' : ''}}" href="{{ route('admin.riwayatPendaftaran') }}">Riwayat</a></li>
                     @else
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.daftarShelter') ? 'active' : ''}}" href="{{ route('adopter.daftarShelter') }}">Shelter</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Riwayat</a></li>
-                        <li class="nav-item"><a class="nav-link {{request()->routeIs('adopter.showLepasAdopsi') ? 'active' : ''}}" href="{{ route('adopter.showLepasAdopsi') }}">Lepas Adopsi</a></li>
+                        <li class="nav-item"><a class="nav-link btn-need-login" href="#">Riwayat</a></li>
+                        <li class="nav-item"><a class="nav-link btn-need-login" href="#">Lepas Adopsi</a></li>
                         <li class="nav-item"><a class="nav-link {{request()->routeIs('tentangKami') ? 'active' : ''}}" href="{{ route('tentangKami') }}">Tentang Kami</a></li>
                     @endif
                 </ul>
@@ -185,7 +185,7 @@
                         <button class="btn ps-3"> 
                             @if(Auth::user()->tipe_pengguna === 'adopter' && Auth::user()->adopter)
                                 <a href="{{ route('adopter.profile') }}">
-                                    <img src="{{ asset('storage/'.Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
+                                    <img src="{{ asset('storage/' . Auth::user()->adopter->foto_adopter) }}" width="40" height="40" class="rounded-circle profile-image-navbar" alt="Foto Adopter">
                                 </a>
                             @elseif(Auth::user()->tipe_pengguna === 'shelter' && Auth::user()->shelter)
                                 <a href="{{ route('shelter.profil') }}">
@@ -206,3 +206,35 @@
         </div>
     </nav>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const needLoginButtons = document.querySelectorAll('.btn-need-login');
+
+    needLoginButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: "error",
+                title: "Harus Login",
+                text: "Silahlan lakukan login sebagai adopter untuk mengakses fitur ini.",
+                showCancelButton: true,
+                cancelButtonText: "Kembali",
+                confirmButtonText: "Login",
+                reverseButtons: true,
+                customClass: {
+                    actions: 'swal-actions-gap',
+                    confirmButton: 'btn btn-primary-color',
+                    cancelButton: 'btn btn-kembali'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('login') }}";
+                }
+            });
+        });
+    });
+});
+</script>

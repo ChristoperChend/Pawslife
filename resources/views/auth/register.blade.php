@@ -221,6 +221,58 @@
                                     shelter</label>
                                 <input type="file" name="dokumen_legal" class="form-control" id="dokumen_legal" accept="image/*">
                             </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label mb-0">Nama bank</label>
+                                    <select name="nama_bank" id="nama_bank" class="form-select" required>
+                                        <option value="" selected disabled>Pilih Bank</option>
+                                        
+                                        @php
+                                            $bankPopuler = ['BCA', 'Bank Mandiri', 'BRI', 'BNI', 'BSI (Syariah)', 'CIMB Niaga'];
+
+                                            $bankLainnya = [
+                                                'Allo Bank', 'Bank Aceh Syariah', 'Bank Aladin Syariah', 'Bank Artha Graha', 
+                                                'Bank BJB', 'Bank BJB Syariah', 'Bank BTPN / Jenius', 'Bank Banten', 
+                                                'Bank Bengkulu', 'Bank Bohai', 'Bank Bukopin', 'Bank Bumi Arta', 
+                                                'Bank Capital', 'Bank Chinatrust', 'Bank DBS Indonesia', 'Bank Danamon', 
+                                                'Bank DKI', 'Bank Ganesha', 'Bank HSBC Indonesia', 'Bank ICBC Indonesia', 
+                                                'Bank Ina Perdana', 'Bank Index Selindo', 'Bank Jago', 'Bank Jasa Jakarta', 
+                                                'Bank Jateng', 'Bank Jatim', 'Bank Jambi', 'Bank Kalbar', 'Bank Kalsel', 
+                                                'Bank Kalteng', 'Bank Kaltimtara', 'Bank Keb Hana', 'Bank Lampung', 
+                                                'Bank Maluku Malut', 'Bank Maspion', 'Bank Mayapada', 'Bank Maybank Indonesia', 
+                                                'Bank Mayora', 'Bank Mega', 'Bank Mega Syariah', 'Bank Mestika', 
+                                                'Bank Muamalat', 'Bank Multiarta Sentosa', 'Bank NTB Syariah', 'Bank NTT', 
+                                                'Bank Nagari', 'Bank Nationalnobu', 'Bank Neo Commerce', 'Bank OCBC NISP', 
+                                                'Bank Of India Indonesia', 'Bank Papua', 'Bank Panin', 'Bank Panin Dubai Syariah', 
+                                                'Bank Permata', 'Bank QNB Indonesia', 'Bank Resona Perdania', 
+                                                'Bank Riau Kepri', 'Bank SBI Indonesia', 'Bank Shinhan Indonesia', 
+                                                'Bank Sinarmas', 'Bank Sulselbar', 'Bank Sulteng', 'Bank Sultra', 
+                                                'Bank Sumsel Babel', 'Bank Sumut', 'Bank UOB Indonesia', 'Bank Victoria', 
+                                                'Bank Victoria Syariah', 'Bank Woori Saudara', 'Bank Yudha Bhakti', 
+                                                'Citibank', 'Digibank', 'JTrust Bank', 'SeaBank', 'Standard Chartered'
+                                            ];
+                                            
+                                            sort($bankLainnya);
+                                            
+                                            $semuaBank = array_merge($bankPopuler, $bankLainnya);
+                                        @endphp
+
+                                        @foreach($semuaBank as $bank)
+                                            <option value="{{ $bank }}">
+                                                {{ $bank }}
+                                            </option>
+                                        @endforeach
+
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label mb-0">Nomor Rekening</label>
+                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" 
+                                        placeholder="Masukkan nomor rekening bank anda..." required>
+                                </div>
+                            </div>
                             <div class="mb-4">
                                 <label for="deskripsi_shelter" class="form-label mb-0">Deskripsi singkat
                                     shelter</label>
@@ -261,7 +313,7 @@
         </div>
 
         <div class="col-5 img-container p-0 position-fixed d-none d-md-block">
-            <img src="{{ asset('image/register2.jpg') }}" alt="Register Image">
+            <img src="{{ asset('image/login.jpg') }}" alt="Register Image" style="object-fit: cover;">
         </div>
     </div>
 
@@ -415,7 +467,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: res.title,
-                                text: response.message,
+                                text: res.message,
                                 customClass: {
                                     actions: 'swal-actions-gap',
                                     confirmButton: 'btn btn-primary-color',
@@ -427,8 +479,6 @@
                                 icon: 'success',
                                 title: res.title,
                                 text: res.message,
-                                showConfirmButton: false,
-                                timer: 1500,
                                 customClass: {
                                     actions: 'swal-actions-gap',
                                     icon: 'swal-success-primary',
@@ -490,6 +540,8 @@
             const formData = new FormData()
             formData.append('foto_shelter', document.getElementById('foto_shelter').files[0])
             formData.append('dokumen_legal', document.getElementById('dokumen_legal').files[0])
+            formData.append('nama_bank', document.getElementById('nama_bank').value)
+            formData.append('nomor_rekening', document.getElementById('nomor_rekening').value)
             formData.append('deskripsi_shelter', document.getElementById('deskripsi_shelter').value)
             formData.append('password_shelter', document.getElementById('password_shelter').value)
             formData.append('confirmation_password_shelter', document.getElementById('confirmation_password_shelter').value)
@@ -546,7 +598,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: res.title,
-                                text: response.message,
+                                text: res.message,
                                 customClass: {
                                     actions: 'swal-actions-gap',
                                     confirmButton: 'btn btn-primary-color',
@@ -558,8 +610,6 @@
                                 icon: 'success',
                                 title: res.title,
                                 text: res.message,
-                                showConfirmButton: false,
-                                timer: 1500,
                                 customClass: {
                                     actions: 'swal-actions-gap',
                                     icon: 'swal-success-primary',

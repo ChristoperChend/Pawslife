@@ -194,8 +194,8 @@ class adopterController extends Controller
             if (!Auth::check()) {
                 return response()->json([
                     'error' => true,
-                    'title' => '',
-                    'message' => 'Lakukan login sebagai adopter untuk menambahkan hewan ke favorit'
+                    'title' => 'Harus Login',
+                    'message' => 'Silahlan lakukan login sebagai adopter untuk menambahkan hewan ke daftar favorit.'
                 ]);
             }
 
@@ -215,8 +215,8 @@ class adopterController extends Controller
                 $favorit->delete();
                 return response()->json([
                     'status' => 'removed',
-                    'title' => '',
-                    'message' => 'Hewan berhasil dihapus dari favorit'
+                    'title' => 'Dihapus dari Favorit',
+                    'message' => 'Hewan berhasil dihapus dari daftar favorit Anda.'
                 ]);
             } else {
                 favorit::create([
@@ -225,8 +225,8 @@ class adopterController extends Controller
                 ]);
                 return response()->json([
                     'status' => 'added',
-                    'title' => '',
-                    'message' => 'Hewan berhasil ditambah ke favorit'
+                    'title' => 'Ditambahkan ke Favorit',
+                    'message' => 'Hewan berhasil ditambahkan ke daftar favorit Anda.'
                 ]);
             }
         } catch (Exception $e) {
@@ -300,7 +300,7 @@ class adopterController extends Controller
         $adopter->no_whatsapp = $request->nomor_wa_adopter;
         $adopter->pekerjaan = $request->pekerjaan_adopter;
 
-        $fotoAdopterPath = $request->file('foto')->store('fotoAdopter', 'public');
+        $fotoAdopterPath = $request->file('foto_adopter')->store('fotoAdopter', 'public');
 
         if ($request->hasFile('foto_adopter')) {
             File::delete($adopter->foto_adopter);
@@ -333,7 +333,7 @@ class adopterController extends Controller
 
             $sudahAda = formPengajuanAdopsi::where('adopter_id', $request->adopter_id)
                 ->where('hewan_id', $request->hewan_id)
-                ->whereIn('status_pengajuan', ['diajukan'])
+                ->whereIn('status_pengajuan', ['diajukan', 'setuju'])
                 ->exists();
             
             if ($sudahAda) {
@@ -341,6 +341,17 @@ class adopterController extends Controller
                     'error' => true,
                     'title' => 'Pengajuan Ganda',
                     'message' => 'Kamu sudah melakukan pengajuan adopsi terhadap hewan ini.'
+                ]);
+            }
+
+            $jumlahDiajukan = formPengajuanAdopsi::where('adopter_id', $request->adopter_id)
+                ->whereIn('status_pengajuan', ['diajukan','setuju'])->count();
+
+            if ($jumlahDiajukan >= 5) {
+                return response()->json([
+                    'error' => true,
+                    'title' => 'Pengajuan Berlebihan',
+                    'message' => 'Kamu sudah melakukan pengajuan adopsi lebih dari 5.'
                 ]);
             }
 
@@ -382,8 +393,12 @@ class adopterController extends Controller
         foreach ($riwayat as $item) {
             $item->selesai_masa_percobaan = $item->updated_at->addDays(7)->isPast();
         }
+
+        $jumlahDiajukan = formPengajuanAdopsi::whereIn('status_pengajuan', ['diajukan', 'setuju'])
+            ->where('adopter_id', $adopter_id)
+            ->count();
         
-        return view('adopter.riwayatPengajuanAdopsi', compact('riwayat'));
+        return view('adopter.riwayatPengajuanAdopsi', compact('riwayat', 'jumlahDiajukan'));
     }
 
     public function showLepasAdopsi() {

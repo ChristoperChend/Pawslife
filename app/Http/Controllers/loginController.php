@@ -67,7 +67,7 @@ class loginController extends Controller
         $request->session()->regenerateToken();
         Cookie::queue(Cookie::forget('remember_token'));
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('beranda.adopterBeranda');
     }
 
     public function lupaKataSandi() {

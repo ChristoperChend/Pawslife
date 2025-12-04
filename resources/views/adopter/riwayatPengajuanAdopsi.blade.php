@@ -160,6 +160,36 @@
             <hr>
         </div>
 
+        @if (!$riwayat->empty())
+            <div class="card border-0 shadow-sm mb-4" style="background:#eef2fb;">
+                <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                    
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="d-flex justify-content-center align-items-center rounded-circle" 
+                            style="width: 55px; height: 50px; background: rgba(13,110,253,0.1);">
+                            <i class="bi bi-exclamation-circle fs-4 text-primary"></i>
+                        </div>
+                        
+                        <div>
+                            <h6 class="fw-bold mb-1">Batas Pengajuan Adopsi</h6>
+                            <p class="small text-muted mb-0" style="line-height:1.6">
+                                Kamu hanya dapat mengajukan adopsi <b>maksimal 5 hewan</b> secara bersamaan.
+                                Jika masih dalam <b>masa percobaan</b> atau <b>diajukan</b>, kamu tidak bisa mengajukan adopsi baru.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <span class="badge rounded-pill px-3 py-2"
+                            style="background: #e8f0fe; color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            Pengajuan Aktif Sekarang: {{ $jumlahDiajukan }}
+                        </span>
+                    </div>
+                    
+                </div>
+            </div>
+        @endif
+
         @forelse ($riwayat as $items)
             <div class="card riwayat-card-item mb-3 shadow-sm overflow-hidden bg-white">
                 <div class="d-flex flex-wrap">
@@ -193,81 +223,68 @@
                     
                     <hr class="d-block d-sm-none w-100 my-2" style="border-top: 3px solid #b3b3b3;">
 
-                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 220px;">
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
-                            @if ($items->status_pengajuan == "setuju")
-                                @php
-                                    $endDate = \Carbon\Carbon::parse($items->tanggal_akhir_percobaan)->startOfDay();
-                                    $today = now()->startOfDay();
-                                    if ($endDate->lt($today)) {
-                                        $daysRemainingDisplay = 0;
-                                    } else {
-                                        $daysRemainingDisplay = $today->diffInDays($endDate);
-                                    }
-                                @endphp
-                                @if ($endDate == $today || $endDate < $today)
-                                    <span 
-                                        class="d-inline-flex align-items-center fw-semibold"
-                                        style="
-                                            background-color: #e8f0fe;
-                                            color: #1967d2;
-                                            border-radius: 6px;
-                                            font-size: 0.9rem;
-                                            padding: 4px 10px;
-                                            min-width: 170px;
-                                            justify-content: center;
-                                        ">
-                                        Diadopsi
-                                    </span>
-                                @else
-                                    <h6 class="fw-bold" style="font-size: 14px">
-                                            Masa Percobaan Sisa {{ $daysRemainingDisplay }} hari
-                                            <i 
-                                                class="fa-solid fa-circle-info tooltip-info"
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
-                                                title="Jika masa percobaan sudah selesai, hewan akan otomatis diadopsi."
-                                            ></i>
-                                    </h6>
-                                    <div class="d-flex gap-2 justify-content-end">
-                                        <button 
-                                            type="button" 
-                                            class="btn btn-merah-color btn-sm riwayat-btn-aksi" 
-                                            onclick="kembalikanHewan({{ $items->hewan->id }})"
-                                        >
-                                            Kembalikan
-                                        </button>
-                                    </div>
-                                @endif
-                            @elseif($items->status_pengajuan == 'diajukan' || $items->status_pengajuan == 'diadopsi')
-                                <span 
-                                    class="d-inline-flex align-items-center fw-semibold"
-                                    style="
-                                        background-color: #e8f0fe;
-                                        color: #1967d2;
-                                        border-radius: 6px;
-                                        font-size: 0.9rem;
-                                        padding: 4px 10px;
-                                        min-width: 170px;
-                                        justify-content: center;
-                                    ">
-                                    {{ ucfirst($items->status_pengajuan) }}
-                                </span>
-                            @elseif($items->status_pengajuan == 'tolak' || $items->status_pengajuan == 'dikembalikan')
-                                <span 
-                                    class="d-inline-flex align-items-center fw-semibold"
-                                    style="
-                                        background-color: #ffe8ea;
-                                        color: #dc3545;
-                                        border-radius: 6px;
-                                        font-size: 0.9rem;
-                                        padding: 4px 10px;
-                                        min-width: 170px;
-                                        justify-content: center;
-                                    ">
-                                    {{ ucfirst($items->status_pengajuan) }}
-                                </span>
+                            @if ($items->status_pengajuan == 'setuju')
+                                <div class="d-flex flex-column align-items-center w-100">
+                                    @php
+                                        $today = \Carbon\Carbon::today();
+                                        $akhir = $items->tanggal_akhir_percobaan 
+                                                    ? \Carbon\Carbon::parse($items->tanggal_akhir_percobaan) 
+                                                    : null;
+                                    @endphp
+
+                                    @if($items->tanggal_mulai_percobaan && $items->tanggal_akhir_percobaan && $akhir->gt($today))
+                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
+                                            style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                            <i class="bi bi-clock-history me-1"></i> Masa Percobaan
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center mb-2">
+                                            <small class="text-secondary" style="font-size: 0.75rem; letter-spacing: 0.5px;">PERIODE:</small>
+                                            <small class="fw-semibold text-dark" style="font-size: 0.85rem;">
+                                                {{ \Carbon\Carbon::parse($items->tanggal_mulai_percobaan)->format('d M') }} 
+                                                <span class="text-muted mx-1">&mdash;</span> 
+                                                {{ \Carbon\Carbon::parse($items->tanggal_akhir_percobaan)->format('d M Y') }}
+                                            </small>
+                                        </div>
+                                        <div class="w-100 mt-1 mb-3">
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-merah-color btn-sm w-100 fw-semibold"
+                                                style="font-size: 0.9rem; padding: 6px 12px;"
+                                                onclick="kembalikanHewan({{ $items->hewan->id }})"
+                                            >
+                                                Batalkan
+                                            </button>
+                                        </div>
+                                    @else
+                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
+                                            style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                            Diadopsi
+                                        </div>
+                                    @endif
+                                </div>
+                            @elseif($items->status_pengajuan == 'diajukan')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                    Diajukan
+                                </div>
+                            @elseif($items->status_pengajuan == 'diadopsi')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                    Diadopsi
+                                </div>
+                            @elseif($items->status_pengajuan == 'tolak')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
+                                    Pengajuan Ditolak
+                                </div>
+                            @elseif($items->status_pengajuan == 'dikembalikan')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
+                                    Hewan Dikembalikan
+                                </div>
                             @endif
                         </div>
                         <a href="{{ route('adopter.detailHewan', ['id' => $items->hewan_id]) }}" 

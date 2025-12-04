@@ -192,7 +192,11 @@
 
 @section('content')
     <div class="container py-5">
-        <div class="row detail-shelter-container g-5 mb-5">
+        <div class="text-atas">
+            <h1 class="fw-bold text-center">Detail Shelter</h1>
+            <hr>
+        </div>
+        <div class="row detail-shelter-container g-4 mb-5">
             <div class="col-12 col-md-6 text-center">
                 <img src="{{ asset('storage/' . $detailShelter->foto_shelter) }}" class="shelter-image img-fluid" alt="Foto Shelter {{ $detailShelter->nama_shelter ?? 'Shelter' }}">
             </div>

@@ -104,14 +104,19 @@
             <hr>
 
             <h5>Pertimbangan Awal</h5>
-            <p class="mb-4">Untuk hewan peliharaan pribadi, pertimbangkan opsi lain terlebih dahulu, seperti mencarikan pemilik baru yang terpercaya dan mampu merawat hewan anda dengan baik.</p>
+            <p class="mb-4">Untuk hewan peliharaan pribadi, pertimbangkan opsi lain terlebih dahulu, seperti mencarikan pemilik baru yang terpercaya dan mampu merawat hewan Anda dengan baik.</p>
             
             <h5>Perlengkapan Yang Disarankan</h5>
             <p>Untuk membantu hewan beradaptasi di lingkungan baru, mohon sediakan barang-barang pribadinya jika ada seperti</p>
-            <li>Tempat tidur</li>
-            <li>Mainan kesayangan</li>
-            <li>Makanan favorit atau peralatan makan</li>
+            <ul>
+                <li>Tempat tidur</li>
+                <li>Mainan kesayangan</li>
+                <li>Makanan favorit atau peralatan makan</li>
+            </ul>
 
+            <p class="fw-semibold fst-italic text-danger">
+                * Pengajuan penyerahan hewan akan ditampilkan kepada seluruh shelter yang telah terdaftar di website ini.
+            </p>
             <hr>
         </div>
 
@@ -176,7 +181,7 @@
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="beratHewan" class="form-label fw-semibold">Berat Hewan <span class="text-danger">*</span></label>
+                        <label for="beratHewan" class="form-label fw-semibold">Berat Hewan (Kg) <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
                         @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>

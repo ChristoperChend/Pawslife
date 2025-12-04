@@ -174,21 +174,8 @@
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <label class="form-label fw-semibold">Alamat <span class="text-danger">*</span></label>
-                            <div class="detail-field-wrapper" style="padding: 0px">
-                                <textarea 
-                                    name="alamat_adopter" 
-                                    class="form-control detail-text" 
-                                    rows="3" 
-                                    style="padding: 10px 15px;"
-                                    required
-                                >{{ old('alamat_adopter', $adopter->alamat) }}</textarea>
-                            </div>
-                        </div>
-
                         <div class="col-12 col-md-6">
-                            <label class="form-label fw-semibold">Usia <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold">Usia (Tahun) <span class="text-danger">*</span></label>
                             <div class="detail-field-wrapper">
                                 <input type="text" name="usia_adopter" class="form-control detail-text" 
                                 value="{{ old('usia_adopter', $adopter->usia) }}" required>
@@ -216,6 +203,19 @@
                             <div class="detail-field-wrapper">
                                 <input type="text" name="nomor_wa_adopter" class="form-control detail-text" 
                                 value="{{ old('nomor_wa_adopter', $adopter->no_whatsapp) }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Alamat <span class="text-danger">*</span></label>
+                            <div class="detail-field-wrapper" style="padding: 0px">
+                                <textarea 
+                                    name="alamat_adopter" 
+                                    class="form-control detail-text" 
+                                    rows="3" 
+                                    style="padding: 10px 15px;"
+                                    required
+                                >{{ old('alamat_adopter', $adopter->alamat) }}</textarea>
                             </div>
                         </div>
                     </div>
