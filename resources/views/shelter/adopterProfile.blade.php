@@ -45,13 +45,13 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="fw-semibold">Usia</label>
-                    <div class="form-control readonly-field">{{ $data->usia }} tahun</div>
+                    <label class="fw-semibold">Email</label>
+                    <div class="form-control readonly-field">{{ $data->pengguna->email ?? '-' }}</div>
                 </div>
 
                 <div class="col-md-6">
-                    <label class="fw-semibold">Alamat</label>
-                    <div class="form-control readonly-field">{{ $data->alamat }}</div>
+                    <label class="fw-semibold">Usia (Tahun)</label>
+                    <div class="form-control readonly-field">{{ $data->usia }} tahun</div>
                 </div>
 
                 <div class="col-md-6">
@@ -70,9 +70,11 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label class="fw-semibold">Email</label>
-                    <div class="form-control readonly-field">{{ $data->pengguna->email ?? '-' }}</div>
+                    <label class="fw-semibold">Alamat</label>
+                    <div class="form-control readonly-field">{{ $data->alamat }}</div>
                 </div>
+
+                
             </div>
 
             <div class="row text-center mt-4">

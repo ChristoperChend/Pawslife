@@ -35,6 +35,9 @@
         transition: transform .2s ease, box-shadow .2s ease;
         overflow: hidden;
         box-shadow: 0 6px 16px rgba(0,0,0,.06);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
     .shelter-container:hover {
@@ -52,22 +55,70 @@
         height: 100%;
         object-fit: cover;
         border-bottom: 1px solid #f1f1f1;
-        transition: transform .3s ease;
     }
 
-    .card-title-shelter {
-        font-size: 1.25rem;
-        color: #212529;
+    .shelter-card-body-alt {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        background-color: #fff;
+        align-items: center; 
+        text-align: center;
     }
 
-    .card-subtitle-shelter {
-        font-size: 0.9rem;
-        color: #6c757d !important;
+    .shelter-meta-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+        width: 100%;
     }
 
-    .card-text-alamat {
-        font-size: 0.8rem;
-        color: #495057 !important;
+    .shelter-meta-icon {
+        font-size: 1rem;
+        margin-right: 8px;
+        background: #90a4ae;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #2c6ade; 
+    }
+
+    .shelter-city-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #90a4ae;
+    }
+
+    .shelter-name-hero {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #2c3e50;
+
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .shelter-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: var(--primary-color);
+        margin-top: auto; 
+        padding-top: 12px;
+        border-top: 1px solid #f0f2f5;
+        width: 100%; 
+    }
+
+    .shelter-footer i {
+        margin-right: 8px;
+        color: var(--primary-color);
     }
 </style>
 
@@ -83,21 +134,38 @@
             @if (!$listShelter->isEmpty())
                 @foreach ($listShelter as $shelter)
                     @if ($shelter->status === 'diterima')
-                        <a href="{{ route('adopter.detailShelter', ['id' => $shelter->id]) }}" class="col d-flex justify-content-center text-decoration-none">
-                            <div class="card shelter-container border-0 shadow-lg">
-                                <div class="ratio">
-                                    <img src="{{ asset('storage/' . $shelter->foto_shelter) }}" class="daftar-shelter" alt="Foto Shelter {{ $shelter->nama_shelter ?? 'Shelter' }}">
-                                </div>
+                        <div class="col d-flex justify-content-center">
+                            <a href="{{ route('adopter.detailShelter', ['id' => $shelter->id]) }}" class="text-decoration-none w-100 d-flex justify-content-center">
+                                <div class="card shelter-container border-0 shadow-sm">
+                                    
+                                    <div class="ratio">
+                                        <img src="{{ asset('storage/' . $shelter->foto_shelter) }}" class="daftar-shelter" alt="Foto Shelter {{ $shelter->nama_shelter ?? 'Shelter' }}">
+                                    </div>
 
-                                <div class="p-3">
-                                    <h5 class="card-title-shelter fw-bold mb-0 text-truncate">{{ $shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</h5>
-                                    <p class="card-subtitle-shelter mb-1 text-muted small">{{ $shelter->lokasi ?? '-' }}</p>
-                                    <p class="card-text-alamat text-muted mt-2 mb-0">
-                                        <i class="fa-solid fa-location-dot me-1"></i> {{ Str::limit($shelter->alamat_shelter, 35, '...') }}
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
+                                    <div class="shelter-card-body-alt">
+
+                                        <h5 class="shelter-name-hero" title="{{ $shelter->nama_shelter }}">
+                                            {{ $shelter->nama_shelter ?? 'Shelter' }}
+                                        </h5>
+
+                                        <div class="shelter-meta-top">
+                                            
+                                            <span class="shelter-city-text">
+                                                {{ $shelter->lokasi ?? 'Lokasi' }}
+                                            </span>
+                                        </div>
+
+                                        <div class="shelter-footer">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span class="text-truncate">
+                                                {{ Str::limit($shelter->alamat_shelter, 25, '...') }}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                            </a>
+                        </div>
                     @endif
                 @endforeach
             @else

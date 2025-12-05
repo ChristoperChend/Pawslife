@@ -266,13 +266,13 @@
                                     @endif
                                 </div>
                             @elseif($items->status_pengajuan == 'diajukan')
-                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                     Diajukan
                                 </div>
                             @elseif($items->status_pengajuan == 'diadopsi')
-                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                     Diadopsi
                                 </div>
                             @elseif($items->status_pengajuan == 'tolak')

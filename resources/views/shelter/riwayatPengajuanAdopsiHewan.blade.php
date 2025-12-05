@@ -58,8 +58,8 @@
                         @if($item->status_pengajuan == 'setuju')
                         <div class="d-flex flex-column align-items-center w-100">
                             
-                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                 <i class="bi bi-clock-history me-1"></i> Masa Percobaan
                             </div>
 
@@ -84,23 +84,23 @@
                         </div>
 
                         @elseif($item->status_pengajuan == 'tolak')
-                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
                                 Pengajuan Ditolak
                             </div>
                         @elseif($item->status_pengajuan == 'dibatalkan')
-                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
                                 Percobaan Adopsi Batal
                             </div>
                         @elseif($item->status_pengajuan == 'diadopsi')
-                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                 Diadopsi
                             </div>
                         @elseif($item->status_pengajuan == 'dikembalikan')
-                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                            <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
                                 Hewan Dikembalikan
                             </div>
                         @else
