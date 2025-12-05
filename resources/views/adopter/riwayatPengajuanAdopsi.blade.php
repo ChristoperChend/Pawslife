@@ -160,7 +160,7 @@
             <hr>
         </div>
 
-        @if (!$riwayat->empty())
+        @if ($riwayat->isNotEmpty())
             <div class="card border-0 shadow-sm mb-4" style="background:#eef2fb;">
                 <div class="card-body d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
                     

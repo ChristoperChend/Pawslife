@@ -75,22 +75,22 @@
                 <h5>Lainnya</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2">
-                        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                        <a href="https://youtube.com/@pawslife67?si=7zHJkxYMSREMvJjY" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
                             Youtube - Pawslife
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                        <a href="https://www.instagram.com/pawslife67?igsh=cmd4aDEyaGppajJm" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
                             Instagram - Pawslife
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                        <a href="https://x.com/pawslife67?t=0pKmIDJknrIMr4kTAbQxrw&s=09" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
                             X - Pawslife
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
+                        <a href="https://www.tiktok.com/@pawslife67" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: white;">
                             TikTok - Pawslife
                         </a>
                     </li>

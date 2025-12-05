@@ -221,13 +221,21 @@
                     </div>
 
                     <div class="row mt-4 align-items-center">
-                        <div class="col-12 col-md-6 d-flex justify-content-start gap-3 flex-wrap order-md-1 order-2">
-                            <a href="{{ url()->previous() }}" class="btn btn-kembali">Kembali</a>
-                            <a href="#" onclick="confirmLogout(event)" class="btn btn-merah-color">Logout</a>
-                        </div>
+                        <div class="col-12 d-flex flex-column flex-md-row justify-content-between gap-3">
+                            <div class="d-flex flex-column flex-md-row gap-3 order-1 order-md-1">
+                                <a href="{{ url()->previous() }}" class="btn btn-kembali w-100 w-md-auto order-1">
+                                    Kembali
+                                </a>
 
-                        <div class="col-12 col-md-6 d-flex justify-content-end gap-2 flex-wrap mt-2 mt-md-0 order-md-2 order-1">
-                            <button type="submit" class="btn btn-primary-color">Simpan</button>
+                                <a href="#" onclick="confirmLogout(event)" class="btn btn-merah-color w-100 w-md-auto order-3 order-md-2">
+                                    Logout
+                                </a>
+                            </div>
+                            <div class="order-2 order-md-2">
+                                <button type="submit" class="btn btn-primary-color w-100 w-md-auto">
+                                    Simpan
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
