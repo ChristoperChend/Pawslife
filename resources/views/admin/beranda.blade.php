@@ -94,10 +94,9 @@
         @if (!$listShelter->isEmpty())
             @foreach ($listShelter as $items)
                 <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 
-                   class="card shelter-card-item shadow-sm overflow-hidden bg-white mb-3 text-decoration-none">
-                   
+                    class="card shelter-card-item shadow-sm overflow-hidden bg-white mb-3 text-decoration-none">
+
                     <div class="d-flex flex-wrap">
-                        
                         <div class="p-3 d-flex align-items-center justify-content-center bg-white" 
                             style="width: 140px; min-height: 130px;"
                         >

@@ -10,8 +10,8 @@
     }
 
     .dokumen-image {
-        width: 450px;
-        height: 350px !important;
+        width: 400px;
+        height: 400px !important;
         border-radius: 10px;
     }
 
@@ -53,6 +53,10 @@
         letter-spacing: .3px;
     }
 
+    .form-control:disabled {
+        background-color: #fff !important;
+    }
+
     @media (max-width: 576px) {
         .shelter-image {
             height: 350px !important;
@@ -81,38 +85,52 @@
                 </div>
 
                 <div class="row g-3">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Nama Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->nama_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Email Shelter</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->pengguna->email ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">No Telepon</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->no_telepon_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Alamat</label>
                         <div class="detail-field-wrapper">
                             <span class="detail-text">{{ $detailShelter->alamat_shelter ?? 'Data tidak tersedia' }}</span>
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nama Bank</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->nama_bank ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nomor Rekening</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $detailShelter->nomor_rekening ?? 'Data tidak tersedia' }}</span>
+                        </div>
+                    </div>
+
                     <div class="col-md-12">
                         <label class="form-label fw-semibold">Deskripsi Shelter</label>
-                        <div class="detail-field-wrapper">
-                            <span class="detail-text">{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</span>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $detailShelter->deskripsi_shelter ?? 'Data tidak tersedia' }}</textarea>
                         </div>
                     </div>
 
@@ -185,6 +203,10 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ url()->previous() }}";
+                                }
                             })
                         } else {
                             Swal.fire({
@@ -196,6 +218,10 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ url()->previous() }}";
+                                }
                             })
                         }
                     })

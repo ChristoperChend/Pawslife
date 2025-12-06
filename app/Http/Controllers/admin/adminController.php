@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\mailController;
 use App\Models\shelter;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,10 +44,16 @@ class adminController extends Controller
             $shelter->status = 'ditolak';
             $shelter->save();
 
+            $mailCtrl = new mailController();
+            $mailCtrl->sendRejectionEmail(
+                $shelter->pengguna->email,
+                $shelter->nama_shelter
+            );
+
             return response()->json([
                 'success' => true,
                 'title' => 'Akun shelter berhasil ditolak!',
-                'message' => 'berikan informasi kepada shelter melalui email bahwa akun ditolak karena data tidak valid.'
+                'message' => ''
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -71,10 +78,13 @@ class adminController extends Controller
             $shelter->status = 'diterima';
             $shelter->save();
 
+            $mailCtrl = new mailController();
+            $mailCtrl->sendApprovalEmail($shelter->pengguna->email, $shelter->nama_shelter);
+
             return response()->json([
                 'success' => true,
                 'title' => 'Akun shelter berhasil dibuat!',
-                'message' => 'berikan informasi kepada shelter melalui email bahwa akun sudah diaktifkan dan bisa diakses.'
+                'message' => ''
             ]);
         } catch (Exception $e) {
             return response()->json([

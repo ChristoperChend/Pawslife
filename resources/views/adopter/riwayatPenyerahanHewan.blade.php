@@ -169,37 +169,19 @@
 
                     <hr class="d-block d-sm-none w-100 my-2" style="border-top: 3px solid #b3b3b3;">
 
-                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 200px;">
+                    <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width: 220px;">
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
-                            @if($items->status_penyerahan == 'diajukan' || $items->status_penyerahan == 'setuju')
-                                <span 
-                                    class="d-inline-flex align-items-center fw-semibold"
-                                    style="
-                                        background-color: #e8f0fe;
-                                        color: #1967d2;
-                                        border-radius: 6px;
-                                        font-size: 0.9rem;
-                                        padding: 4px 10px;
-                                        min-width: 170px;
-                                        justify-content: center;
-                                    ">
-                                    {{ ucfirst($items->status_penyerahan) }}
-                                </span>
-                            @elseif($items->status_penyerahan == 'tolak')
-                                <span 
-                                    class="d-inline-flex align-items-center fw-semibold"
-                                    style="
-                                        background-color: #ffe8ea;
-                                        color: #dc3545;
-                                        border-radius: 6px;
-                                        font-size: 0.9rem;
-                                        padding: 4px 10px;
-                                        min-width: 170px;
-                                        justify-content: center;
-                                    ">
-                                    {{ ucfirst($items->status_penstatus_penyerahangajuan) }}
-                                </span>
+                            @if($items->status_penyerahan == 'diajukan')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
+                                    Diajukan
+                                </div>
+                            @elseif($items->status_pengajuan == 'setuju')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
+                                    Diadopsi
+                                </div>
                             @endif
                         </div>
                         <a href="{{ route('adopter.detailPenyerahanHewan', ['id' => $items->id, 'adopter_id' => $items->adopter_id]) }}" 

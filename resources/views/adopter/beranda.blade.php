@@ -222,7 +222,7 @@
             </div>
         </div>
 
-        <div class="text-end me-md-4">
+        <div class="text-end me-md-4" style="margin-right: 2.5rem">
             <a href="{{ route('adopter.daftarHewan') }}" class="btn btn-primary-color fw-bold text-decoration-none">
                 Lihat semua
             </a>

@@ -300,18 +300,13 @@ class adopterController extends Controller
         $adopter->no_whatsapp = $request->nomor_wa_adopter;
         $adopter->pekerjaan = $request->pekerjaan_adopter;
 
+        
         $fotoAdopterPath = $request->file('foto_adopter')->store('fotoAdopter', 'public');
-
-        if ($request->hasFile('foto_adopter')) {
-            File::delete($adopter->foto_adopter);
-            $adopter->foto_adopter = $fotoAdopterPath;
-        } else {
-            return response()->json([
-                'error' => true,
-                'title' => 'Gagal mengedit profile!',
-                'message' => 'Tidak menemukan file foto.'
-            ]);
+        if ($adopter->foto_adopter && File::exists(public_path('storage/' . $adopter->foto_adopter))) {
+            File::delete(public_path('storage/' . $adopter->foto_adopter));
         }
+        $adopter->foto_adopter = $fotoAdopterPath;
+        
         $adopter->save();
 
         return response()->json([
@@ -384,22 +379,41 @@ class adopterController extends Controller
     }
 
     public function showRiwayatPengajuanAdopsi() {
-        $adopter = Auth::user()->adopter;
+        $adopter_id = Auth::user()->adopter->id;
 
-        $adopter_id = $adopter->id;
+        $allRiwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)->get();
+        $hewanIds = $allRiwayat->pluck('hewan_id');
 
-        $riwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)->latest()->paginate(4);
+        $expiredAdoptionsQuery = formPengajuanAdopsi::whereIn('hewan_id', $hewanIds)
+            ->where('status_pengajuan', 'setuju')
+            ->whereNotNull('tanggal_akhir_percobaan')
+            ->where('tanggal_akhir_percobaan', '<', now('Asia/Jakarta'));
 
-        foreach ($riwayat as $item) {
-            $item->selesai_masa_percobaan = $item->updated_at->addDays(7)->isPast();
+        $affectedHewanIds = $expiredAdoptionsQuery->pluck('hewan_id');
+
+        if ($affectedHewanIds->isNotEmpty()) {
+            $expiredAdoptionsQuery->update([
+                'status_pengajuan' => 'diadopsi',
+                'updated_at' => now('Asia/Jakarta')
+            ]);
+
+            Hewan::whereIn('id', $affectedHewanIds)->update([
+                'status_hewan' => 'di_adopsi',
+                'updated_at' => now('Asia/Jakarta')
+            ]);
         }
+
+        $riwayat = formPengajuanAdopsi::where('adopter_id', $adopter_id)
+            ->latest()
+            ->paginate(4);
 
         $jumlahDiajukan = formPengajuanAdopsi::whereIn('status_pengajuan', ['diajukan', 'setuju'])
             ->where('adopter_id', $adopter_id)
             ->count();
-        
+
         return view('adopter.riwayatPengajuanAdopsi', compact('riwayat', 'jumlahDiajukan'));
     }
+
 
     public function showLepasAdopsi() {
         return view('adopter.lepasAdopsi');
@@ -407,23 +421,29 @@ class adopterController extends Controller
 
     public function lepasAdopsi(Request $request) {
         try {
+            Log::debug($request);
             $validator = Validator::make($request->all(), [
                 'namaHewan'=> 'required',
                 'jenisHewan' =>'required|in:anjing,kucing',
                 'jenisKelaminHewan' =>'required|in:jantan,betina',
-                'statusVaksinHewan' =>'required|in:sudahVaksin,belumVaksin',
-                'statusSterilHewan' =>'required|in:sudahSteril,belumSteril',
+                'statusVaksinHewan' =>'required|in:sudah_vaksin,belum_vaksin',
+                'tanggalVaksinHewan' =>'required',
+                'statusSterilHewan' =>'required|in:sudah_steril,belum_steril',
+                'tanggalSterilHewan' =>'required',
                 'beratHewan' =>'required|numeric',
                 'rasHewan' =>'required',
                 'fotoHewan' =>'required|image|mimes:jpeg,png,jpg|max:2048',
                 'catatanMedisHewan'=> 'required',
                 'alasanPenyerahanHewan'=> 'required',
+                'deskripsiHewan'=> 'required',
             ],[
                 'namaHewan.required' => '*Nama Hewan Harus di Isi',
                 'jenisHewan.required' => '*Jenis Hewan Harus di Pilih',
                 'jenisKelaminHewan.required' => '*Jenis Kelamin Hewan Harus di Isi',
                 'statusVaksinHewan.required' => '*Status Vaksin Hewan Harus di Isi',
+                'tanggalVaksinHewan.required' => '*Tanggal Vaksin Hewan Harus di Isi',
                 'statusSterilHewan.required' => '*Status Steril Hewan Harus di Isi',
+                'tanggalSterilHewan.required' => '*Tanggal Steril Hewan Harus di Isi',
                 'beratHewan.required' => '*Berat Hewan Harus di Isi',
                 'beratHewan.numeric' => '*Berat Hewan Hanya Boleh Berupa Angka',
                 'rasHewan.required' => '*Ras Hewan Harus di Isi',
@@ -432,7 +452,8 @@ class adopterController extends Controller
                 'fotoHewan.mimes' => '*Foto harus berformat JPG, JPEG, atau PNG.',
                 'fotoHewan.max' => '*Ukuran foto maksimal 2MB.',
                 'catatanMedisHewan.required' => '*Catatan Medis Hewan Harus di Isi',
-                'alasanPenyerahanHewan.required' => '*Alasan Penyerahan Hewan Harus di Isi'
+                'alasanPenyerahanHewan.required' => '*Alasan Penyerahan Hewan Harus di Isi',
+                'deskripsiHewan.required' => '*Deskripsi Hewan Harus di Isi'
             ]);
 
             if($validator->fails()) {
@@ -455,22 +476,22 @@ class adopterController extends Controller
 
                 DB::beginTransaction();
 
-                $statusVaksin = $request->statusVaksinHewan === 'sudahVaksin' ? 'sudah_vaksin' : 'belum_vaksin';
-                $statusSteril = $request->statusSterilHewan === 'sudahSteril' ? 'sudah_steril' : 'belum_steril';
-
                 $formPenyerahanHewan = formPenyerahanHewan::create([
                     'shelter_id' => null,
                     'adopter_id' => $adopter_id,
                     'nama_hewan' => $request->namaHewan,
                     'ras' => $request->rasHewan,
                     'berat' => $request->beratHewan,
-                    'status_steril' => $statusSteril,
-                    'status_vaksin' => $statusVaksin,
+                    'status_steril' => $request->statusSterilHewan,
+                    'tanggal_steril' => $request->tanggalSterilHewan,
+                    'status_vaksin' => $request->statusVaksinHewan,
+                    'tanggal_vaksin' => $request->tanggalVaksinHewan,
                     'catatan_medis' => $request->catatanMedisHewan,
                     'foto_hewan' => $fotoHewanPath,
                     'jenis_hewan' => $request->jenisHewan,
                     'alasan_penyerahan' => $request->alasanPenyerahanHewan,
                     'jenis_kelamin' => $request->jenisKelaminHewan,
+                    'deskripsi_hewan' => $request->deskripsiHewan,
                     'status_penyerahan' => 'diajukan',
                 ]);
             } else {

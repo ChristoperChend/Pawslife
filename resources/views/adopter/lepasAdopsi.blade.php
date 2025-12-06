@@ -80,19 +80,33 @@
         object-fit:cover;
     }
 
+    .date-input-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, opacity 0.3s ease, margin-top 0.3s ease;
+        opacity: 0;
+        margin-top: 0;
+    }
+
+    .date-input-wrapper.show {
+        max-height: 100px;
+        opacity: 1;
+        margin-top: 0.75rem;
+    }
+
     @media (max-width: 576px) {
-    .preview-wrap {
-        justify-content: center;
+        .preview-wrap {
+            justify-content: center;
+        }
+        
+        .preview-box {
+            margin: 0 auto; 
+        }
+        
+        .preview-wrap > div:last-child {
+            min-width: 90% !important;
+        }
     }
-    
-    .preview-box {
-        margin: 0 auto; 
-    }
-    
-    .preview-wrap > div:last-child {
-        min-width: 90% !important;
-    }
-}
 </style>
 
 @extends('layout.master')
@@ -159,13 +173,9 @@
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="statusVaksinHewan" class="form-label fw-semibold">Status Vaksin Hewan <span class="text-danger">*</span></label>
-                        <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
-                            <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                            <option value="sudahVaksin"  {{old('statusVaksinHewan') === 'sudahVaksin' ? 'selected' : ''}}>Sudah Vaksin</option>
-                            <option value="belumVaksin"{{old('statusVaksinHewan') === 'belumVaksin' ? 'selected' : ''}}>Belum Vaksin</option>
-                        </select>
-                        @error('statusVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                        <label for="beratHewan" class="form-label fw-semibold">Berat Hewan (Kg) <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
+                        @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
@@ -173,17 +183,33 @@
                     <div class="col-md-6 ">
                         <label for="statusSterilHewan" class="form-label fw-semibold">Status Steril Hewan <span class="text-danger">*</span></label>
                         <select class="form-select" name="statusSterilHewan" id="statusSterilHewan">
-                            <option value="" disabled selected hidden>Masukkan Status Vaksin Hewan</option>
-                            <option value="sudahSteril" {{old('statusSterilHewan') === 'sudahSteril' ? 'selected' : ''}}>Sudah Steril</option>
-                            <option value="belumSteril" {{old('statusSterilHewan') === 'belumSteril' ? 'selected' : ''}}>Belum Steril</option>
+                            <option value="" disabled selected hidden>Pilih status steril</option>
+                            <option value="sudah_steril" {{old('statusSterilHewan') === 'sudah_steril' ? 'selected' : ''}}>Sudah Steril</option>
+                            <option value="belum_steril" {{old('statusSterilHewan') === 'belum_steril' ? 'selected' : ''}}>Belum Steril</option>
                         </select>
                         @error('statusSterilHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+
+                        <div id="wrapper_tanggal_steril" class="date-input-wrapper">
+                            <label class="form-label fw-semibold" for="tanggalSterilHewan">Tanggal Sterilisasi <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tanggalSterilHewan" name="tanggalSterilHewan" value="">
+                            @error('tanggalSterilHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                        </div>
                     </div>
 
                     <div class="col-md-6 ">
-                        <label for="beratHewan" class="form-label fw-semibold">Berat Hewan (Kg) <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan Berat Hewan">
-                        @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                        <label for="statusVaksinHewan" class="form-label fw-semibold">Status Vaksin Hewan <span class="text-danger">*</span></label>
+                        <select class="form-select" name="statusVaksinHewan" id="statusVaksinHewan">
+                            <option value="" disabled selected hidden>Pilih status vaksin</option>
+                            <option value="sudah_vaksin"  {{old('statusVaksinHewan') === 'sudah_vaksin' ? 'selected' : ''}}>Sudah Vaksin</option>
+                            <option value="belum_vaksin"{{old('statusVaksinHewan') === 'belum_vaksin' ? 'selected' : ''}}>Belum Vaksin</option>
+                        </select>
+                        @error('statusVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+
+                        <div id="wrapper_tanggal_vaksin" class="date-input-wrapper">
+                        <label class="form-label fw-semibold" for="tanggalVaksinHewan">Tanggal Vaksinasi <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="tanggalVaksinHewan" name="tanggalVaksinHewan" value="">
+                        @error('tanggalVaksinHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
                     </div>
                 </div>
 
@@ -206,6 +232,14 @@
                         <label for="alasanPenyerahanHewan" class="form-label fw-semibold">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
                         <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
                         @error('alasanPenyerahanHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label for="deskripsiHewan" class="form-label fw-semibold">Deskripsi Hewan <span class="text-danger">*</span></label>
+                        <textarea type="text" class="form-control" rows="3" id="deskripsiHewan" name="deskripsiHewan" placeholder="Masukkan Deskripsi Hewan"></textarea>
+                        @error('deskripsiHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
                 
@@ -278,15 +312,19 @@
                 if (result.isConfirmed) {
                     document.getElementById('fullscreen-loading').classList.remove('d-none')
                     const formData = new FormData()
+                    console.log(document.getElementById('deskripsiHewan').value)
                     formData.append('namaHewan', document.getElementById('namaHewan').value)
                     formData.append('jenisHewan', document.getElementById('jenisHewan').value)
                     formData.append('jenisKelaminHewan', document.getElementById('jenisKelaminHewan').value)
                     formData.append('statusVaksinHewan', document.getElementById('statusVaksinHewan').value)
+                    formData.append('tanggalVaksinHewan', document.getElementById('tanggalVaksinHewan').value)
                     formData.append('statusSterilHewan', document.getElementById('statusSterilHewan').value)
+                    formData.append('tanggalSterilHewan', document.getElementById('tanggalSterilHewan').value)
                     formData.append('catatanMedisHewan', document.getElementById('catatanMedisHewan').value)
                     formData.append('beratHewan', document.getElementById('beratHewan').value)
                     formData.append('rasHewan', document.getElementById('rasHewan').value)
                     formData.append('alasanPenyerahanHewan', document.getElementById('alasanPenyerahanHewan').value)
+                    formData.append('deskripsiHewan', document.getElementById('deskripsiHewan').value)
                     formData.append('fotoHewan', document.getElementById('fotoHewan').files[0])
                     formData.append('_token', '{{ csrf_token() }}')
 
@@ -323,7 +361,11 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
-                            })
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ url()->previous() }}";
+                                }
+                            });
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -334,11 +376,50 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
-                            })
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ url()->previous() }}";
+                                }
+                            });
                         }
                     })
                 }
             })
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const vaksinSelect = document.getElementById('statusVaksinHewan');
+            const vaksinWrapper = document.getElementById('wrapper_tanggal_vaksin');
+            
+            const sterilSelect = document.getElementById('statusSterilHewan');
+            const sterilWrapper = document.getElementById('wrapper_tanggal_steril');
+
+            function toggleVerticalDate(selectElement, wrapperElement, triggerValue) {
+                if(selectElement.value === triggerValue) {
+                    wrapperElement.classList.add('show');
+                    wrapperElement.classList.add('mt-4');
+                    wrapperElement.querySelector('input').required = true;
+                } else {
+                    wrapperElement.classList.remove('show');
+                    wrapperElement.classList.remove('mt-4');
+                    const input = wrapperElement.querySelector('input');
+                    input.required = false;
+                }
+            }
+
+            if(vaksinSelect && vaksinWrapper) {
+                toggleVerticalDate(vaksinSelect, vaksinWrapper, 'sudah_vaksin');
+                vaksinSelect.addEventListener('change', function() {
+                    toggleVerticalDate(this, vaksinWrapper, 'sudah_vaksin');
+                });
+            }
+
+            if(sterilSelect && sterilWrapper) {
+                toggleVerticalDate(sterilSelect, sterilWrapper, 'sudah_steril');
+                sterilSelect.addEventListener('change', function() {
+                    toggleVerticalDate(this, sterilWrapper, 'sudah_steril');
+                });
+            }
+        });
     </script>
 @endsection

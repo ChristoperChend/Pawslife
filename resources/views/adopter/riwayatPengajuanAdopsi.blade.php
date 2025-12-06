@@ -236,8 +236,8 @@
                                     @endphp
 
                                     @if($items->tanggal_mulai_percobaan && $items->tanggal_akhir_percobaan && $akhir->gt($today))
-                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                            style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                            style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                             <i class="bi bi-clock-history me-1"></i> Masa Percobaan
                                         </div>
                                         <div class="d-flex flex-column align-items-center mb-2">
@@ -257,11 +257,6 @@
                                             >
                                                 Batalkan
                                             </button>
-                                        </div>
-                                    @else
-                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                            style="color: var(--primary-color); border: 1px solid var(--primary-color);">
-                                            Diadopsi
                                         </div>
                                     @endif
                                 </div>
@@ -284,6 +279,11 @@
                                 <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
                                     style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
                                     Hewan Dikembalikan
+                                </div>
+                            @elseif($items->status_pengajuan == 'dibatalkan')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
+                                    Percobaan Adopsi Batal
                                 </div>
                             @endif
                         </div>
