@@ -222,11 +222,13 @@
             </div>
         </div>
 
-        <div class="text-end me-md-4" style="margin-right: 2.5rem">
-            <a href="{{ route('adopter.daftarHewan') }}" class="btn btn-primary-color fw-bold text-decoration-none">
-                Lihat semua
-            </a>
-        </div>
+        @if (!$listHewan->isEmpty())
+            <div class="text-end me-md-4" style="margin-right: 2.5rem">
+                <a href="{{ route('adopter.daftarHewan') }}" class="btn btn-primary-color fw-bold text-decoration-none">
+                    Lihat semua
+                </a>
+            </div>
+        @endif
         
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
                 @if (!$listHewan->isEmpty())

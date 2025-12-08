@@ -174,7 +174,7 @@
             </p>
         </div>
         <div class="mission-image-wrapper">
-            <img src="/image/tentangKami/TentangKami1.jpg" alt="Pawslife Mission" class="mission-image">
+            <img src="{{ asset('image/tentangKami/TentangKami1.jpg') }}" alt="Pawslife Mission" class="mission-image">
         </div>
     </div>
 </div>
@@ -191,7 +191,7 @@
             </p>
         </div>
         <div class="story-image-wrapper">
-            <img src="/image/tentangKami/TentangKami2.jpg" alt="Pawslife Story" class="story-image">
+            <img src="{{ asset('image/tentangKami/TentangKami2.jpg') }}" alt="Pawslife Story" class="story-image">
         </div>
     </div>
 </div>
