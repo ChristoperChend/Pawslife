@@ -99,7 +99,7 @@
                         title: '<h4 style="font-weight:700; font-size:18px; margin-bottom:8px;">Apakah anda yakin menerima penyerahan hewan?</h4>',
                         html: `
                             <p style="font-size:14px; color:#444; margin-bottom:0; line-height:1.4;">
-                                Anda harus mengambil hewan peliharaan pada alamat adopter.
+                                Pastikan alamat adopter dekat dengan shelter, sehingga adopter dapat mengantarkan hewan ke shelter.
                             </p>
                             <div class="swal-buttons mt-3" 
                                 style="display:flex; justify-content:center; gap:10px; width:100%; margin-top:18px;">

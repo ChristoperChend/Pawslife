@@ -342,7 +342,7 @@ class shelterController
                 ], 404);
             }
 
-            $pengajuan->status_pengajuan = 'tolak';
+            $pengajuan->status_pengajuan = 'dibatalkan';
             $pengajuan->alasan_penolakan_pengajuan_adopsi = $request->alasan;
             $pengajuan->updated_at = now();
             $pengajuan->save();

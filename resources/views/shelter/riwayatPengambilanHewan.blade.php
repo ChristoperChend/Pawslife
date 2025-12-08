@@ -60,8 +60,8 @@
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
                             @if($item->status_penyerahan == 'setuju')
-                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm bg-light w-100" 
-                                    style="color: var(--primary-color); border: 1px solid var(--primary-color);">
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                    style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                     Berhasil diadopsi
                                 </div>
                             @elseif($item->status_penyerahan == 'tolak')

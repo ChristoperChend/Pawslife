@@ -72,7 +72,7 @@
                             <div class="p-3 d-flex align-items-center justify-content-center bg-white text-center" 
                             style="width: 140px; min-height: 130px;"
                             >
-                                <img src="{{ asset($items->foto_shelter) }}" 
+                                <img src="{{ asset('storage/'.$items->foto_shelter) }}" 
                                     alt="Foto Shelter"
                                     class="rounded mx-auto d-block"
                                     style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
@@ -92,33 +92,15 @@
                                 <div>
                                     <h6 class="fw-bold mb-2">Status</h6>
                                     @if ($items->status == "diterima")
-                                        <span 
-                                            class="d-inline-flex align-items-center fw-semibold"
-                                            style="
-                                                background-color: #e8f0fe;
-                                                color: #1967d2;
-                                                border-radius: 6px;
-                                                font-size: 0.9rem;
-                                                padding: 4px 10px;
-                                                min-width: 170px;
-                                                justify-content: center;
-                                            ">
+                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                            style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                             {{ ucfirst($items->status) }}
-                                        </span>
+                                        </div>
                                     @elseif ($items->status == "ditolak")
-                                        <span 
-                                            class="d-inline-flex align-items-center fw-semibold"
-                                            style="
-                                                background-color: #ffe8ea;
-                                                color: #dc3545;
-                                                border-radius: 6px;
-                                                font-size: 0.9rem;
-                                                padding: 4px 10px;
-                                                min-width: 170px;
-                                                justify-content: center;
-                                            ">
+                                        <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                            style="color: #dc3545; border: 1px solid #dc3545; background-color: #ffe8ea;">
                                             {{ ucfirst($items->status) }}
-                                        </span>
+                                        </div>
                                     @endif
                                 </div>
                                 <a href="{{ route('admin.detailShelter', ['id' => $items->id]) }}" 

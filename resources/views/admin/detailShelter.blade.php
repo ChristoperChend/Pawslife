@@ -57,6 +57,32 @@
         background-color: #fff !important;
     }
 
+    .btn-label-download {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 4px 16px;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease-in-out;
+        background-color: transparent;
+    }
+
+    .btn-label-download:hover {
+        background-color: var(--primary-color);
+        color: white !important;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        transform: translateY(-1px);
+    }
+    
+    .btn-label-download i {
+        font-size: 0.8rem;
+    }
+
     @media (max-width: 576px) {
         .shelter-image {
             height: 350px !important;
@@ -135,9 +161,21 @@
                     </div>
 
                     <div class="col-md-12">
-                        <label class="form-label fw-semibold">Dokumen Legalitas Pendirian</label>
+                        <div class="d-flex align-items-center mb-2 gap-3">
+                            <label class="form-label fw-semibold mb-0">Dokumen Legalitas Pendirian</label>
+                            
+                            <a href="{{ asset('storage/'.$detailShelter->dokumen_legal) }}" 
+                            download="Dokumen_Legalitas_{{ $detailShelter->nama_shelter }}" 
+                            class="btn-label-download">
+                                <i class="fas fa-download"></i>
+                                <span>Unduh</span>
+                            </a>
+                        </div>
+
                         <div class="detail-field-wrapper">
-                            <img src="{{ asset('storage/'.$detailShelter->dokumen_legal) }}" class="dokumen-image img-fluid" alt="Foto Dokumen Shelter">
+                            <img src="{{ asset('storage/'.$detailShelter->dokumen_legal) }}" 
+                                class="dokumen-image img-fluid" 
+                                alt="Foto Dokumen Shelter">
                         </div>
                     </div>
                 </div>
