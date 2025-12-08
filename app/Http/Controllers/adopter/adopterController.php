@@ -20,14 +20,6 @@ use Illuminate\Support\Facades\Validator;
 
 class adopterController extends Controller
 {
-    private function checkLogin() {
-        if (!Auth::check()) {
-            return redirect()->route('login')
-                ->with('error', 'Silakan login terlebih dahulu.');
-        }
-        return null;
-    }
-
     public function daftarHewan(Request $request) {
         $query = Hewan::with('shelter');
 

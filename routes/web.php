@@ -45,24 +45,27 @@ Route::prefix('adopter')->group(function () {
     Route::get('daftar_hewan', [adopterController::class, 'daftarHewan'])->name('adopter.daftarHewan');
     Route::get('detail_hewan', [adopterController::class, 'detailHewan'])->name('adopter.detailHewan');
     Route::get('daftar_shelter', [adopterController::class, 'daftarShelter'])->name('adopter.daftarShelter');
-    Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
-    Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
-    Route::get('profile', [adopterController::class, 'profile'])->name('adopter.profile');
-    Route::put('/adopter/profile/{id}', [adopterController::class, 'updateProfile'])->name('adopter.updateProfile');
-    Route::post('ajukan_adopsi', [adopterController::class, 'ajukanAdopsi'])->name('adopter.ajukanAdopsi');
-    Route::get('riwayat_pengajuan_adopsi', [adopterController::class, 'showRiwayatPengajuanAdopsi'])->name('adopter.showRiwayatPengajuanAdopsi');
-    Route::get('lepas_adopsi', [adopterController::class, 'showLepasAdopsi'])->name('adopter.showLepasAdopsi');
-    Route::post('lepas_adopsi_post', [adopterController::class, 'lepasAdopsi'])->name('adopter.lepasAdopsi');
-    Route::get('riwayat_penyerahan_hewan', [adopterController::class, 'showRiwayatPenyerahanHewan'])->name('adopter.showRiwayatPenyerahanHewan');
-    Route::get('detail_penyerahan_hewan', [adopterController::class, 'detailPenyerahanHewan'])->name('adopter.detailPenyerahanHewan');
     Route::get('detail_shelter', [adopterController::class, 'detailShelter'])->name('adopter.detailShelter');
-    Route::post('adopsi_hewan', [adopterController::class, 'adopsiHewan'])->name('adopter.adopsiHewan');
-    Route::post('kembalikan_hewan', [adopterController::class, 'kembalikanHewan'])->name('adopter.kembalikanHewan');
-    Route::post('persyaratan_adopsi', [adopterController::class, 'persyaratanAdopsi'])->name('adopter.persyaratanAdopsi');
-    Route::get('/persyaratan-adopsi/{id}', [adopterController::class, 'persyaratanAdopsiPage'])->name('adopter.persyaratanAdopsiPage');
+
+    Route::middleware('auth')->group(function () {
+        Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
+        Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
+        Route::get('profile', [adopterController::class, 'profile'])->name('adopter.profile');
+        Route::put('/adopter/profile/{id}', [adopterController::class, 'updateProfile'])->name('adopter.updateProfile');
+        Route::post('ajukan_adopsi', [adopterController::class, 'ajukanAdopsi'])->name('adopter.ajukanAdopsi');
+        Route::get('riwayat_pengajuan_adopsi', [adopterController::class, 'showRiwayatPengajuanAdopsi'])->name('adopter.showRiwayatPengajuanAdopsi');
+        Route::get('lepas_adopsi', [adopterController::class, 'showLepasAdopsi'])->name('adopter.showLepasAdopsi');
+        Route::post('lepas_adopsi_post', [adopterController::class, 'lepasAdopsi'])->name('adopter.lepasAdopsi');
+        Route::get('riwayat_penyerahan_hewan', [adopterController::class, 'showRiwayatPenyerahanHewan'])->name('adopter.showRiwayatPenyerahanHewan');
+        Route::get('detail_penyerahan_hewan', [adopterController::class, 'detailPenyerahanHewan'])->name('adopter.detailPenyerahanHewan');
+        Route::post('adopsi_hewan', [adopterController::class, 'adopsiHewan'])->name('adopter.adopsiHewan');
+        Route::post('kembalikan_hewan', [adopterController::class, 'kembalikanHewan'])->name('adopter.kembalikanHewan');
+        Route::post('persyaratan_adopsi', [adopterController::class, 'persyaratanAdopsi'])->name('adopter.persyaratanAdopsi');
+        Route::get('/persyaratan-adopsi/{id}', [adopterController::class, 'persyaratanAdopsiPage'])->name('adopter.persyaratanAdopsiPage');
+    });
 });
 
-Route::prefix('shelter')->group(function () {
+Route::prefix('shelter')->middleware('auth')->group(function () {
     Route::get('beranda', [shelterController::class, 'shelterBeranda'])->name('beranda.shelterBeranda');
     
     Route::get('tambah-hewan', [shelterController::class, 'halamanTambahHewan'])->name('shelter.tambahHewan');
@@ -97,7 +100,7 @@ Route::prefix('shelter')->group(function () {
 
 });
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('beranda', [berandaController::class, 'adminBeranda'])->name('beranda.adminBeranda');
     Route::get('detail_shelter', [adminController::class, 'detailShelter'])->name('admin.detailShelter');
     Route::get('profile', [adminController::class, 'profile'])->name('admin.profile');
