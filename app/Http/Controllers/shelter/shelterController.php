@@ -277,7 +277,7 @@ class shelterController
         
         $tanggalMulai = Carbon::now('Asia/Jakarta');
         $shelterDatas = Auth::user()->shelter;
-        $masaPercobaan = $shelterDatas->masa_percobaan;
+        $masaPercobaan = (int) $shelterDatas->masa_percobaan;
         $tanggalAkhir = $tanggalMulai->copy()->addDays($masaPercobaan);
 
         $pengajuan->status_pengajuan = 'setuju';
