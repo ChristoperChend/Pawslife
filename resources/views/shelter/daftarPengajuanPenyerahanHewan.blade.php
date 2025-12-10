@@ -58,9 +58,8 @@
 
                     <div class="p-3 d-flex flex-column justify-content-between bg-white" style="min-width:220px;">
                         <div>
-                            <h6 class="fw-bold mb-2">Status</h6>
                             @if($item->status_penyerahan == 'diajukan')
-                                <div class="d-flex justify-content-start gap-2 mb-2">
+                                <div class="d-flex justify-content-start gap-2 mb-2 mt-4">
                                     <button class="btn btn-primary-color terima-btn w-100" 
                                         data-id="{{ $item->id }}">
                                         Terima
