@@ -251,7 +251,6 @@
                                             <i class="fa-solid fa-house"></i>
                                             <span class="text-truncate">{{ $hewan->shelter->nama_shelter ?? 'Shelter' }}</span>
                                         </div>
-
                                     </div>
                                 </a>
                             </div>

@@ -195,7 +195,7 @@
                     <label for="rasHewan" class="form-label label-row">
                         Ras Hewan <span class="req"> *</span>
                     </label>
-                    <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan ras hewan">
+                    <input type="text" class="form-control" id="rasHewan" name="rasHewan" placeholder="Masukkan ras hewan" value="{{ old('rasHewan') }}">
 
                     @error('rasHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
@@ -217,8 +217,7 @@
                     <label for="beratHewan" class="form-label label-row">
                         Berat Hewan (Kg)<span class="req"> *</span>
                     </label>
-                    <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan berat hewan">
-         
+                    <input type="text" class="form-control" id="beratHewan" name="beratHewan" placeholder="Masukkan berat hewan"  value="{{ old('beratHewan') }}">
                     @error('beratHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
 
@@ -275,19 +274,17 @@
                 <div class="col-md-6">
                     <label for="catatanMedisHewan" class="form-label">Catatan Medis <span class="req"> *</span></label>
                     <input type="text" class="form-control" id="catatanMedisHewan" name="catatanMedisHewan"
-                           placeholder="Alergi, riwayat sakit, dll.">
+                           placeholder="Alergi, riwayat sakit, dll."  value="{{ old('catatanMedisHewan') }}">
                     @error('catatanMedisHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
 
                 <div class="col-md-12">
                     <label for="deskripsiHewan" class="form-label">Deskripsi Hewan <span class="req"> *</span></label>
-                    <textarea name="deskripsiHewan" placeholder="Deskripsi karakteristik hewan..." class="form-control" rows="3"></textarea>
+                    <textarea name="deskripsiHewan" placeholder="Deskripsi karakteristik hewan..." class="form-control" rows="3">{{ old('deskripsiHewan') }}</textarea>
 
                     @error('deskripsiHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                 </div>
             </div>
-
-            
 
             <div class="section-title mt-4">Foto</div>
             <div class="section-divider"></div>

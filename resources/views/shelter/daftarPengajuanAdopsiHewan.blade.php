@@ -221,12 +221,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="swal-buttons mt-3" 
                         style="display:flex; justify-content:center; gap:12px; width:100%;">
                         <button type="button" id="btnKembaliTolak" 
-                            class="btn border btn-light fw-semibold px-4 py-2 flex-fill" 
+                            class="btn btn-kembali flex-fill" 
                             style="width:120px;">
                             Kembali
                         </button>
                         <button type="button" id="btnSelanjutnyaTolak" 
-                            class="btn btn-primary text-white fw-semibold px-4 py-2 flex-fill" 
+                            class="btn btn-primary-color flex-fill" 
                             style="width:120px;">
                             Selanjutnya
                         </button>
@@ -250,32 +250,64 @@ document.addEventListener('DOMContentLoaded', function () {
                             return;
                         }
 
-                        // POST request to backend
-                        fetch(`/shelter/tolak-pengajuan-adopsi/${pengajuanId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ alasan })
-                        })
-                        .then(res => res.json())
-                        .then(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Pengajuan Ditolak',
-                                text: 'Pengajuan adopsi telah ditolak.',
-                                confirmButtonText: 'OK',
-                                customClass: { confirmButton: 'btn btn-dark text-white px-4 fw-semibold' },
-                                buttonsStyling: false
-                            }).then(() => location.reload());
-                        })
-                        .catch(() => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi kesalahan!',
-                                text: 'Tidak dapat memproses permintaan.',
-                            });
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '<h4 style="font-weight:700; font-size:18px; margin-bottom:8px;">Apakah anda yakin menolak pengajuan adopsi?</h4>',
+                            html: `
+                                <div class="swal-buttons mt-3" 
+                                    style="display:flex; justify-content:center; gap:10px; width:100%; margin-top:18px;">
+                                    <button type="button" id="btnKembaliKonfirmasiTolak" 
+                                        class="btn btn-kembali flex-fill" 
+                                        style="width:110px; font-size:14px;">
+                                        Kembali
+                                    </button>
+                                    <button type="button" id="btnYakinKonfirmasiTolak" 
+                                        class="btn btn-merah-color  flex-fill" 
+                                        style="width:110px; font-size:14px;">
+                                        Yakin
+                                    </button>
+                                </div>
+                            `,
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            width: 420,
+                            padding: '1.2rem 1.2rem',
+                            customClass: { popup: 'rounded-3 shadow-sm', icon: 'swal-warning-primary' },
+                            didOpen: () => {
+                                const kembaliKonfirmasi = document.getElementById('btnKembaliKonfirmasiTolak');
+                                const yakinKonfirmasi = document.getElementById('btnYakinKonfirmasiTolak');
+
+                                kembaliKonfirmasi.addEventListener('click', () => Swal.close()); // Back to previous or close
+
+                                yakinKonfirmasi.addEventListener('click', () => {
+                                    fetch(`/shelter/tolak-pengajuan-adopsi/${pengajuanId}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({ alasan })
+                                    })
+                                    .then(res => res.json())
+                                    .then(() => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Pengajuan Ditolak',
+                                            text: 'Pengajuan adopsi telah ditolak.',
+                                            confirmButtonText: 'OK',
+                                            customClass: { confirmButton: 'btn btn-primary-color', icon:'swal-success-primary' },
+                                            buttonsStyling: false
+                                        }).then(() => location.reload());
+                                    })
+                                    .catch(() => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Terjadi kesalahan!',
+                                            text: 'Tidak dapat memproses permintaan.',
+                                        });
+                                    });
+                                });
+                            }
                         });
                     });
                 }

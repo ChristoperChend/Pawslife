@@ -28,38 +28,45 @@ class loginController extends Controller
             'password.required' => 'Kata sandi harus diisi.',
         ]);
 
-        if(Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $user = Auth::user();
-            if ($request->has('remember')) {
-                $token = Str::random(50);
-                $user->remember_token = $token;
-
-                Cookie::queue('remember_token', $token, 60 * 24 * 7);
-            }
-            if ($user->tipe_pengguna === 'adopter') {
-                return redirect()->route('beranda.adopterBeranda');
-            } else if ($user->tipe_pengguna === 'shelter') {
-                $shelter = shelter::where('pengguna_id', $user->id)->first();
-                if ($shelter && $shelter->status === 'diajukan') {
-                    Auth::logout();
-                    Alert::warning('Akun shelter Anda menunggu konfirmasi admin.');
-                    return back();
-                } else if ($shelter->status === 'ditolak') {
-                    Auth::logout();
-                    Alert::warning('Akun shelter Anda ditolak oleh admin.');
-                    return back();
-                } else if ($shelter->status === 'diterima') {
-                    return redirect()->route('beranda.shelterBeranda');
-                }
-            } else if ($user->tipe_pengguna === 'admin') {
-                return redirect()->route('beranda.adminBeranda');
-            }
+        $user = pengguna::where('email', $request->email)->first();
+        
+        if (!$user) {
+            Alert::error('Email tidak ditemukan', 'Email yang Anda masukkan tidak terdaftar.');
+            return back()->withInput($request->only('email'));
         }
 
-        Alert::error('Email atau kata sandi salah', 'silahkan periksa kembali dan coba lagi.');
-        return back();
+        if(!Auth::attempt($credentials)) {
+            Alert::error('Kata sandi salah', 'Kata sandi yang Anda masukkan tidak sesuai.');
+            return back()->withInput($request->only('email'));
+        }
+
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+        if ($request->has('remember')) {
+            $token = Str::random(50);
+            $user->remember_token = $token;
+
+            Cookie::queue('remember_token', $token, 60 * 24 * 7);
+        }
+        if ($user->tipe_pengguna === 'adopter') {
+            return redirect()->route('beranda.adopterBeranda');
+        } else if ($user->tipe_pengguna === 'shelter') {
+            $shelter = shelter::where('pengguna_id', $user->id)->first();
+            if ($shelter && $shelter->status === 'diajukan') {
+                Auth::logout();
+                Alert::warning('Akun shelter Anda menunggu konfirmasi admin.');
+                return back();
+            } else if ($shelter->status === 'ditolak') {
+                Auth::logout();
+                Alert::warning('Akun shelter Anda ditolak oleh admin.');
+                return back();
+            } else if ($shelter->status === 'diterima') {
+                return redirect()->route('beranda.shelterBeranda');
+            }
+        } else if ($user->tipe_pengguna === 'admin') {
+            return redirect()->route('beranda.adminBeranda');
+        }
     }
 
     public function logout(Request $request) {
