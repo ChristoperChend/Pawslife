@@ -243,7 +243,7 @@
                                 buttonsStyling: false
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = "{{ url()->previous() }}";
+                                    window.location.href = "{{ route('beranda.adminBeranda') }}";
                                 }
                             })
                         } else {
@@ -258,7 +258,7 @@
                                 buttonsStyling: false
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = "{{ url()->previous() }}";
+                                    window.location.href = "{{ route('beranda.adminBeranda') }}";
                                 }
                             })
                         }
@@ -315,6 +315,10 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('beranda.adminBeranda') }}";
+                                }
                             })
                         } else {
                             Swal.fire({
@@ -326,6 +330,10 @@
                                     confirmButton: 'btn btn-primary-color',
                                 },
                                 buttonsStyling: false
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('beranda.adminBeranda') }}";
+                                }
                             })
                         }
                     })

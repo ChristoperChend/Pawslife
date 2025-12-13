@@ -182,6 +182,7 @@ class adopterController extends Controller
     }
 
     public function tambahFavorit(Request $request) {
+        Log::debug("masuk sini");
         try {
             if (!Auth::check()) {
                 return response()->json([
@@ -235,7 +236,10 @@ class adopterController extends Controller
         $adopter_id = Auth::user()->adopter->id;
         
         $query = favorit::with(['hewan.shelter'])
-            ->where('adopter_id', $adopter_id);
+            ->where('adopter_id', $adopter_id)
+            ->whereHas('hewan', function($q) {
+                $q->where('status_hewan', 'siap_di_adopsi');
+            });
 
         if ($request->filled('search')) {
             $searchTerm = trim($request->search);
