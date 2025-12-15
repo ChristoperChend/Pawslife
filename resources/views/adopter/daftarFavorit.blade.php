@@ -167,24 +167,27 @@
                 @foreach ($listFavorit as $favorit)
                     <div class="col d-flex justify-content-center">
                         <div class="card hewan-container border-0 shadow-sm">
-                            <div class="ratio">
-                                <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan"
-                                    alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
-                            </div>
                             <span class="heart-icon {{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'liked' : '' }}"
                                 onclick="toggleHeart(this, {{ $favorit->hewan->id }})">
                                 <i
                                     class="{{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
                             </span>
-                            <div class="hewan-card-body-alt">
-                                <h5 class="hewan-name-hero" title="{{ $favorit->hewan->nama_hewan }}">
-                                    {{ $favorit->hewan->nama_hewan ?? 'Nama Hewan' }}
-                                </h5>
-                                <div class="hewan-shelter-footer">
-                                    <i class="fa-solid fa-house"></i>
-                                    <span class="text-truncate">{{ $favorit->hewan->shelter->nama_shelter ?? 'Shelter' }}</span>
+
+                            <a href="{{ route('adopter.detailHewan', ['id' => $favorit->hewan->id]) }}" class="text-decoration-none d-flex flex-column h-100">
+                                <div class="ratio">
+                                    <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan"
+                                        alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
                                 </div>
-                            </div>
+                                <div class="hewan-card-body-alt">
+                                    <h5 class="hewan-name-hero" title="{{ $favorit->hewan->nama_hewan }}">
+                                        {{ $favorit->hewan->nama_hewan ?? 'Nama Hewan' }}
+                                    </h5>
+                                    <div class="hewan-shelter-footer">
+                                        <i class="fa-solid fa-house"></i>
+                                        <span class="text-truncate">{{ $favorit->hewan->shelter->nama_shelter ?? 'Shelter' }}</span>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 @endforeach
