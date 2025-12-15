@@ -27,43 +27,6 @@
     </div>
 
     @include('layout.loading')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const clickableElements = document.querySelectorAll(
-                'a[href], button[type="submit"], button[data-loading]');
-
-            clickableElements.forEach(el => {
-                el.addEventListener('click', function(e) {
-                    const href = el.getAttribute('href');
-                    if (el.tagName === 'A' && (el.target === '_blank' || !href || href.startsWith(
-                            '#') || href.startsWith('javascript:'))) {
-                        return;
-                    }
-
-                    if (el.tagName === 'BUTTON' && el.type !== 'submit' && !el.hasAttribute(
-                            'data-loading')) {
-                        return;
-                    }
-
-                    document.getElementById('fullscreen-loading').classList.remove('d-none');
-                });
-            });
-
-            window.addEventListener('load', () => {
-                const loader = document.getElementById('fullscreen-loading');
-                if (loader) loader.classList.add('d-none');
-            });
-
-            const loader = document.getElementById('fullscreen-loading');
-            if (loader) loader.classList.add('d-none');
-        });
-
-        window.addEventListener('pageshow', function(event) {
-            const loader = document.getElementById('fullscreen-loading');
-            if (loader) loader.classList.add('d-none');
-        });
-    </script>
 </body>
 
 </html>
