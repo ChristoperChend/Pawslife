@@ -255,8 +255,10 @@ class shelterController
 
     public function getDaftarPengajuanAdopsiHewan(){
         Paginator::useBootstrap();
+        $user = auth::user();
         $data = formPengajuanAdopsi::orderBy('id', 'desc')
         ->where('status_pengajuan', '=', 'diajukan')
+        ->where('shelter_id', '=', $user->shelter->id)
         ->paginate(5);
         return view('shelter.daftarPengajuanAdopsiHewan', compact('data'));
     }
