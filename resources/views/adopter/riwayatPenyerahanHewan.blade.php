@@ -43,87 +43,87 @@
     }
 
     @media (max-width: 576px) {
-    .riwayat-card-item {
-        padding: 10px 8px;
-    }
+        .riwayat-card-item {
+            padding: 10px 8px;
+        }
 
-    .riwayat-card-item > .d-flex {
-        flex-direction: column !important;
-        align-items: center;
-    }
+        .riwayat-card-item>.d-flex {
+            flex-direction: column !important;
+            align-items: center;
+        }
 
-    .riwayat-card-item > .d-flex > div:first-child {
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-    }
+        .riwayat-card-item>.d-flex>div:first-child {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
 
-    .riwayat-card-item img {
-        width: 130px !important;
-        height: 130px !important;
-        border-radius: 12px;
-        margin: 0 auto !important;
-        display: block;
-    }
+        .riwayat-card-item img {
+            width: 130px !important;
+            height: 130px !important;
+            border-radius: 12px;
+            margin: 0 auto !important;
+            display: block;
+        }
 
-    .riwayat-card-item .flex-fill {
-        border: none !important;
-        text-align: center;
-        padding: 14px 0 10px 0 !important;
-        width: 100%;
-    }
+        .riwayat-card-item .flex-fill {
+            border: none !important;
+            text-align: center;
+            padding: 14px 0 10px 0 !important;
+            width: 100%;
+        }
 
-    .riwayat-hewan-nama,
-    .riwayat-hewan-jenis {
-        font-size: 1rem;
-        margin-bottom: 2px !important;
-    }
-    
-    .riwayat-card-item .flex-fill p span {
-        display: block;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
+        .riwayat-hewan-nama,
+        .riwayat-hewan-jenis {
+            font-size: 1rem;
+            margin-bottom: 2px !important;
+        }
 
-    .riwayat-card-item .flex-fill p span.fw-semibold {
-        font-size: 1.1rem;
-    }
+        .riwayat-card-item .flex-fill p span {
+            display: block;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
 
-    .riwayat-card-item > .d-flex > div:last-child {
-        width: 100%;
-        text-align: center;
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-    }
+        .riwayat-card-item .flex-fill p span.fw-semibold {
+            font-size: 1.1rem;
+        }
 
-    .status-badge,
-    .riwayat-card-item span {
-        width: 100% !important;
-        min-width: 100% !important;
-    }
+        .riwayat-card-item>.d-flex>div:last-child {
+            width: 100%;
+            text-align: center;
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
 
-    .riwayat-btn-aksi {
-        width: 100%;
-        margin-top: 5px;
-    }
+        .status-badge,
+        .riwayat-card-item span {
+            width: 100% !important;
+            min-width: 100% !important;
+        }
 
-    .riwayat-card-item a {
-        justify-content: center;
-        margin-top: 12px;
-    }
+        .riwayat-btn-aksi {
+            width: 100%;
+            margin-top: 5px;
+        }
 
-    .border-end {
-        border: none !important;
-    }
+        .riwayat-card-item a {
+            justify-content: center;
+            margin-top: 12px;
+        }
 
-    .text-primary {
-        justify-content: center;
-    }
+        .border-end {
+            border: none !important;
+        }
 
-    .d-flex.gap-2.justify-content-end {
-        justify-content: center !important;
+        .text-primary {
+            justify-content: center;
+        }
+
+        .d-flex.gap-2.justify-content-end {
+            justify-content: center !important;
+        }
     }
-}
 </style>
 
 @extends('layout.master')
@@ -138,12 +138,9 @@
         @forelse ($riwayat as $items)
             <div class="card riwayat-card-item mb-3 shadow-sm overflow-hidden bg-white">
                 <div class="d-flex flex-wrap">
-                    <div class="p-3 d-flex align-items-center justify-content-center bg-white text-center" 
-                        style="width: 140px; min-height: 130px;"
-                    >
-                        <img src="{{ asset('storage/' . $items->foto_hewan) }}" 
-                            alt="Foto Hewan"
-                            class="rounded"
+                    <div class="p-3 d-flex align-items-center justify-content-center bg-white text-center"
+                        style="width: 140px; min-height: 130px;">
+                        <img src="{{ asset('storage/' . $items->foto_hewan) }}" alt="Foto Hewan" class="rounded"
                             style="width: 100px; height: 100px; object-fit: cover; background:#e5e7eb;">
                     </div>
 
@@ -173,21 +170,29 @@
                         <div>
                             <h6 class="fw-bold mb-2">Status</h6>
                             @if($items->status_penyerahan == 'diajukan')
-                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100"
                                     style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                     Diajukan
                                 </div>
-                            @elseif($items->status_pengajuan == 'setuju')
-                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100" 
+                            @elseif($items->status_penyerahan == 'setuju')
+                                <div class="badge px-3 py-2 rounded-pill mb-2 shadow-sm w-100"
                                     style="color: var(--primary-color); border: 1px solid var(--primary-color); background-color: #eef2fb;">
                                     Diadopsi
                                 </div>
+                                 @if($items->shelter)
+                                    <div class="mt-1 p-2 rounded mb-2" style="border: 1px solid var(--primary-color); background-color: #eef2fb;;">
+                                        <span class="text-muted small" style="letter-spacing:.03em;">Diadopsi oleh:</span>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.9rem;">
+                                            {{ $items->shelter->nama_shelter }}
+                                        </p>
+                                    </div>
+                                @endif
                             @endif
                         </div>
-                        <a href="{{ route('adopter.detailPenyerahanHewan', ['id' => $items->id, 'adopter_id' => $items->adopter_id]) }}" 
-                            class="text-primary fw-semibold small text-decoration-none align-items-center gap-0"
-                        >
-                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;" title="View Status"></i>
+                        <a href="{{ route('adopter.detailPenyerahanHewan', ['id' => $items->id, 'adopter_id' => $items->adopter_id]) }}"
+                            class="d-flex align-items-center gap-1 text-primary fw-semibold small text-decoration-none">
+                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;"
+                                title="View Status"></i>
                             <span>Informasi Hewan</span>
                         </a>
                     </div>
