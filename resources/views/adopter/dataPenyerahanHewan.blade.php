@@ -1,6 +1,16 @@
 @extends('layout.master')
 
 <style>
+    .hewan-image {
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e5e5e5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
     .detail-field-wrapper {
         display: flex;
         align-items: center;
@@ -26,102 +36,149 @@
 
     .detail-text {
         flex-grow: 1;
-        color: #212529; 
+        color: #212529;
         font-size: 1rem;
         font-weight: 400;
+    }
+
+    .form-control:disabled {
+        background-color: #fff !important;
+    }
+
+    @media (max-width: 576px) {
+        .row>* {
+            padding-right: 3px !important;
+            padding-left: 3px !important;
+        }
+
+        .hewan-image {
+            height: 350px !important;
+        }
     }
 </style>
 
 @section('content')
-<div class="container py-5">
-    <div class="text-center mb-4">
-        <h2 class="fw-bold fs-3 mb-2">Data Penyerahan Hewan</h2>
-    </div>
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold fs-3 mb-2">Data Penyerahan Hewan</h2>
+        </div>
 
-    <div class="card border-0 mx-auto" style="max-width: 860px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);">
-        <div class="card-body p-5">
-
-            <div class="text-center mb-4">
-                <img src="{{ asset('storage/' . $data->foto_hewan) }}" 
-                    alt="{{$data->nama_hewan }}"
-                    class="img-fluid rounded shadow-sm"
-                    style="width: 230px; height: 230px; object-fit: cover;">
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h5 class="detail-label">Nama hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->nama_hewan ?? 'data tidak ada' }}</span>
+        <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px;">
+            <div class="card-body p-md-5">
+                <div class="row-12 row-md-6 text-center mb-4">
+                    <img src="{{ asset('storage/' . $data->foto_hewan) }}" class="hewan-image" alt="{{ $data->nama_hewan }}">
+                </div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Nama hewan</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->nama_hewan ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Ras hewan</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->ras ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Ras hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->ras ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Jenis hewan</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->jenis_hewan ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Jenis kelamin hewan</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->jenis_kelamin ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Status vaksin</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->status_vaksin ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Berat hewan (Kg)</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->berat ?? 'data tidak ada' }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Status steril</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->status_steril ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6 mb-4 mb-md-0">
+                        <label class="form-label fw-semibold">Apakah hewan sudah disteril</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->status_steril ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Tanggal Sterilisasi</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">
+                                {{ $data->tanggal_steril ? \Carbon\Carbon::parse($data->tanggal_steril)->format('d F Y') : '-' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Jenis hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->jenis_hewan ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-12 col-md-6 mb-4 mb-md-0">
+                        <label class="form-label fw-semibold">Apakah hewan sudah divaksin</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">{{ $data->status_vaksin ?? 'data tidak ada' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-semibold">Tanggal Vaksinasi</label>
+                        <div class="detail-field-wrapper">
+                            <span class="detail-text">
+                                {{ $data->tanggal_vaksin ? \Carbon\Carbon::parse($data->tanggal_vaksin)->format('d F Y') : '-' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Jenis kelamin hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->jenis_kelamin ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Catatan medis hewan</label>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $data->catatan_medis ?? 'data tidak ada' }}</textarea>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <h5 class="detail-label">Catatan medis hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->catatan_medis ?? 'data tidak ada' }}</span>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Deskripsi hewan</label>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $data->deskripsi_hewan ?? 'data tidak ada' }}</textarea>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="col-md-6">
-                    <h5 class="detail-label">Berat hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->berat ?? 'data tidak ada' }} kg</span>
-                    </div>
-                </div>
-                
-                <div class="col-md-12">
-                    <h5 class="detail-label">Alasan penyerahan hewan</h5>
-                    <div class="detail-field-wrapper">
-                        <span class="detail-text">{{ $data->alasan_penyerahan ?? 'data tidak ada' }}</span>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row text-center mt-4">
-                <div class="col-md-12">
-                    <a href="{{ url()->previous() }}"
-                        class="btn btn-kembali">
-                        Kembali
-                    </a>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Alasan penyerahan hewan</label>
+                        <div class="detail-field-wrapper" style="padding: 0px">
+                            <textarea class="form-control detail-text" style="padding: 10px 15px;" rows="3" disabled>{{ $data->alasan_penyerahan ?? 'data tidak ada' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row text-center mt-4">
+                    <div class="col-md-12">
+                        <a href="{{ url()->previous() }}" class="btn btn-primary-color w-100">
+                            Kembali
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

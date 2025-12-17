@@ -287,13 +287,10 @@
                                 </div>
                             @endif
                         </div>
-                        <a href="{{ route('adopter.detailHewan', ['id' => $items->hewan_id]) }}" 
-                            class="text-primary fw-semibold small text-decoration-none align-items-center gap-0"
-                        >
-                            <i class="bi bi-info-circle fs-5 me-1"
-                            style="cursor:pointer; color:#0d6efd;"
-                            title="View Status"></i>
-
+                        <a href="{{ route('adopter.detailHewan', ['id' => $items->hewan_id]) }}"
+                            class="d-flex align-items-center gap-1 text-primary fw-semibold small text-decoration-none">
+                            <i class="bi bi-info-circle fs-5" style="cursor:pointer; color:#0d6efd;"
+                                title="View Status"></i>
                             <span>Informasi Hewan</span>
                         </a>
                     </div>
