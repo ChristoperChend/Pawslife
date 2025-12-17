@@ -182,6 +182,7 @@ class adopterController extends Controller
     }
 
     public function tambahFavorit(Request $request) {
+        Log::debug("masuk sini");
         try {
             if (!Auth::check()) {
                 return response()->json([
@@ -235,7 +236,10 @@ class adopterController extends Controller
         $adopter_id = Auth::user()->adopter->id;
         
         $query = favorit::with(['hewan.shelter'])
-            ->where('adopter_id', $adopter_id);
+            ->where('adopter_id', $adopter_id)
+            ->whereHas('hewan', function($q) {
+                $q->where('status_hewan', 'siap_di_adopsi');
+            });
 
         if ($request->filled('search')) {
             $searchTerm = trim($request->search);
@@ -293,11 +297,13 @@ class adopterController extends Controller
         $adopter->pekerjaan = $request->pekerjaan_adopter;
 
         
-        $fotoAdopterPath = $request->file('foto_adopter')->store('fotoAdopter', 'public');
-        if ($adopter->foto_adopter && File::exists(public_path('storage/' . $adopter->foto_adopter))) {
-            File::delete(public_path('storage/' . $adopter->foto_adopter));
+        if ($request->hasFile('foto_adopter')) {
+            if ($adopter->foto_adopter && Storage::disk('public')->exists($adopter->foto_adopter)) {
+                Storage::disk('public')->delete($adopter->foto_adopter);
+            }
+
+            $adopter->foto_adopter = $request->file('foto_adopter')->store('fotoAdopter', 'public');
         }
-        $adopter->foto_adopter = $fotoAdopterPath;
         
         $adopter->save();
 
@@ -543,7 +549,7 @@ class adopterController extends Controller
     public function adopsiHewan(Request $request) {
         DB::beginTransaction();
         try {
-            $adopter_id = Auth::user()->id;
+            $adopter_id = Auth::user()->adopter->id;
 
             $pengajuan = formPengajuanAdopsi::where('adopter_id', $adopter_id)
                     ->where('hewan_id', $request->hewan_id)
@@ -583,7 +589,7 @@ class adopterController extends Controller
     public function kembalikanHewan(Request $request) {
         DB::beginTransaction();
         try {
-            $adopter_id = Auth::user()->id;
+            $adopter_id = Auth::user()->adopter->id;
 
             $pengajuan = formPengajuanAdopsi::where('adopter_id', $adopter_id)
                     ->where('hewan_id', $request->hewan_id)

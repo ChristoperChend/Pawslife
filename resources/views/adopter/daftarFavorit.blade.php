@@ -1,23 +1,23 @@
 <style>
     .hewan-container {
         width: 100%;
-        max-width: 280px;  
+        max-width: 280px;
         border: none;
         border-radius: 1rem;
         background: #fff;
         transition: transform .2s ease, box-shadow .2s ease;
         overflow: hidden;
-        box-shadow: 0 6px 16px rgba(0,0,0,.06);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, .06);
     }
-        
+
     .hewan-container:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(0,0,0,.08);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
     }
 
     .hewan-container .ratio {
         aspect-ratio: 4 / 3;
-        height: 240px; 
+        height: 240px;
     }
 
 
@@ -89,16 +89,19 @@
         margin: 0 auto 2rem;
         position: relative;
     }
+
     .search-wrap .form-control {
         border-radius: 2rem;
-        padding: .75rem 1rem .75rem 2.5rem; 
+        padding: .75rem 1rem .75rem 2.5rem;
         border: 1px solid #e5e7eb;
         transition: border .2s ease, box-shadow .2s ease;
     }
+
     .search-wrap .form-control:focus {
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, .15);
     }
+
     .search-wrap .fa-search {
         position: absolute;
         top: 50%;
@@ -106,6 +109,45 @@
         transform: translateY(-50%);
         color: #9ca3af;
         font-size: .95rem;
+    }
+
+    .hewan-card-body-alt {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        background-color: #fff;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hewan-name-hero {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .hewan-shelter-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: #2c6ade;
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px solid #e2e2e2c5;
+        width: 100%;
+    }
+
+    .hewan-shelter-footer i {
+        margin-right: 8px;
+        color: #2c6ade;
     }
 </style>
 
@@ -116,39 +158,38 @@
     <div class="container py-5">
         <form class="search-wrap" role="search" method="GET" action="{{ route('adopter.daftarFavorit') }}">
             <i class="fa-solid fa-search"></i>
-            <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Cari hewan berdasarkan nama, jenis, atau jenis kelamin..." value="{{ request('search') }}">
+            <input type="text" name="search" autocomplete="off" class="form-control"
+                placeholder="Cari hewan berdasarkan nama, jenis, atau jenis kelamin..." value="{{ request('search') }}">
         </form>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-start">
             @if (!$listFavorit->isEmpty())
                 @foreach ($listFavorit as $favorit)
-                    @if ($favorit->hewan->status_hewan == "siap_di_adopsi")
-                        <div class="col d-flex justify-content-center">
-                            <div class="card hewan-container border-0 shadow-sm">
+                    <div class="col d-flex justify-content-center">
+                        <div class="card hewan-container border-0 shadow-sm">
+                            <span class="heart-icon {{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'liked' : '' }}"
+                                onclick="toggleHeart(this, {{ $favorit->hewan->id }})">
+                                <i
+                                    class="{{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
+                            </span>
+
+                            <a href="{{ route('adopter.detailHewan', ['id' => $favorit->hewan->id]) }}" class="text-decoration-none d-flex flex-column h-100">
                                 <div class="ratio">
-                                    <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan" alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
+                                    <img src="{{ asset('storage/' . $favorit->hewan->foto_hewan) }}" class="daftar-hewan"
+                                        alt="Foto {{ $favorit->hewan->nama_hewan ?? 'Hewan' }}">
                                 </div>
-                                <span class="heart-icon {{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'liked' : '' }}" onclick="toggleHeart(this, {{ $favorit->hewan->id }})">
-                                    <i class="{{ in_array($favorit->hewan->id, $favoritHewanIds) ? 'fa-solid' : 'fa-regular' }} fa-heart fa-xl"></i>
-                                </span>
-                                
-                                <div class="p-3"> 
-                                    <a href="{{ route('adopter.detailHewan', ['id' => $favorit->hewan->id]) }}" class="text-decoration-none">
-                                        <h5 class="card-title-hewan fw-bold mb-0 text-truncate">
-                                            {{ $favorit->hewan->nama_hewan ?? 'Nama Hewan' }}
-                                            @if (strtolower($favorit->hewan->jenis_hewan ?? '') === 'anjing')
-                                                <i class="fa-solid fa-bone ms-1"></i>
-                                            @elseif (strtolower($favorit->hewan->jenis_hewan ?? '') === 'kucing')
-                                                <i class="fa-solid fa-paw ms-1"></i>
-                                            @endif
-                                        </h5>
-                                        <p class="card-subtitle-hewan mb-2 text-muted small">{{ $favorit->hewan->ras ?? 'Jenis Ras' }}</p>
-                                        <p class="small mb-0 text-muted"><i class="fa-solid fa-house me-1"></i> {{ $favorit->hewan->shelter->nama_shelter ?? 'Shelter Tidak Dikenal' }}</p>
-                                    </a>
+                                <div class="hewan-card-body-alt">
+                                    <h5 class="hewan-name-hero" title="{{ $favorit->hewan->nama_hewan }}">
+                                        {{ $favorit->hewan->nama_hewan ?? 'Nama Hewan' }}
+                                    </h5>
+                                    <div class="hewan-shelter-footer">
+                                        <i class="fa-solid fa-house"></i>
+                                        <span class="text-truncate">{{ $favorit->hewan->shelter->nama_shelter ?? 'Shelter' }}</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    @endif
+                    </div>
                 @endforeach
             @else
                 <h4 class="d-flex justify-content-center align-items-center w-100">Tidak ada daftar favorit</h4>
@@ -163,66 +204,68 @@
         function toggleHeart(el, hewanId) {
             document.getElementById('fullscreen-loading').classList.remove('d-none')
             fetch("{{ route('adopter.tambahFavorit') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({ hewan_id: hewanId })
-            })
-            .then(res => res.json())
-            .then(res => {
-                document.getElementById('fullscreen-loading').classList.add('d-none')
-                const icon = el.querySelector('i');
-                if (res.status === 'added') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: res.title,
-                        text: res.message,
-                        customClass: {
-                            actions: 'swal-actions-gap',
-                            icon: 'swal-success-primary',
-                            confirmButton: 'btn btn-primary-color',
-                        },
-                        buttonsStyling: false
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        hewan_id: hewanId
                     })
-                    .then(() => {
-                        location.reload();
-                    })
-                    icon.classList.remove('fa-regular');
-                    icon.classList.add('fa-solid');
-                    el.classList.add('liked');
-                } else if (res.status === 'removed') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: res.title,
-                        text: res.message,
-                        customClass: {
-                            actions: 'swal-actions-gap',
-                            icon: 'swal-success-primary',
-                            confirmButton: 'btn btn-primary-color',
-                        },
-                        buttonsStyling: false
-                    })
-                    .then(() => {
-                        location.reload();
-                    })
-                    icon.classList.remove('fa-solid');
-                    icon.classList.add('fa-regular');
-                    el.classList.remove('liked');
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: res.title,
-                        text: res.message,
-                        customClass: {
-                            actions: 'swal-actions-gap',
-                            confirmButton: 'btn btn-primary-color',
-                        },
-                        buttonsStyling: false
-                    })
-                }
-            });
+                })
+                .then(res => res.json())
+                .then(res => {
+                    document.getElementById('fullscreen-loading').classList.add('d-none')
+                    const icon = el.querySelector('i');
+                    if (res.status === 'added') {
+                        Swal.fire({
+                                icon: 'success',
+                                title: res.title,
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
+                            })
+                            .then(() => {
+                                location.reload();
+                            })
+                        icon.classList.remove('fa-regular');
+                        icon.classList.add('fa-solid');
+                        el.classList.add('liked');
+                    } else if (res.status === 'removed') {
+                        Swal.fire({
+                                icon: 'success',
+                                title: res.title,
+                                text: res.message,
+                                customClass: {
+                                    actions: 'swal-actions-gap',
+                                    icon: 'swal-success-primary',
+                                    confirmButton: 'btn btn-primary-color',
+                                },
+                                buttonsStyling: false
+                            })
+                            .then(() => {
+                                location.reload();
+                            })
+                        icon.classList.remove('fa-solid');
+                        icon.classList.add('fa-regular');
+                        el.classList.remove('liked');
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: res.title,
+                            text: res.message,
+                            customClass: {
+                                actions: 'swal-actions-gap',
+                                confirmButton: 'btn btn-primary-color',
+                            },
+                            buttonsStyling: false
+                        })
+                    }
+                });
         }
     </script>
 @endsection

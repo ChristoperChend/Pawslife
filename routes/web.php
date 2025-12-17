@@ -46,9 +46,9 @@ Route::prefix('adopter')->group(function () {
     Route::get('detail_hewan', [adopterController::class, 'detailHewan'])->name('adopter.detailHewan');
     Route::get('daftar_shelter', [adopterController::class, 'daftarShelter'])->name('adopter.daftarShelter');
     Route::get('detail_shelter', [adopterController::class, 'detailShelter'])->name('adopter.detailShelter');
+    Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
 
     Route::middleware('auth')->group(function () {
-        Route::post('favorit', [adopterController::class, 'tambahFavorit'])->name('adopter.tambahFavorit');
         Route::get('daftar_favorit', [adopterController::class, 'daftarFavorit'])->name('adopter.daftarFavorit');
         Route::get('profile', [adopterController::class, 'profile'])->name('adopter.profile');
         Route::put('/adopter/profile/{id}', [adopterController::class, 'updateProfile'])->name('adopter.updateProfile');

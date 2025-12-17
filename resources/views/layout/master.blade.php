@@ -25,6 +25,8 @@
             @include('layout.footer')
         </div>
     </div>
+
+    @include('layout.loading')
 </body>
 
 </html>
