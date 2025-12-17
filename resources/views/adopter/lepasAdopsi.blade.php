@@ -229,17 +229,17 @@
 
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label for="alasanPenyerahanHewan" class="form-label fw-semibold">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
-                        <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
-                        @error('alasanPenyerahanHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                        <label for="deskripsiHewan" class="form-label fw-semibold">Deskripsi Hewan <span class="text-danger">*</span></label>
+                        <textarea type="text" class="form-control" rows="3" id="deskripsiHewan" name="deskripsiHewan" placeholder="Masukkan Deskripsi Hewan"></textarea>
+                        @error('deskripsiHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
 
                 <div class="row g-4">
                     <div class="col-md-12">
-                        <label for="deskripsiHewan" class="form-label fw-semibold">Deskripsi Hewan <span class="text-danger">*</span></label>
-                        <textarea type="text" class="form-control" rows="3" id="deskripsiHewan" name="deskripsiHewan" placeholder="Masukkan Deskripsi Hewan"></textarea>
-                        @error('deskripsiHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
+                        <label for="alasanPenyerahanHewan" class="form-label fw-semibold">Alasan Menyerahkan Hewan <span class="text-danger">*</span></label>
+                        <textarea type="text" class="form-control" rows="3" id="alasanPenyerahanHewan" name="alasanPenyerahanHewan" placeholder="Masukkan Alasan Menyerahkan Hewan"></textarea>
+                        @error('alasanPenyerahanHewan') <small class="text-danger fs-7">{{ $message }}</small> @enderror
                     </div>
                 </div>
                 
