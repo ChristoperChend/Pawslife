@@ -70,23 +70,7 @@
                 </ul>
             </div>
 
-            @if (Auth::check() && Auth::user()->tipe_pengguna === 'adopter')
-                <div class="col-12 col-md-2">
-                    <h5>Layanan Kami</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2">
-                            <a href="{{ route('adopter.daftarHewan') }}" style="text-decoration: none; color: white;">
-                                Pengajuan Adopsi
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="{{ route('adopter.showLepasAdopsi') }}" style="text-decoration: none; color: white;">
-                                Penyerahan Adopsi
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            @elseif (Auth::check() && Auth::user()->tipe_pengguna === 'shelter')
+            @if (Auth::check() && Auth::user()->tipe_pengguna === 'shelter')
                 <div class="col-12 col-md-2">
                     <h5>Layanan Kami</h5>
                     <ul class="nav flex-column">
@@ -124,6 +108,22 @@
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.riwayatPendaftaran') }}" style="text-decoration: none; color: white;">
                                 Daftar Riwayat Pendaftaran Shelter
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @else
+                <div class="col-12 col-md-2">
+                    <h5>Layanan Kami</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('adopter.daftarHewan') }}" style="text-decoration: none; color: white;">
+                                Pengajuan Adopsi
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('adopter.showLepasAdopsi') }}" style="text-decoration: none; color: white;">
+                                Penyerahan Adopsi
                             </a>
                         </li>
                     </ul>
