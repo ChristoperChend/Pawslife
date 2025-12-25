@@ -410,11 +410,14 @@ class shelterController
             'ras' => $penyerahan->ras,
             'berat' => $penyerahan->berat,
             'status_steril' => $penyerahan->status_steril,
+            'tanggal_vaksin' => $penyerahan->tanggal_vaksin,
             'status_vaksin' => $penyerahan->status_vaksin,
+            'tanggal_steril' => $penyerahan->tanggal_steril,
             'catatan_medis' => $penyerahan->catatan_medis,
             'foto_hewan' => $fotoHewan,
             'jenis_hewan' => $penyerahan->jenis_hewan,
             'jenis_kelamin' => $penyerahan->jenis_kelamin,
+            'deskripsi_hewan' => $penyerahan->deskripsi_hewan,
             'status_hewan' => 'siap_di_adopsi'
             ]);
             return response()->json([
