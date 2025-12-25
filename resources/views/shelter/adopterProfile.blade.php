@@ -71,7 +71,7 @@
 
                 <div class="col-md-12">
                     <label class="fw-semibold">Alamat</label>
-                    <div class="form-control readonly-field">{{ $data->alamat }}</div>
+                    <textarea class="form-control readonly-field">{{ $data->alamat }}</textarea>
                 </div>
 
                 

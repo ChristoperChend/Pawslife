@@ -5,6 +5,11 @@
 
     .logo-image-footer {
         width: 150px;
+        transition: transform 0.3s ease;
+    }
+
+    .logo-image-footer:hover {
+        transform: scale(1.05);
     }
 
     div h5 {
@@ -12,11 +17,21 @@
         font-size: 1.3rem !important;
     }
 
+    footer a {
+        transition: color 0.3s ease, transform 0.2s ease;
+        display: inline-block;
+    }
+
+    footer a:hover {
+        transform: translateX(5px);
+    }
+
     @media (max-width: 767.98px) {
         .footer-content .col-12 {
             text-align: center;
             margin-bottom: 1.5rem;
         }
+
         .footer-content .col-12:last-child {
             margin-bottom: 0;
         }
@@ -55,21 +70,65 @@
                 </ul>
             </div>
 
-            <div class="col-12 col-md-2">
-                <h5>Layanan Kami</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('adopter.daftarHewan') }}" style="text-decoration: none; color: white;">
-                            Pengajuan Adopsi
-                        </a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('adopter.showLepasAdopsi') }}" style="text-decoration: none; color: white;">
-                            Penyerahan Adopsi
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            @if (Auth::check() && Auth::user()->tipe_pengguna === 'shelter')
+                <div class="col-12 col-md-2">
+                    <h5>Layanan Kami</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('shelter.daftar.pengajuan.adopsi.hewan') }}" style="text-decoration: none; color: white;">
+                                Daftar Pengajuan Adopsi
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('shelter.daftar.pengajuan.penyerahan.hewan') }}" style="text-decoration: none; color: white;">
+                                Daftar Pengajuan Penyerahan Hewan
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('shelter.riwayat.pengambilan.hewan') }}" style="text-decoration: none; color: white;">
+                                Riwayat Pengambilan Hewan Adopter
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('shelter.riwayat.pengajuan.adopsi') }}" style="text-decoration: none; color: white;">
+                                Riwayat Pengajuan Adopsi Hewan
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @elseif (Auth::check() && Auth::user()->tipe_pengguna === 'admin')
+                <div class="col-12 col-md-2">
+                    <h5>Layanan Kami</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('beranda.adminBeranda') }}" style="text-decoration: none; color: white;">
+                                Daftar Pengajuan Pendaftaran Shelter
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('admin.riwayatPendaftaran') }}" style="text-decoration: none; color: white;">
+                                Daftar Riwayat Pendaftaran Shelter
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @else
+                <div class="col-12 col-md-2">
+                    <h5>Layanan Kami</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('adopter.daftarHewan') }}" style="text-decoration: none; color: white;">
+                                Pengajuan Adopsi
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{ route('adopter.showLepasAdopsi') }}" style="text-decoration: none; color: white;">
+                                Penyerahan Adopsi
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
 
             <div class="col-12 col-md-2">
                 <h5>Lainnya</h5>

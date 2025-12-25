@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-semibold">Foto Hewan <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Foto Hewan </span></label>
                         <input type="file" name="foto_hewan" class="form-control" 
                             accept=".jpg,.jpeg,.png" {{ $hewan->foto_hewan ? '' : 'required' }}>
                     </div>
