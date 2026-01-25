@@ -579,6 +579,8 @@
                     finalFormData.append('dokumen_legal', document.getElementById('dokumen_legal').files[0])
                     finalFormData.append('deskripsi_shelter', document.getElementById('deskripsi_shelter').value)
                     finalFormData.append('password_shelter', document.getElementById('password_shelter').value)
+                    finalFormData.append('nama_bank', document.getElementById('nama_bank').value)
+                    finalFormData.append('nomor_rekening', document.getElementById('nomor_rekening').value)
                     finalFormData.append('confirmation_password_shelter', document.getElementById('confirmation_password_shelter').value)
                     finalFormData.append('_token', '{{ csrf_token() }}')
 
